@@ -17,6 +17,7 @@ $Project "client"
 {
 	"game\client\client_hl2.vpc"		[($WIN32||$X360||$POSIX) && $HL2]
 	"game\client\client_episodic.vpc"	[($WIN32||$X360||$POSIX) && $EPISODIC]
+	"game\client\client_sdk2013ce.vpc"	[($WIN32||$X360||$POSIX) && $SDK2013CE]
 }
 
 $Project "fgdlib"
@@ -42,8 +43,9 @@ $Project "height2normal"
 
 $Project "server"
 {
-	"game\server\server_hl2.vpc"		[($WIN32||$X360||$POSIX) && $HL2]
+	"game\server\server_hl2.vpc"	[($WIN32||$X360||$POSIX) && $HL2]
 	"game\server\server_episodic.vpc"	[($WIN32||$X360||$POSIX) && $EPISODIC]
+	"game\server\server_sdk2013ce.vpc"	[($WIN32||$X360||$POSIX) && $SDK2013CE]
 }
 
 $Project "mathlib"

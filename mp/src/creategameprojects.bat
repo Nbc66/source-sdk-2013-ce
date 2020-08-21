@@ -1,1 +1,1 @@
-devtools\bin\vpc.exe /hl2mp +game /mksln games.sln
+devtools\bin\vpc.exe /2013 /sdk2013ce +game /mksln Game.sln
