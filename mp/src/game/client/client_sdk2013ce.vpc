@@ -15,7 +15,7 @@ $Configuration
 	$Compiler
 	{
 		$AdditionalIncludeDirectories		"$BASE;$SRCDIR\game\shared\hl2;$SRCDIR\game\shared\hl2mp;$SRCDIR\game\shared\sdk2013ce;.\hl2;.\hl2\elements;.\hl2mp;hl2mp\ui;.\sdk2013ce"
-		$PreprocessorDefinitions			"$BASE;HL2MP;HL2_CLIENT_DLL;2013CE"
+		$PreprocessorDefinitions			"$BASE;HL2MP;HL2_CLIENT_DLL;SDK2013CE"
 	}
 }
 
