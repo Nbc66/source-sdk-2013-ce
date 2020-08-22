@@ -126,7 +126,11 @@ public:
 	// Sounds
 	// -------------
 	void			DeathSound( void );
+#ifdef SDK2013CE
+	void			PainSound( const CTakeDamageInfo &info );
+#else
 	void			PainSound( void );
+#endif
 	void			IdleSound( void );
 	void			AlertSound( void );
 	void			LostEnemySound( void );
