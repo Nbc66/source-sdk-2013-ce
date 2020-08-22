@@ -389,8 +389,13 @@ void	CNPC_CombineDropship::PopulatePoseParameters( void )
 		m_poseBody_Sway			= LookupPoseParameter( "body_sway" );
 		m_poseCargo_Body_Accel  = LookupPoseParameter( "cargo_body_accel" );
 		m_poseCargo_Body_Sway   = LookupPoseParameter( "cargo_body_sway" );
+	#ifdef SDK2013CE
+		m_poseWeapon_Pitch		= m_hContainer->LookupPoseParameter( "weapon_pitch" );
+		m_poseWeapon_Yaw		= m_hContainer->LookupPoseParameter( "weapon_yaw" );
+	#else
 		m_poseWeapon_Pitch		= LookupPoseParameter( "weapon_pitch" );
 		m_poseWeapon_Yaw		= LookupPoseParameter( "weapon_yaw" );
+	#endif
 
 		m_sbStaticPoseParamsLoaded = true;
 	}
