@@ -9,6 +9,7 @@
 #include "ivmodemanager.h"
 #include "clientmode_hlnormal.h"
 #include "panelmetaclassmgr.h"
+#include "sdk_2013_discord_rpc.h"
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -64,6 +65,15 @@ void CHLModeManager::CreateMove( float flInputSampleTime, CUserCmd *cmd )
 void CHLModeManager::LevelInit( const char *newmap )
 {
 	g_pClientMode->LevelInit( newmap );
+
+#ifdef SDK2013CE
+
+	//initialized when a map is loaded for discord rpc
+	//-Nbc66
+	g_discordrpc.LevelInit(newmap);
+
+#endif 
+
 }
 
 void CHLModeManager::LevelShutdown( void )

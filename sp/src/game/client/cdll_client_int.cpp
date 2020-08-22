@@ -87,6 +87,7 @@
 #include "ihudlcd.h"
 #include "toolframework_client.h"
 #include "hltvcamera.h"
+#include "sdk_2013_discord_rpc.h"
 #if defined( REPLAY_ENABLED )
 #include "replay/replaycamera.h"
 #include "replay/replay_ragdoll.h"
@@ -1085,6 +1086,14 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 	HookHapticMessages(); // Always hook the messages
 #endif
 
+#ifdef SDK2013CE
+
+	//discord rpc initialization
+	//-Nbc66
+	g_discordrpc.Init();
+
+#endif
+
 	return true;
 }
 
@@ -1209,6 +1218,14 @@ void CHLClient::Shutdown( void )
 	DisconnectDataModel();
 	ShutdownFbx();
 #endif
+
+#ifdef SDK2013CE
+
+	//discord rpc shutdown 
+	//-Nbc66
+	g_discordrpc.Shutdown();
+
+#endif
 	
 	// This call disconnects the VGui libraries which we rely on later in the shutdown path, so don't do it
 //	DisconnectTier3Libraries( );
@@ -1280,6 +1297,14 @@ void CHLClient::HudUpdate( bool bActive )
 	// I don't think this is necessary any longer, but I will leave it until
 	// I can check into this further.
 	C_BaseTempEntity::CheckDynamicTempEnts();
+
+#ifdef SDK2013CE
+
+	//runs on the first frame discord rpc
+	//-Nbc66
+	g_discordrpc.RunFrame();
+
+#endif
 
 #ifdef SIXENSE
 	// If we're not connected, update sixense so we can move the mouse cursor when in the menus
@@ -1627,6 +1652,12 @@ void CHLClient::LevelInitPreEntity( char const* pMapName )
 
 	gHUD.LevelInit();
 
+#ifdef SDK2013CE
+	//discord rpc reset
+	//-Nbc66
+	g_discordrpc.Reset();
+#endif
+
 #if defined( REPLAY_ENABLED )
 	// Initialize replay ragdoll recorder
 	if ( !engine->IsPlayingDemo() )
@@ -1716,6 +1747,14 @@ void CHLClient::LevelShutdown( void )
 	internalCenterPrint->Clear();
 
 	messagechars->Clear();
+
+#ifdef SDK2013CE
+
+
+	g_discordrpc.Reset();
+
+
+#endif
 
 #ifndef TF_CLIENT_DLL
 	// don't want to do this for TF2 because we have particle systems in our

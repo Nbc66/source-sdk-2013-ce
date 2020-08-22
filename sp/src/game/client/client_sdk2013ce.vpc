@@ -29,6 +29,8 @@ $Project "Client"
 
 		$Folder	"SDK2013CE DLL"
 		{
+		    $File 	"$SRCDIR\game\client\sdk_2013_discord_rpc.cpp"
+			$File 	"$SRCDIR\game\client\sdk_2013_discord_rpc.h"
 		}
 
 		$Folder	"HL2 DLL"
