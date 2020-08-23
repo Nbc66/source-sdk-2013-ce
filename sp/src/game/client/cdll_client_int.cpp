@@ -87,7 +87,6 @@
 #include "ihudlcd.h"
 #include "toolframework_client.h"
 #include "hltvcamera.h"
-#include "sdk_2013_discord_rpc.h"
 #if defined( REPLAY_ENABLED )
 #include "replay/replaycamera.h"
 #include "replay/replay_ragdoll.h"
@@ -146,6 +145,10 @@
 
 #ifdef WORKSHOP_IMPORT_ENABLED
 #include "fbxsystem/fbxsystem.h"
+#endif
+
+#ifdef SDK2013CE
+#include "sdk2013ce_discord_rpc.h"
 #endif
 
 extern vgui::IInputInternal *g_InputInternal;
@@ -1087,11 +1090,8 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 #endif
 
 #ifdef SDK2013CE
-
-	//discord rpc initialization
-	//-Nbc66
-	g_discordrpc.Init();
-
+	// Discord RPC initialization
+	g_DiscordRPC.Init();
 #endif
 
 	return true;
@@ -1220,11 +1220,8 @@ void CHLClient::Shutdown( void )
 #endif
 
 #ifdef SDK2013CE
-
-	//discord rpc shutdown 
-	//-Nbc66
-	g_discordrpc.Shutdown();
-
+	// Discord RPC shutdown 
+	g_DiscordRPC.Shutdown();
 #endif
 	
 	// This call disconnects the VGui libraries which we rely on later in the shutdown path, so don't do it
@@ -1299,11 +1296,8 @@ void CHLClient::HudUpdate( bool bActive )
 	C_BaseTempEntity::CheckDynamicTempEnts();
 
 #ifdef SDK2013CE
-
-	//runs on the first frame discord rpc
-	//-Nbc66
-	g_discordrpc.RunFrame();
-
+	// Run Discord RPC
+	g_DiscordRPC.RunFrame();
 #endif
 
 #ifdef SIXENSE
@@ -1653,9 +1647,8 @@ void CHLClient::LevelInitPreEntity( char const* pMapName )
 	gHUD.LevelInit();
 
 #ifdef SDK2013CE
-	//discord rpc reset
-	//-Nbc66
-	g_discordrpc.Reset();
+	// Reset Discord RPC
+	g_DiscordRPC.Reset();
 #endif
 
 #if defined( REPLAY_ENABLED )
@@ -1749,11 +1742,8 @@ void CHLClient::LevelShutdown( void )
 	messagechars->Clear();
 
 #ifdef SDK2013CE
-
-
-	g_discordrpc.Reset();
-
-
+	// Reset Discord RPC
+	g_DiscordRPC.Reset();
 #endif
 
 #ifndef TF_CLIENT_DLL
