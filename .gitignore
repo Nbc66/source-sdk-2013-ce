@@ -1,8 +1,5 @@
 # Files to ignore when considering what GIT should commit.
 
-# SDK2013CE
-
-
 # Visual Studio
 .vs/
 *.suo
@@ -25,6 +22,18 @@ ipch
 *.filters
 *.vpc_crc
 *.sln
+
+# Visual Studio build results
+*[Dd]ebug*/
+[Dd]ebugPublic/
+*[Rr]elease*/
+[Rr]eleases/
+x64/
+x86/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
 
 # OSX/Linux build products
 *.mak
@@ -65,3 +74,5 @@ config.cfg
 # shader files
 *.tmp
 
+# Microsoft Speech API
+/src/utils/sapi51/
