@@ -21,6 +21,10 @@ bool PlayerHasMegaPhysCannon();
 void PhysCannonForceDrop( CBaseCombatWeapon *pActiveWeapon, CBaseEntity *pOnlyIfHoldingThis );
 void PhysCannonBeginUpgrade( CBaseAnimating *pAnim );
 
+#ifdef SDK2013CE
+bool PhysCannonAccountableForObject(CBaseCombatWeapon* pPhysCannon, CBaseEntity* pObject);
+#endif // SDK2013CE
+
 bool PlayerPickupControllerIsHoldingEntity( CBaseEntity *pPickupController, CBaseEntity *pHeldEntity );
 float PlayerPickupGetHeldObjectMass( CBaseEntity *pPickupControllerEntity, IPhysicsObject *pHeldObject );
 float PhysCannonGetHeldObjectMass( CBaseCombatWeapon *pActiveWeapon, IPhysicsObject *pHeldObject );

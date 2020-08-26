@@ -13,6 +13,7 @@
 #include "gamerules.h"
 #include "singleplay_gamerules.h"
 #include "hl2_shareddefs.h"
+#include "weapon_physcannon.h"
 
 #ifdef CLIENT_DLL
 	#define CHalfLife2 C_HalfLife2
