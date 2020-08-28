@@ -133,10 +133,10 @@ CEventAction::CEventAction( const char *ActionData )
 	// Parse the target name.
 	//
 #ifdef SDK2013CE
-	const char* psz = nexttoken(szToken, ActionData, ',', sizeof(szToken));
+	const char *psz = nexttoken(szToken, ActionData, ',', sizeof(szToken));
 #else
 	const char *psz = nexttoken(szToken, ActionData, ',');
-#endif // SDK2013CE
+#endif
 	if (szToken[0] != '\0')
 	{
 		m_iTarget = AllocPooledString(szToken);
@@ -149,7 +149,7 @@ CEventAction::CEventAction( const char *ActionData )
 	psz = nexttoken(szToken, psz, ',', sizeof(szToken));
 #else
 	psz = nexttoken(szToken, psz, ',');
-#endif // SDK2013CE
+#endif
 	if (szToken[0] != '\0')
 	{
 		m_iTargetInput = AllocPooledString(szToken);
@@ -166,7 +166,7 @@ CEventAction::CEventAction( const char *ActionData )
 	psz = nexttoken(szToken, psz, ',', sizeof(szToken));
 #else
 	psz = nexttoken(szToken, psz, ',');
-#endif // SDK2013CE
+#endif
 	if (szToken[0] != '\0')
 	{
 		m_iParameter = AllocPooledString(szToken);
@@ -179,7 +179,7 @@ CEventAction::CEventAction( const char *ActionData )
 	psz = nexttoken(szToken, psz, ',', sizeof(szToken));
 #else
 	psz = nexttoken(szToken, psz, ',');
-#endif // SDK2013CE
+#endif
 	if (szToken[0] != '\0')
 	{
 		m_flDelay = atof(szToken);
@@ -192,7 +192,7 @@ CEventAction::CEventAction( const char *ActionData )
 	psz = nexttoken(szToken, psz, ',', sizeof(szToken));
 #else
 	psz = nexttoken(szToken, psz, ',');
-#endif // SDK2013CE
+#endif
 	if (szToken[0] != '\0')
 	{
 		m_nTimesToFire = atoi(szToken);

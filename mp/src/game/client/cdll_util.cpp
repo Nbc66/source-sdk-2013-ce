@@ -731,11 +731,10 @@ CBaseEntity *CEntitySphereQuery::GetCurrentEntity()
 // Output : Returns a pointer to the next token to be parsed.
 //-----------------------------------------------------------------------------
 #ifdef SDK2013CE
-
+const char *nexttoken(char *token, const char *str, char sep, size_t tokenLen)
 #else
 const char *nexttoken(char *token, const char *str, char sep)
-#endif // SDK2013CE
-const char* nexttoken(char* token, const char* str, char sep, size_t tokenLen)
+#endif
 {
 	if ((str == NULL) || (*str == '\0'))
 	{
@@ -767,16 +766,13 @@ const char* nexttoken(char* token, const char* str, char sep, size_t tokenLen)
 		*token = '\0';
 		tokenLen--;
 	}
-
 #else
-
 	while ((*str != sep) && (*str != '\0'))
 	{
 		*token++ = *str++;
 	}
 	*token = '\0';
-
-#endif // SDK2013CE
+#endif
 
 	//
 	// Advance the pointer unless we hit the end of the input string.
