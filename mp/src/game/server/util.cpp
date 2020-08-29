@@ -2067,14 +2067,8 @@ void UTIL_ValidateSoundName( string_t &name, const char *defaultStr )
 //          tokenLen - Length of token buffer
 // Output : Returns a pointer to the next token to be parsed.
 //-----------------------------------------------------------------------------
-<<<<<<< HEAD
-
-#ifdef SDK2013CE
-const char* nexttoken(char* token, const char* str, char sep, size_t tokenLen)
-=======
 #ifdef SDK2013CE
 const char *nexttoken(char *token, const char *str, char sep, size_t tokenLen)
->>>>>>> master
 {
 	if ((str == NULL) || (*str == '\0'))
 	{
@@ -2148,12 +2142,8 @@ const char *nexttoken(char *token, const char *str, char sep)
 
 	return(++str);
 }
-<<<<<<< HEAD
-#endif // SDK2013CE
-=======
 #endif
 
->>>>>>> master
 //-----------------------------------------------------------------------------
 // Purpose: Helper for UTIL_FindClientInPVS
 // Input  : check - last checked client
