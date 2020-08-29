@@ -727,9 +727,14 @@ CBaseEntity *CEntitySphereQuery::GetCurrentEntity()
 // Input  : token - Returns with a token, or zero length if the token was missing.
 //			str - String to parse.
 //			sep - Character to use as separator. UNDONE: allow multiple separator chars
+//			tokenLen - Length of token buffer
 // Output : Returns a pointer to the next token to be parsed.
 //-----------------------------------------------------------------------------
+#ifdef SDK2013CE
+const char* nexttoken(char* token, const char* str, char sep, size_t tokenLen)
+#else
 const char *nexttoken(char *token, const char *str, char sep)
+#endif
 {
 	if ((str == NULL) || (*str == '\0'))
 	{
@@ -741,11 +746,33 @@ const char *nexttoken(char *token, const char *str, char sep)
 	// Copy everything up to the first separator into the return buffer.
 	// Do not include separators in the return buffer.
 	//
+#ifdef SDK2013CE
+	while ((*str != sep) && (*str != '\0') && (tokenLen > 1))
+	{
+		*token++ = *str++;
+		tokenLen--;
+	}
+
+	//
+	// If token is to big for return buffer, skip rest of token
+	//
+	while ((*str != sep) && (*str != '\0'))
+	{
+		str++;
+	}
+
+	if (tokenLen)
+	{
+		*token = '\0';
+		tokenLen--;
+	}
+#else
 	while ((*str != sep) && (*str != '\0'))
 	{
 		*token++ = *str++;
 	}
 	*token = '\0';
+#endif
 
 	//
 	// Advance the pointer unless we hit the end of the input string.

@@ -90,6 +90,7 @@ public:
 			if ( m_bSelfCollisions )
 			{
 				char szToken[256];
+<<<<<<< HEAD
 #ifdef SDK2013CE
 				const char* pStr = nexttoken(szToken, pValue, ',', sizeof(szToken));
 #else
@@ -101,6 +102,19 @@ public:
 #else
 				nexttoken( szToken, pStr, ',' );
 #endif // SDK2013CE
+=======
+			#ifdef SDK2013CE
+				const char *pStr = nexttoken(szToken, pValue, ',', sizeof(szToken));
+			#else
+				const char *pStr = nexttoken(szToken, pValue, ',');
+			#endif
+				int index0 = atoi(szToken);
+			#ifdef SDK2013CE
+				nexttoken( szToken, pStr, ',', sizeof(szToken) );
+			#else
+				nexttoken( szToken, pStr, ',' );
+			#endif
+>>>>>>> master
 				int index1 = atoi(szToken);
 
 				m_pSet->EnableCollisions( index0, index1 );

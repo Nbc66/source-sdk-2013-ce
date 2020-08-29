@@ -15,6 +15,10 @@
 #include "hl2_shareddefs.h"
 #include "weapon_physcannon.h"
 
+#ifdef SDK2013CE
+	#include "weapon_physcannon.h"
+#endif
+
 #ifdef CLIENT_DLL
 	#define CHalfLife2 C_HalfLife2
 	#define CHalfLife2Proxy C_HalfLife2Proxy

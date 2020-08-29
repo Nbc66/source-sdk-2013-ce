@@ -1616,7 +1616,11 @@ void CNPC_BaseZombie::HandleAnimEvent( animevent_t *pEvent )
 
 		const char	*pString = pEvent->options;
 		char		token[128];
+#ifdef SDK2013CE
+		pString = nexttoken(token, pString, ' ', sizeof(token));
+#else
 		pString = nexttoken( token, pString, ' ' );
+#endif
 
 		int boneIndex = GetInteractionPartner()->LookupBone( token );
 
@@ -1626,7 +1630,11 @@ void CNPC_BaseZombie::HandleAnimEvent( animevent_t *pEvent )
 			return;
 		}
 
-		pString = nexttoken( token, pString, ' ' );
+#ifdef SDK2013CE
+		pString = nexttoken(token, pString, ' ', sizeof(token));
+#else
+		pString = nexttoken(token, pString, ' ');
+#endif
 
 		if ( !token )
 		{

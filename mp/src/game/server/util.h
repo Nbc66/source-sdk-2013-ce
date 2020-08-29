@@ -201,10 +201,18 @@ inline bool FStrEq( string_t str1, string_t str2 )
 #endif
 
 #ifdef SDK2013CE
+<<<<<<< HEAD
 const char *nexttoken(char* token, const char* str, char sep, size_t tokenLen);
 #else
 const char *nexttoken(char *token, const char *str, char sep);
 #endif // SDK2013CE
+=======
+const char *nexttoken(char *token, const char *str, char sep, size_t tokenLen);
+#else
+const char *nexttoken(char *token, const char *str, char sep);
+#endif
+
+>>>>>>> master
 // Misc. Prototypes
 void		UTIL_SetSize			(CBaseEntity *pEnt, const Vector &vecMin, const Vector &vecMax);
 void		UTIL_ClearTrace			( trace_t &trace );

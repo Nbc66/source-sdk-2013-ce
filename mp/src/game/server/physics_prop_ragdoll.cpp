@@ -707,11 +707,19 @@ void CRagdollProp::InitRagdoll( const Vector &forceVector, int forceBone, const 
 	{
 		char szToken[2048];
 
+<<<<<<< HEAD
 #ifdef SDK2013CE
 		const char* pStr = nexttoken(szToken, STRING(m_anglesOverrideString), ',', sizeof(szToken));
 #else
 		const char *pStr = nexttoken(szToken, STRING(m_anglesOverrideString), ',');
 #endif // SDK2013CE
+=======
+	#ifdef SDK2013CE
+		const char *pStr = nexttoken(szToken, STRING(m_anglesOverrideString), ',', sizeof(szToken));
+	#else
+		const char *pStr = nexttoken(szToken, STRING(m_anglesOverrideString), ',');
+	#endif
+>>>>>>> master
 
 		// anglesOverride is index,angles,index,angles (e.g. "1, 22.5 123.0 0.0, 2, 0 0 0, 3, 0 0 180.0")
 		while ( szToken[0] != 0 )
@@ -719,11 +727,19 @@ void CRagdollProp::InitRagdoll( const Vector &forceVector, int forceBone, const 
 			int objectIndex = atoi(szToken);
 			// sanity check to make sure this token is an integer
 			Assert( atof(szToken) == ((float)objectIndex) );
+<<<<<<< HEAD
 #ifdef SDK2013CE
 			pStr = nexttoken(szToken, pStr, ',', sizeof(szToken));
 #else
 			pStr = nexttoken(szToken, pStr, ',');
 #endif // SDK2013CE
+=======
+		#ifdef SDK2013CE
+			pStr = nexttoken(szToken, pStr, ',', sizeof(szToken));
+		#else
+			pStr = nexttoken(szToken, pStr, ',');
+		#endif
+>>>>>>> master
 			Assert( szToken[0] );
 			if ( objectIndex >= m_ragdoll.listCount )
 			{
@@ -750,11 +766,19 @@ void CRagdollProp::InitRagdoll( const Vector &forceVector, int forceBone, const 
 				MatrixSetColumn( out, 3, pBoneToWorld[boneIndex] );
 				element.pObject->SetPositionMatrix( pBoneToWorld[boneIndex], true );
 			}
+<<<<<<< HEAD
 #ifdef SDK2013CE
 			pStr = nexttoken(szToken, pStr, ',', sizeof(szToken));
 #else
 			pStr = nexttoken(szToken, pStr, ',');
 #endif // SDK2013CE
+=======
+		#ifdef SDK2013CE
+			pStr = nexttoken(szToken, pStr, ',', sizeof(szToken));
+		#else
+			pStr = nexttoken(szToken, pStr, ',');
+		#endif
+>>>>>>> master
 		}
 	}
 

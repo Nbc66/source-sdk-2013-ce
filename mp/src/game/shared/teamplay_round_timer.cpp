@@ -1372,10 +1372,17 @@ void CTeamRoundTimer::InputAddTeamTime( inputdata_t &input )
 
 	// get the team
 #ifdef SDK2013CE
+<<<<<<< HEAD
 	p = nexttoken(token, p, ' ', sizeof(token));
 #else
 	p = nexttoken( token, p, ' ' );
 #endif // SDK2013CE
+=======
+	p = nexttoken( token, p, ' ', sizeof(token) );
+#else
+	p = nexttoken( token, p, ' ' );
+#endif
+>>>>>>> master
 	if ( token[0] )
 	{
 		nTeam = Q_atoi( token );
@@ -1383,10 +1390,17 @@ void CTeamRoundTimer::InputAddTeamTime( inputdata_t &input )
 
 	// get the time
 #ifdef SDK2013CE
+<<<<<<< HEAD
 	p = nexttoken(token, p, ' ', sizeof(token));
 #else
 	p = nexttoken( token, p, ' ' );
 #endif // SDK2013CE
+=======
+	p = nexttoken( token, p, ' ', sizeof(token) );
+#else
+	p = nexttoken( token, p, ' ' );
+#endif
+>>>>>>> master
 	if ( token[0] )
 	{
 		nSeconds = Q_atoi( token );

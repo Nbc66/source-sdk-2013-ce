@@ -90,10 +90,17 @@ void	InterpolateAngles( const QAngle& start, const QAngle& end, QAngle& output, 
 void	InterpolateVector( float frac, const Vector& src, const Vector& dest, Vector& output );
 
 #ifdef SDK2013CE
+<<<<<<< HEAD
 const char *nexttoken(char* token, const char* str, char sep, size_t tokenLen);
 #else
 const char *nexttoken(char *token, const char *str, char sep);
 #endif // SDK2013CE
+=======
+const char *nexttoken(char *token, const char *str, char sep, size_t tokenLen);
+#else
+const char *nexttoken(char *token, const char *str, char sep);
+#endif
+>>>>>>> master
 
 //-----------------------------------------------------------------------------
 // Base light indices to avoid index collision

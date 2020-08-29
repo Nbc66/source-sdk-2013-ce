@@ -90,7 +90,11 @@ string_t ExtractParentName(string_t parentName)
 	nexttoken(szToken, STRING(parentName), ',', sizeof(szToken));
 #else
 	nexttoken(szToken, STRING(parentName), ',');
+<<<<<<< HEAD
 #endif // SDK2013CE
+=======
+#endif
+>>>>>>> master
 	return AllocPooledString(szToken);
 }
 
@@ -212,11 +216,19 @@ void SetupParentsForSpawnList( int nEntities, HierarchicalSpawn_t *pSpawnList )
 			if ( strchr(STRING(pEntity->m_iParent), ',') )
 			{
 				char szToken[256];
+<<<<<<< HEAD
 #ifdef SDK2013CE
 				const char* pAttachmentName = nexttoken(szToken, STRING(pEntity->m_iParent), ',', sizeof(szToken));
 #else
 				const char *pAttachmentName = nexttoken(szToken, STRING(pEntity->m_iParent), ',');
 #endif // SDK2013CE
+=======
+			#ifdef SDK2013CE
+				const char *pAttachmentName = nexttoken(szToken, STRING(pEntity->m_iParent), ',', sizeof(szToken));
+			#else
+				const char *pAttachmentName = nexttoken(szToken, STRING(pEntity->m_iParent), ',');
+			#endif
+>>>>>>> master
 				pEntity->m_iParent = AllocPooledString(szToken);
 				CBaseEntity *pParent = gEntList.FindEntityByName( NULL, pEntity->m_iParent );
 
