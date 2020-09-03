@@ -75,4 +75,4 @@ config.cfg
 *.tmp
 
 # Microsoft Speech API
-/src/utils/sapi51/
+sp/src/utils/sapi51/
