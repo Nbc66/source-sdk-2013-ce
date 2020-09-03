@@ -1137,9 +1137,13 @@ bool CHL2GameMovement::CanAccelerate()
 	}
 #endif
 
+#ifdef SDK2013CE
+	return BaseClass::CanAccelerate();
+#else
 	BaseClass::CanAccelerate();
 
 	return true;
+#endif
 }
 
 
