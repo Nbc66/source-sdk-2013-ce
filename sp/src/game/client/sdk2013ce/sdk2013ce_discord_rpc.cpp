@@ -116,7 +116,7 @@ void CDiscordRPC::LevelInit( const char *pszMapname )
 void CDiscordRPC::Reset()
 {
 	Q_memset( &m_sDiscordRichPresence, 0, sizeof(m_sDiscordRichPresence) );
-	m_sDiscordRichPresence.details = LocalizeDiscordString( "#Discord_State_Menu" );
+	m_sDiscordRichPresence.details = "Main Menu";
 	
 	const char *pszState = "";
 	m_sDiscordRichPresence.state = pszState;
@@ -231,7 +231,7 @@ void CDiscordRPC::UpdateRichPresence()
 
 	if ( engine->IsConnected() )
 	{
-		V_snprintf( m_szStateBuffer, sizeof(m_szStateBuffer), "%s : %s", LocalizeDiscordString("#Discord_Map"), m_szLatchedMapname );
+		V_snprintf( m_szStateBuffer, sizeof(m_szStateBuffer), "Map : %s",  m_szLatchedMapname );
 		// Starts the elapsed timer for Discord RPC -Nbc66
 		m_sDiscordRichPresence.startTimestamp = mktime(tStartTime);
 		// Sets the map name
@@ -278,11 +278,16 @@ void CDiscordRPC::SetLogo()
 	}
 }
 
+
+
 //-----------------------------------------------------------------------------
 // Purpose: Function to get the localized string and then localize it on runtime
 //          Use this to localize the rest of the strings
 //-----------------------------------------------------------------------------
-const char *CDiscordRPC::LocalizeDiscordString( const char *pszLocalizedString )
+
+//dont bother using this for sp since v_strdup only works on mp and is crucial for this function to work
+
+/*const char *CDiscordRPC::LocalizeDiscordString( const char *pszLocalizedString )
 {
 	const wchar_t *pwszLocalizedString = g_pVGuiLocalize->Find( pszLocalizedString );
 
@@ -292,12 +297,14 @@ const char *CDiscordRPC::LocalizeDiscordString( const char *pszLocalizedString )
 	// or you are going to have a bad time with this whole function -Nbc66
 	char szLocalizedArray[256];
 	g_pVGuiLocalize->ConvertUnicodeToANSI( pwszLocalizedString, szLocalizedArray, sizeof(szLocalizedArray) );
-	const char *pszFinalLocalizedString = szLocalizedArray;
+	const char *pszFinalLocalizedString = V_strdup(szLocalizedArray);
+
+	ConLog("RPC Localization Result = $",pszFinalLocalizedString);
 
 	return pszFinalLocalizedString;
 
-	delete[] pszFinalLocalizedString;
-}
+	delete[] pszFinalLocalizedString, szLocalizedArray;
+}*/
 
 //-----------------------------------------------------------------------------
 // Purpose: 
@@ -334,7 +341,7 @@ bool CDiscordRPC::IsRPCUsed()
 		KeyValues* IsUsedBool = pDiscordRPCIsUsed->FindKey( "Discord" );
 		if (IsUsedBool)
 		{
-			return IsItOn = IsUsedBool->GetBool( "SupportsDiscordRPC",  1 );
+			return IsItOn = IsUsedBool->GetBool( "SupportsDiscordRPC",  1);
 		}
 		IsUsedBool->deleteThis();
 		pDiscordRPCIsUsed->deleteThis();
