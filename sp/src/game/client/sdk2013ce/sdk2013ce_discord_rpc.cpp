@@ -59,6 +59,11 @@ CDiscordRPC::~CDiscordRPC()
 //-----------------------------------------------------------------------------
 void CDiscordRPC::RunFrame()
 {
+	if (IsRPCUsed() == 0)
+	{
+		Shutdown();
+	}
+
 	if ( m_bErrored )
 		return;
 
@@ -77,6 +82,11 @@ void CDiscordRPC::RunFrame()
 //-----------------------------------------------------------------------------
 void CDiscordRPC::Init()
 {
+	if (IsRPCUsed() == 0)
+	{
+		Shutdown();
+	}
+
 	InitializeDiscord();
 	m_bInitializeRequested = true;
 
@@ -302,12 +312,34 @@ const char *CDiscordRPC::GetRPCAppId()
 		KeyValues *pID = pDiscordRPCID->FindKey( "Discord" );
 		if (pID)
 		{
-			return ID = pID->GetString( "Discord_app_id", "746722719328108615" );
+			return ID = pID->GetString( "DiscordAppID", "746722719328108615" );
 		}
 		pID->deleteThis();
 		pDiscordRPCID->deleteThis();
 	}
 	return ID;
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: function to check if we set up support for RPC in Gameinfo.txt and
+//			are we going to use RPC in our mod -Nbc66
+//-----------------------------------------------------------------------------
+bool CDiscordRPC::IsRPCUsed()
+{
+	bool IsItOn = 0;
+	KeyValues* pDiscordRPCIsUsed = new KeyValues( "GameInfo" );
+	pDiscordRPCIsUsed->LoadFromFile( filesystem, "gameinfo.txt" );
+	if (pDiscordRPCIsUsed)
+	{
+		KeyValues* IsUsedBool = pDiscordRPCIsUsed->FindKey( "Discord" );
+		if (IsUsedBool)
+		{
+			return IsItOn = IsUsedBool->GetBool( "SupportsDiscordRPC",  1 );
+		}
+		IsUsedBool->deleteThis();
+		pDiscordRPCIsUsed->deleteThis();
+	}
+	return IsItOn;
 }
 
 //-----------------------------------------------------------------------------

@@ -45,6 +45,7 @@ private:
 	const char *LocalizeDiscordString( const char *pszLocalizedString );
 
 	const char *GetRPCAppId();
+	bool IsRPCUsed();
 	const char *GetRPCMapImage( char szLatchedMapname[MAX_MAP_NAME], const char *pszMapIcon );
 
 private:
