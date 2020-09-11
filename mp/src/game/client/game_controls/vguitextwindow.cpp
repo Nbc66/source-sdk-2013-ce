@@ -385,7 +385,11 @@ void CTextWindow::OnKeyCodePressed( vgui::KeyCode code )
 
 void CTextWindow::SetData(KeyValues *data)
 {
+#ifdef SDK2013CE
+	SetData( data->GetInt( "type" ), data->GetString( "title" ), data->GetString( "message" ), data->GetString( "msg_fallback" ), data->GetInt( "command" ), data->GetBool( "unload" ) );
+#else
 	SetData( data->GetInt( "type" ), data->GetString( "title" ), data->GetString( "msg" ), data->GetString( "msg_fallback" ), data->GetInt( "cmd" ), data->GetBool( "unload" ) );
+#endif
 }
 
 void CTextWindow::SetData( int type, const char *title, const char *message, const char *message_fallback, int command, bool bUnload )
