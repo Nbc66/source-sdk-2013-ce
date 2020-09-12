@@ -6,6 +6,12 @@
 //
 //=============================================================================//
 
+#ifndef COLLISION_SET_H
+#define COLLISION_SET_H
+#ifdef _WIN32
+#pragma once
+#endif
+
 // A set of collision rules
 // NOTE: Defaults to all indices disabled
 class IPhysicsCollisionSet
@@ -18,3 +24,5 @@ public:
 
 	virtual bool ShouldCollide( int index0, int index1 ) = 0;
 };
+
+#endif // COLLISION_SET_H
