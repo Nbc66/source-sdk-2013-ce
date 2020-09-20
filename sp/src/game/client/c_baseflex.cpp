@@ -1149,10 +1149,11 @@ void C_BaseFlex::SetupWeights( const matrix3x4_t *pBoneToWorld, int nFlexWeightC
 {
 	// hack in an initialization
 	LinkToGlobalFlexControllers( GetModelPtr() );
-
-#ifndef SDK2013CE
-		m_iBlink = AddGlobalFlexController("UH");
-#endif // !SDK2013CE
+#ifdef SDK2013CE
+	m_iBlink = AddGlobalFlexController( "blink" );
+#else
+	m_iBlink = AddGlobalFlexController( "UH" );
+#endif
 
 	if ( SetupGlobalWeights( pBoneToWorld, nFlexWeightCount, pFlexWeights, pFlexDelayedWeights ) )
 	{
