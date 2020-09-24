@@ -18,10 +18,6 @@ To be able to use Source 2013 CE you will need to download:
 * Visual Studio 2013
 * Multibyte MFC Library for Visual Studio 2013
 
-And because we will be adding v142 toolset support to Source 2013 CE you would also want to download the following:
-* Visual Studio 2019
-* MFC and ATL support (which can be selected during installation through the 'Desktop development with C++' workload)
-
 # Contributing
 We appreciate any form of help so ideally if you want to help this project out the best way would be to make a pull request.
 
