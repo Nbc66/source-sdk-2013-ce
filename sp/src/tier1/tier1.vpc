@@ -47,6 +47,7 @@ $Project "tier1"
 		$File	"memstack.cpp"
 		$File	"NetAdr.cpp"
 		$File	"splitstring.cpp"
+		$File	"math_proxy.cpp" [$POSIX]
 		$File	"processor_detect.cpp" [$WINDOWS||$X360]
 		{
 			$Configuration
