@@ -18,7 +18,7 @@
 #include <vgui_controls/ScrollBarSlider.h>
 #include <vgui_controls/Controls.h>
 
-#include <math.h>
+//#include <math.h>
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include <tier0/memdbgon.h>
