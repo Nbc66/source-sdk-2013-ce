@@ -2236,9 +2236,9 @@ bool KeyValues::LoadFromBuffer( char const *resourceName, const char *pBuffer, I
 	// Translate Unicode files into UTF-8 before proceeding
 	if ( nLen > 2 && (uint8)pBuffer[0] == 0xFF && (uint8)pBuffer[1] == 0xFE )
 	{
-		int nUTF8Len = V_UnicodeToUTF8( (wchar_t*)(pBuffer+2), NULL, 0 );
+		int nUTF8Len = Q_WStringToUTF8( (wchar_t*)(pBuffer+2), NULL, 0 );
 		char *pUTF8Buf = new char[nUTF8Len];
-		V_UnicodeToUTF8( (wchar_t*)(pBuffer+2), pUTF8Buf, nUTF8Len );
+		Q_WStringToUTF8( (wchar_t*)(pBuffer+2), pUTF8Buf, nUTF8Len );
 		buf.AssumeMemory( pUTF8Buf, nUTF8Len, nUTF8Len, CUtlBuffer::READ_ONLY | CUtlBuffer::TEXT_BUFFER );
 	}
 
