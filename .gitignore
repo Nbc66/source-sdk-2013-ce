@@ -80,3 +80,7 @@ sp/src/utils/sapi51/
 # Ignore various Linux vpc products
 compile_commands.json
 *.project
+
+# Don't ignore base makefiles
+!makefile_base_posix.mak
+!sourcesdk_def.mak
