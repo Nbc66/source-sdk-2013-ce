@@ -1,0 +1,17 @@
+// Choreo version 1
+actor "Kleiner"
+{
+  channel "audio"
+  {
+    event speak "kl_fellowcitizens26"
+    {
+      time 12.453595 17.554253
+      param "ep_01.kl_fellowcitizens26"
+      param2 ".33"
+      fixedlength
+      cctype "cc_master"
+      cctoken ""
+    }
+  }
+}
+

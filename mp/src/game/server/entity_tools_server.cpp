@@ -14,6 +14,12 @@
 #include "sceneentity.h"
 #include "particles/particles.h"
 
+#ifdef SDK2013CE
+#include "icommandline.h"
+#include "tier0/memdbgon.h"
+#endif // SDK2013CE
+
+
 
 //-----------------------------------------------------------------------------
 // Interface from engine to tools for manipulating entities

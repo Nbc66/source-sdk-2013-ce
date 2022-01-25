@@ -209,7 +209,7 @@ void CParticleSystemQuery::GetRandomPointsOnControllingObjectHitBox(
 		float flRandMax = flBBoxScale;
 		float flRandMin = 1.0 - flBBoxScale;
 		Vector vecBasePos;
-		pParticles->GetControlPointAtTime( nControlPointNumber, pParticles->m_flCurTime, &vecBasePos );
+		//pParticles->GetControlPointAtTime( nControlPointNumber, pParticles->m_flCurTime, &vecBasePos );
 
 		s_BoneMutex.Lock();
 		C_BaseAnimating *pAnimating = pMoveParent->GetBaseAnimating();

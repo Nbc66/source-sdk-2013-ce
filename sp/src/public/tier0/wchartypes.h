@@ -31,6 +31,14 @@ typedef unsigned short wchar_t;
 // chars).
 typedef char char8;
 
+#if defined( _MSC_VER ) || defined( WIN32 )
+typedef wchar_t uchar16;
+typedef unsigned int uchar32;
+#else
+typedef unsigned short uchar16;
+typedef wchar_t uchar32;
+#endif
+
 // uint8
 // uint8 is equivalent to byte (but is preferred over byte for clarity).  Use this
 // whenever you mean a byte (for example, one byte of a network packet).

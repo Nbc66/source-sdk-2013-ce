@@ -113,17 +113,22 @@ entities. Each one is useful under different conditions.
 #include "materialsystem/imaterialsystem.h"
 #include "mathlib/vector.h"
 #include "mathlib/vmatrix.h"
-#include "mathlib/mathlib.h"
+//#include "mathlib/mathlib.h"
 #include "iclientrenderable.h"
 #include "clientleafsystem.h"
 #include "tier0/fasttimer.h"
 #include "utllinkedlist.h"
 #include "utldict.h"
+#ifdef SDK2013CE
+#include <typeinfo>
+#else
 #ifdef WIN32
 #include <typeinfo.h>
 #else
 #include <typeinfo>
 #endif
+#endif // SDK2013CE
+
 #include "tier1/utlintrusivelist.h"
 #include "tier1/utlstring.h"
 
@@ -234,6 +239,13 @@ public:
 #endif
 	
 	IMaterial *m_pMaterial;
+};
+
+// Particle simulation list, used to determine what particles to simulate and how.
+struct ParticleSimListEntry_t
+{
+	CNewParticleEffect* m_pNewParticleEffect;
+	bool m_bBoundingBoxOnly;
 };
 
 
@@ -715,8 +727,9 @@ private:
 		const CViewSetup& view, const VMatrix &worldToPixels, float flFocalDist );
 
 	bool RetireParticleCollections( CParticleSystemDefinition* pDef, int nCount, RetireInfo_t *pInfo, float flScreenArea, float flMaxTotalArea );
-	void BuildParticleSimList( CUtlVector< CNewParticleEffect* > &list );
-	bool EarlyRetireParticleSystems( int nCount, CNewParticleEffect **ppEffects );
+
+	void BuildParticleSimList( CUtlVector< ParticleSimListEntry_t > &list );
+	bool EarlyRetireParticleSystems( int nCount, ParticleSimListEntry_t *ppEffects );
 	static int RetireSort( const void *p1, const void *p2 ); 
 
 private:

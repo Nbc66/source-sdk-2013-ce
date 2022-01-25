@@ -22,6 +22,7 @@ ipch
 *.filters
 *.vpc_crc
 *.sln
+*.sentinel
 
 # Visual Studio build results
 *[Dd]ebug*/
