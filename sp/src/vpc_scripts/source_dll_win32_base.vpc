@@ -49,7 +49,7 @@ $Configuration
 		$TargetMachine						"MachineX64 (/MACHINE:X64)"	[$WIN64]
 		// Suppress this pointless warning using the undocumented /ignore linker switch
 		// schemalib.lib(schemaclassinfo.obj) : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
-		$AdditionalOptions					"$BASE /ignore:4221 /force:multiple"
+		$AdditionalOptions					"$BASE /ignore:4221"
 		$AdditionalOptions					"$BASE $SRCDIR\lib\public\ftol3.obj" [$VS2013 && $WIN32 && !$DISABLE_FTOL3_OVERRIDE && !$SOURCESDK] // Work around CRT bug https://connect.microsoft.com/VisualStudio/feedback/details/806362/vc12-pollutes-the-floating-point-stack-when-casting-infinity-nan-to-unsigned-long#
 	}
 	
