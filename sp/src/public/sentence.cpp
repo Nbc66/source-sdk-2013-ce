@@ -469,7 +469,7 @@ void CSentence::ParseWords( CUtlBuffer& buf )
 {
 	char token[ 4096 ];
 	char word[ 256 ];
-	float start, end;
+	float startLocl, endLocl;
 
 	while ( 1 )
 	{
@@ -484,14 +484,14 @@ void CSentence::ParseWords( CUtlBuffer& buf )
 		Q_strncpy( word, token, sizeof( word ) );
 
 		buf.GetString( token );
-		start = atof( token );
+		startLocl = atof(token);
 		buf.GetString( token );
-		end = atof( token );
+		endLocl = atof(token);
 
 		CWordTag *wt = new CWordTag( word );
 		assert( wt );
-		wt->m_flStartTime = start;
-		wt->m_flEndTime = end;
+		wt->m_flStartTime = startLocl;
+		wt->m_flEndTime = endLocl;
 
 		AddWordTag( wt );
 
@@ -526,8 +526,8 @@ void CSentence::ParseWords( CUtlBuffer& buf )
 			assert( pt );
 			pt->SetPhonemeCode( code );
 			pt->SetTag( phonemename );
-			pt->SetStartTime( start );
-			pt->SetEndTime( end );
+			pt->SetStartTime(startLocl);
+			pt->SetEndTime(endLocl);
 
 			AddPhonemeTag( wt, pt );
 		}
@@ -1304,9 +1304,9 @@ void CSentence::Append( float starttime, const CSentence& src )
 
 		// Offset times
 		int c = newWord->m_Phonemes.Count();
-		for ( int i = 0; i < c; ++i )
+		for (int j = 0; j < c; ++j)
 		{
-			CPhonemeTag *tag = newWord->m_Phonemes[ i ];
+			CPhonemeTag* tag = newWord->m_Phonemes[j];
 			tag->AddStartTime( starttime );
 			tag->AddEndTime( starttime );
 		}

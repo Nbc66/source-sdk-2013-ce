@@ -528,7 +528,7 @@ void CLCD::ShowItems_R( CLCDPage *page, unsigned int dwCurTime, CUtlVector< CLCD
 						{
 							CLCDItem *newItem = NULL;
 
-							CLCDItem *item = ag->m_Definition[ r ];
+							CLCDItem *itemLocl = ag->m_Definition[ r ];
 							switch ( item->m_Type )
 							{
 							default:
@@ -536,7 +536,7 @@ void CLCD::ShowItems_R( CLCDPage *page, unsigned int dwCurTime, CUtlVector< CLCD
 
 							case LCDITEM_TEXT:
 								{
-									CLCDItemText *text = static_cast< CLCDItemText * >( item );
+									CLCDItemText *text = static_cast< CLCDItemText * >( itemLocl );
 									CUtlString s;
 									s = text->m_OriginalText;
 									Replace( s, prefix, s1 );
@@ -551,7 +551,7 @@ void CLCD::ShowItems_R( CLCDPage *page, unsigned int dwCurTime, CUtlVector< CLCD
 
 									// text->m_OriginalText = s;
 
-									CLCDItemText *copy = static_cast< CLCDItemText * >( page->Alloc( item->m_Type ) );
+									CLCDItemText *copy = static_cast< CLCDItemText * >( page->Alloc( itemLocl->m_Type ) );
 									*copy = *text;
 									copy->m_bActive = true;
 									copy->m_OriginalText = s;
@@ -564,8 +564,8 @@ void CLCD::ShowItems_R( CLCDPage *page, unsigned int dwCurTime, CUtlVector< CLCD
 								break;
 							case LCDITEM_ICON:
 								{
-									CLCDItemIcon *icon = static_cast< CLCDItemIcon * >( item );
-									CLCDItemIcon *copy = static_cast< CLCDItemIcon * >( page->Alloc( item->m_Type ) );
+									CLCDItemIcon *icon = static_cast< CLCDItemIcon * >( itemLocl );
+									CLCDItemIcon *copy = static_cast< CLCDItemIcon * >( page->Alloc( itemLocl->m_Type ) );
 									*copy = *icon;
 									copy->m_bActive = true;
 									copy->Create( m_lcd );
@@ -1186,8 +1186,8 @@ void CLCD::DumpPlayer()
 	C_Team *team = player->GetTeam();
 	if ( team )
 	{
-		CDescribeData helper( team );
-		helper.DumpDescription( team->GetPredDescMap() );
+		CDescribeData helperLocl( team );
+		helperLocl.DumpDescription( team->GetPredDescMap() );
 	}
 
 	Msg( "(playerresource)\n\n" );
