@@ -42,7 +42,7 @@ $Configuration
 		$PreprocessorDefinitions		"$BASE;GNUC;POSIX;COMPILER_GCC;MEMOVERRIDE_MODULE=$PROJECTNAME;_DLL_EXT=$_DLL_EXT"
 		$PreprocessorDefinitions		"$BASE;DEDICATED" [$DEDICATED]
 		$PreprocessorDefinitions		"$BASE;_LINUX;LINUX"		[$LINUXALL]
-		$SymbolVisibility				"hidden" 		[$POSIX]
+		$SymbolVisibility				"default" 		[$POSIX]
 		$PreprocessorDefinitions		"$BASE;POSIX;_POSIX"		[$POSIX]
 		
 		$GCC_ExtraCompilerFlags			"-U_FORTIFY_SOURCE" [$LINUXALL]
