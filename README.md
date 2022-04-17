@@ -28,3 +28,4 @@ Thank you for trying out this project we hope we will help you out with your Sou
 Made with :heart: by [@Nbc66](https://github.com/Nbc66) & [@GamerDude27](https://github.com/GamerDude27)
 
 Credits for 2019 support: momentum mod, Brae, and Anthonypython
+Credits for CI: TF2Vintage, Deathreus, Dio, Anthonypython
