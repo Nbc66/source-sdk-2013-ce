@@ -278,12 +278,11 @@ extern "C"
         return pMemOut;
     }
 
+#if NTDDI_VERSION >= 0x0A00000B
     size_t _msize_base(void* pMem)noexcept
-    {
-        return g_pMemAlloc->GetSize(pMem);
-    }
-
-    size_t _msize(void* pMem)
+#else
+    size_t _msize_base( void *pMem )
+#endif
     {
         return _msize_base(pMem);
     }
