@@ -170,7 +170,7 @@ extern "C"
 
     // 64-bit
 #ifdef _WIN64
-    void* __cdecl _malloc_base(size_t nSize)
+    ALLOC_CALL void* __cdecl _malloc_base(size_t nSize)
     {
         return AllocUnattributed(nSize);
     }
@@ -180,7 +180,7 @@ extern "C"
         return AllocUnattributed(nSize);
     }
 #else
-    void* _malloc_base(size_t nSize)
+    ALLOC_CALL void* _malloc_base(size_t nSize)
     {
         return AllocUnattributed(nSize);
     }
@@ -194,7 +194,7 @@ extern "C"
         return pMem;
     }
 #else
-    void* _calloc_base(size_t nSize)
+    ALLOC_CALL void* _calloc_base(size_t nSize)
     {
         void* pMem = AllocUnattributed(nSize);
         memset(pMem, 0, nSize);
@@ -208,7 +208,7 @@ extern "C"
         return ReallocUnattributed(pMem, nSize);
     }
 #else
-    void* _realloc_base(void* pMem, size_t nSize)
+    ALLOC_CALL void* _realloc_base(void* pMem, size_t nSize)
     {
         return ReallocUnattributed(pMem, nSize);
     }
@@ -220,9 +220,9 @@ extern "C"
         return _recalloc(pMem, count, nSize);
     }
 #else
-    void* _recalloc_base(void* pMem, size_t nSize)
+    ALLOC_CALL void* _recalloc_base(void* pMem, size_t nSize)
     {
-        _recalloc(pMem, 1, nSize);
+        return _recalloc(pMem, 1, nSize);
     }
 #endif
 
@@ -279,6 +279,11 @@ extern "C"
     }
 
     size_t _msize_base(void* pMem)noexcept
+    {
+        return g_pMemAlloc->GetSize(pMem);
+    }
+
+    size_t _msize(void* pMem)
     {
         return _msize_base(pMem);
     }
@@ -347,6 +352,7 @@ extern "C"
     }
 
 #ifdef _WIN32
+#include <malloc.h>
     int __cdecl _heapwalk(_HEAPINFO*)
     {
         return 0;
