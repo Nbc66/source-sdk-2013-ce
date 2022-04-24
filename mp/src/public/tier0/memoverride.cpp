@@ -170,65 +170,43 @@ extern "C"
 
     // 64-bit
 #ifdef _WIN64
-    void* __cdecl _malloc_base(size_t nSize)
-    {
-        return AllocUnattributed(nSize);
-    }
-#elif _MSC_VER >= 1900
-    __declspec(restrict) void* _malloc_base(size_t nSize)
+    ALLOC_CALL void* __cdecl _malloc_base(size_t nSize)
     {
         return AllocUnattributed(nSize);
     }
 #else
-    void* _malloc_base(size_t nSize)
+    ALLOC_CALL void* _malloc_base(size_t nSize)
     {
         return AllocUnattributed(nSize);
     }
 #endif
 
-#if _MSC_VER >= 1900
-    __declspec(restrict) void* _calloc_base(size_t count, size_t nSize)
+    ALLOC_CALL void* _calloc_base(size_t nCount, size_t nSize)
     {
-        void* pMem = AllocUnattributed(count * nSize);
-        memset(pMem, 0, count * nSize);
+        void* pMem = AllocUnattributed(nCount * nSize);
+        memset(pMem, 0, nCount * nSize);
         return pMem;
-    }
-#else
-    void* _calloc_base(size_t nSize)
-    {
-        void* pMem = AllocUnattributed(nSize);
-        memset(pMem, 0, nSize);
-        return pMem;
-    }
-#endif
+}
 
-#if _MSC_VER >= 1900
-    __declspec(restrict) void* _realloc_base(void* pMem, size_t nSize)
+    ALLOC_CALL void* _realloc_base(void* pMem, size_t nSize)
     {
         return ReallocUnattributed(pMem, nSize);
     }
-#else
-    void* _realloc_base(void* pMem, size_t nSize)
-    {
-        return ReallocUnattributed(pMem, nSize);
-    }
-#endif
 
-#if _MSC_VER >= 1900
-    __declspec(restrict) void* _recalloc_base(void* pMem, size_t count, size_t nSize)
+    ALLOC_CALL void* _recalloc_base(void* pMem, size_t nCount, size_t nSize)
     {
-        return _recalloc(pMem, count, nSize);
+        void* pMemOut = ReallocUnattributed(pMem, nCount * nSize);
+        memset(pMemOut, 0, nCount * nSize);
+        return pMemOut;
     }
-#else
-    void* _recalloc_base(void* pMem, size_t nSize)
-    {
-        _recalloc(pMem, 1, nSize);
-    }
-#endif
 
     void _free_base(void* pMem)
     {
+#if !defined(USE_LIGHT_MEM_DEBUG) && !defined(USE_MEM_DEBUG)
         g_pMemAlloc->Free(pMem);
+#else
+        g_pMemAlloc->Free(pMem, g_pszModule, 0);
+#endif
     }
 
     void* __cdecl _expand_base(void* pMem, size_t nNewSize, int nBlockUse)
@@ -245,11 +223,7 @@ extern "C"
 
     void* __cdecl _calloc_crt(size_t count, size_t size)
     {
-#if _MSC_VER >= 1900
         return _calloc_base(count, size);
-#else
-        return _calloc_base(count * size);
-#endif
     }
 
     void* __cdecl _realloc_crt(void* ptr, size_t size)
@@ -259,26 +233,22 @@ extern "C"
 
     void* __cdecl _recalloc_crt(void* ptr, size_t count, size_t size)
     {
-#if _MSC_VER >= 1900
-        return _recalloc_base(ptr, count, size);
-#else
-        return _recalloc_base(ptr, size * count);
-#endif
+        return _recalloc_base(ptr, size, count);
     }
 
     ALLOC_CALL void* __cdecl _recalloc(void* memblock, size_t count, size_t size)
     {
-        const size_t oldSize = _msize(memblock);
-        const size_t newSize = count * size;
-        void* pMemOut = ReallocUnattributed(memblock, newSize);
-
-        if (newSize > oldSize)
-            memset(((char*)pMemOut) + oldSize, 0, newSize - oldSize);
-
-        return pMemOut;
+        void* pMem = ReallocUnattributed(memblock, size * count);
+        memset(pMem, 0, size * count);
+        return pMem;
     }
 
     size_t _msize_base(void* pMem)noexcept
+    {
+        return g_pMemAlloc->GetSize(pMem);
+    }
+
+    size_t _msize(void* pMem)
     {
         return _msize_base(pMem);
     }
@@ -347,6 +317,7 @@ extern "C"
     }
 
 #ifdef _WIN32
+#include <malloc.h>
     int __cdecl _heapwalk(_HEAPINFO*)
     {
         return 0;
