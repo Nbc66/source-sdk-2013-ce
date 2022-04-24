@@ -194,10 +194,10 @@ extern "C"
         return pMem;
     }
 #else
-    ALLOC_CALL void* _calloc_base(size_t nCount, size_t nSize)
+    ALLOC_CALL void* _calloc_base(size_t nSize)
     {
-        void* pMem = AllocUnattributed(nCount * nSize);
-        memset(pMem, 0, nCount * nSize);
+        void* pMem = AllocUnattributed(nSize);
+        memset(pMem, 0, nSize);
         return pMem;
     }
 #endif
@@ -220,11 +220,9 @@ extern "C"
         return _recalloc(pMem, count, nSize);
     }
 #else
-    ALLOC_CALL void* _recalloc_base(void* pMem, size_t nCount, size_t nSize)
+    ALLOC_CALL void* _recalloc_base(void* pMem, size_t nSize)
     {
-        void* pMemOut = ReallocUnattributed(pMem, nCount * nSize);
-        memset(pMemOut, 0, nCount * nSize);
-        return pMemOut;
+        return _recalloc(pMem, 1, nSize);
     }
 #endif
 
