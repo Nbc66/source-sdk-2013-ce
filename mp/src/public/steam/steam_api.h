@@ -594,7 +594,8 @@ inline bool CSteamAPIContext::Init()
 		return false;
 	}
 
-	/*m_pSteamMusicRemote = SteamClient()->GetISteamMusicRemote( hSteamUser, hSteamPipe, STEAMMUSICREMOTE_INTERFACE_VERSION );
+#ifndef SDK2013CE
+	m_pSteamMusicRemote = SteamClient()->GetISteamMusicRemote( hSteamUser, hSteamPipe, STEAMMUSICREMOTE_INTERFACE_VERSION );
 	if ( !m_pSteamMusicRemote )
 	{
 		return false;
@@ -604,7 +605,8 @@ inline bool CSteamAPIContext::Init()
 	if ( !m_pSteamHTMLSurface )
 	{
 		return false;
-	}*/
+	}
+#endif // !SDK2013CE
 
 #ifdef _PS3
 	m_pSteamPS3OverlayRender = SteamClient()->GetISteamPS3OverlayRender();
