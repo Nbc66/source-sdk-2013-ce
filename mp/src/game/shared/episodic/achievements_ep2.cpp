@@ -60,7 +60,11 @@ protected:
 	virtual void Init() 
 	{
 		SetFlags( ACH_LISTEN_KILL_ENEMY_EVENTS | ACH_SAVE_WITH_GAME );
+#ifdef SDK2013CE
+		SetInflictorFilter( "prop_vehicle_jalopy" );
+#else
 		SetInflictorFilter( "prop_vehicle_jeep" );
+#endif // SDK2013CE
 		SetGameDirFilter( "ep2" );
 		SetGoal( 20 );
 	}
