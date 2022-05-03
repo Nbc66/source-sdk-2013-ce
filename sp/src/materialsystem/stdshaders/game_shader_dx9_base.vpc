@@ -51,11 +51,11 @@ $Project
 	{
 		$File	"BaseVSShader.cpp"
 
-		$File	"example_model_dx9.cpp"
-		$File	"example_model_dx9_helper.cpp"
+		//$File	"example_model_dx9.cpp"
+		//$File	"example_model_dx9_helper.cpp"
 
-		$File	"Bloom.cpp"
-		$File	"screenspace_general.cpp"
+		//$File	"Bloom.cpp"
+		//$File	"screenspace_general.cpp"
 	}
 
 	$Folder	"Header Files"
@@ -68,7 +68,7 @@ $Project
 		$File	"common_vs_fxc.h"
 		$File	"shader_constant_register_map.h"
 
-		$File	"example_model_dx9_helper.h"
+		//$File	"example_model_dx9_helper.h"
 	}
 
 	$Folder	"Link Libraries" [$WIN32]
