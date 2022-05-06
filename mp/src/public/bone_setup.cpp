@@ -5928,10 +5928,14 @@ const char *Studio_GetDefaultSurfaceProps( CStudioHdr *pstudiohdr )
 
 float Studio_GetMass( CStudioHdr *pstudiohdr )
 {
+	#ifdef SDK2013CE
+	
 	if ( pstudiohdr == NULL )
 	{
 		return 0.f;
 	}
+
+	#endif
 
 	return pstudiohdr->mass();
 }
