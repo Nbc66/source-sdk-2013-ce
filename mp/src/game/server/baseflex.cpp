@@ -2157,8 +2157,13 @@ void CBaseFlex::DoBodyLean( void )
 		{
 			m_vecPrevVelocity = vecDelta;
 			float decay =  ExponentialDecay( 0.5, 0.1, dt );
+#ifdef SDK2013CE
+			m_vecShift *= decay;
+			m_vecLean *= decay;
+#else
 			m_vecShift = m_vecLean * decay;
 			m_vecLean = m_vecShift * decay;
+#endif // SDK2013CE
  		}
 
 		m_vecPrevOrigin = vecOrigin;
