@@ -1,0 +1,41 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: Describe the behaviour you're expecting
+      placeholder: When I drive then the car should move
+    validations:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to Reproduce
+      description: Provide detailed steps for repoducing the issue
+      placeholder: |
+        1. Open
+        2. Run
+        3. Test
+        4. Crash
+    validations:
+      required: true
+  - type: textarea
+    id: detailed-description
+    attributes:
+      label: Detailed Description
+      description: Provide information about the failure.
+      placeholder: My mod crashed when ...
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating System
+      description: Windows 10, Arch Linux, MacOS, etc
+      placeholder: Arch Linux
+    validations:
+      required: true
