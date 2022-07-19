@@ -73,9 +73,6 @@ BEGIN_SEND_TABLE_NOBASE( CHL2MP_Player, DT_HL2MPLocalPlayerExclusive )
 	SendPropVector	(SENDINFO(m_vecOrigin), -1,  SPROP_NOSCALE|SPROP_CHANGES_OFTEN, 0.0f, HIGH_DEFAULT, SendProxy_Origin ),
 	SendPropFloat( SENDINFO_VECTORELEM(m_angEyeAngles, 0), 8, SPROP_CHANGES_OFTEN, -90.0f, 90.0f ),
 //	SendPropAngle( SENDINFO_VECTORELEM(m_angEyeAngles, 1), 10, SPROP_CHANGES_OFTEN ),
-	// Only need to latch cycle for other players
-	// If you increase the number of bits networked, make sure to also modify the code below and in the client class.
-	SendPropInt( SENDINFO( m_cycleLatch ), 4, SPROP_UNSIGNED ),
 END_SEND_TABLE()
 
 BEGIN_SEND_TABLE_NOBASE( CHL2MP_Player, DT_HL2MPNonLocalPlayerExclusive )
@@ -83,6 +80,9 @@ BEGIN_SEND_TABLE_NOBASE( CHL2MP_Player, DT_HL2MPNonLocalPlayerExclusive )
 	SendPropVector	(SENDINFO(m_vecOrigin), -1,  SPROP_COORD_MP_LOWPRECISION|SPROP_CHANGES_OFTEN, 0.0f, HIGH_DEFAULT, SendProxy_Origin ),
 	SendPropFloat( SENDINFO_VECTORELEM(m_angEyeAngles, 0), 8, SPROP_CHANGES_OFTEN, -90.0f, 90.0f ),
 	SendPropAngle( SENDINFO_VECTORELEM(m_angEyeAngles, 1), 10, SPROP_CHANGES_OFTEN ),
+	// Only need to latch cycle for other players
+	// If you increase the number of bits networked, make sure to also modify the code below and in the client class.
+	SendPropInt(SENDINFO(m_cycleLatch), 4, SPROP_UNSIGNED),
 END_SEND_TABLE()
 
 IMPLEMENT_SERVERCLASS_ST(CHL2MP_Player, DT_HL2MP_Player)
