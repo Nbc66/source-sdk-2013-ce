@@ -78,8 +78,10 @@ public:
 
 	CWeapon_SLAM();
 
-#ifndef CLIENT_DLL
+#if !defined( CLIENT_DLL ) || defined( SDK2013CE )
 	DECLARE_ACTTABLE();
+#endif
+#ifndef CLIENT_DLL
 	DECLARE_DATADESC();
 #endif
 

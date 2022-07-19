@@ -179,6 +179,12 @@ void DispatchEffect( const char *pName, const CEffectData &data )
 	te->DispatchEffect( filter, 0.0, data.m_vOrigin, pName, data );
 }
 
+#ifdef SDK2013CE
+void DispatchEffect( const char *pName, const CEffectData &data, IRecipientFilter &filter )
+{
+	te->DispatchEffect( filter, 0.0, data.m_vOrigin, pName, data );
+}
+#endif // SDK2013CE
 
 //-----------------------------------------------------------------------------
 // Playback

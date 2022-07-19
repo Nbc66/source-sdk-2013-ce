@@ -433,7 +433,7 @@ private:
 	void	SetChargerState( ChargerState_t state );
 	void	DoLoadEffect( void );
 
-#ifndef CLIENT_DLL
+#if !defined( CLIENT_DLL ) || defined( SDK2013CE )
 	DECLARE_ACTTABLE();
 #endif
 
@@ -475,10 +475,25 @@ LINK_ENTITY_TO_CLASS( weapon_crossbow, CWeaponCrossbow );
 
 PRECACHE_WEAPON_REGISTER( weapon_crossbow );
 
-#ifndef CLIENT_DLL
+#if !defined( CLIENT_DLL ) || defined( SDK2013CE )
 
 acttable_t	CWeaponCrossbow::m_acttable[] = 
 {
+#ifdef SDK2013CE
+	{ ACT_MP_STAND_IDLE,				ACT_HL2MP_IDLE_CROSSBOW,					false },
+	{ ACT_MP_CROUCH_IDLE,				ACT_HL2MP_IDLE_CROUCH_CROSSBOW,				false },
+
+	{ ACT_MP_RUN,						ACT_HL2MP_RUN_CROSSBOW,						false },
+	{ ACT_MP_CROUCHWALK,				ACT_HL2MP_WALK_CROUCH_CROSSBOW,				false },
+
+	{ ACT_MP_ATTACK_STAND_PRIMARYFIRE,	ACT_HL2MP_GESTURE_RANGE_ATTACK_CROSSBOW,	false },
+	{ ACT_MP_ATTACK_CROUCH_PRIMARYFIRE,	ACT_HL2MP_GESTURE_RANGE_ATTACK_CROSSBOW,	false },
+
+	{ ACT_MP_RELOAD_STAND,				ACT_HL2MP_GESTURE_RANGE_ATTACK_CROSSBOW,			false },
+	{ ACT_MP_RELOAD_CROUCH,				ACT_HL2MP_GESTURE_RANGE_ATTACK_CROSSBOW,			false },
+
+	{ ACT_MP_JUMP,						ACT_HL2MP_JUMP_CROSSBOW,					false },
+#else
 	{ ACT_HL2MP_IDLE,					ACT_HL2MP_IDLE_CROSSBOW,					false },
 	{ ACT_HL2MP_RUN,					ACT_HL2MP_RUN_CROSSBOW,						false },
 	{ ACT_HL2MP_IDLE_CROUCH,			ACT_HL2MP_IDLE_CROUCH_CROSSBOW,				false },
@@ -486,6 +501,7 @@ acttable_t	CWeaponCrossbow::m_acttable[] =
 	{ ACT_HL2MP_GESTURE_RANGE_ATTACK,	ACT_HL2MP_GESTURE_RANGE_ATTACK_CROSSBOW,	false },
 	{ ACT_HL2MP_GESTURE_RELOAD,			ACT_HL2MP_GESTURE_RELOAD_CROSSBOW,			false },
 	{ ACT_HL2MP_JUMP,					ACT_HL2MP_JUMP_CROSSBOW,					false },
+#endif // SDK2013CE
 };
 
 IMPLEMENT_ACTTABLE(CWeaponCrossbow);
@@ -792,6 +808,41 @@ void CWeaponCrossbow::DoLoadEffect( void )
 	if ( pOwner == NULL )
 		return;
 
+#ifdef SDK2013CE
+	//Tony; change this up a bit; on the server, dispatch an effect but don't send it to the client who fires
+	//on the client, create an effect either in the view model, or on the world model if first person.
+	CEffectData	data;
+
+	data.m_nAttachmentIndex = 1;
+	data.m_vOrigin = pOwner->GetAbsOrigin();
+
+	CPASFilter filter( data.m_vOrigin );
+
+#ifdef GAME_DLL
+	filter.RemoveRecipient( pOwner );
+	data.m_nEntIndex = entindex();
+#else
+	CBaseViewModel *pViewModel = pOwner->GetViewModel();
+	if ( ShouldDrawUsingViewModel() && pViewModel != NULL )
+		data.m_hEntity = pViewModel->GetRefEHandle();
+	else
+		data.m_hEntity = GetRefEHandle();
+#endif
+	DispatchEffect( "CrossbowLoad", data, filter );
+
+#ifndef CLIENT_DLL
+	CSprite *pBlast = CSprite::SpriteCreate( CROSSBOW_GLOW_SPRITE2, GetAbsOrigin(), false );
+
+	if ( pBlast )
+	{
+		pBlast->SetAttachment( this, 1 );
+		pBlast->SetTransparency( kRenderTransAdd, 255, 255, 255, 255, kRenderFxNone );
+		pBlast->SetBrightness( 128 );
+		pBlast->SetScale( 0.2f );
+		pBlast->FadeOutFromSpawn();
+	}
+#endif
+#else
 	CBaseViewModel *pViewModel = pOwner->GetViewModel();
 
 	if ( pViewModel == NULL )
@@ -821,7 +872,7 @@ void CWeaponCrossbow::DoLoadEffect( void )
 		pBlast->FadeOutFromSpawn();
 	}
 #endif
-	
+#endif // SDK2013CE
 }
 
 //-----------------------------------------------------------------------------

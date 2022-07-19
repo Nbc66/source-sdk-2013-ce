@@ -16,6 +16,9 @@ class CHL2MP_Player;
 #include "hl2_player.h"
 #include "simtimer.h"
 #include "soundenvelope.h"
+#ifdef SDK2013CE
+#include "hl2mp_playeranimstate.h"
+#endif // SDK2013CE
 #include "hl2mp_player_shared.h"
 #include "hl2mp_gamerules.h"
 #include "utldict.h"
@@ -51,13 +54,22 @@ public:
 
 	DECLARE_SERVERCLASS();
 	DECLARE_DATADESC();
+#ifdef SDK2013CE
+	DECLARE_PREDICTABLE();
+
+	// This passes the event to the client's and server's CHL2MPPlayerAnimState.
+	void			DoAnimationEvent( PlayerAnimEvent_t event, int nData = 0 );
+	void			SetupBones( matrix3x4_t *pBoneToWorld, int boneMask );
+#endif // SDK2013CE
 
 	virtual void Precache( void );
 	virtual void Spawn( void );
 	virtual void PostThink( void );
 	virtual void PreThink( void );
 	virtual void PlayerDeathThink( void );
+#ifndef SDK2013CE
 	virtual void SetAnimation( PLAYER_ANIM playerAnim );
+#endif // !SDK2013CE
 	virtual bool HandleCommand_JoinTeam( int team );
 	virtual bool ClientCommand( const CCommand &args );
 	virtual void CreateViewModel( int viewmodelindex = 0 );
@@ -82,9 +94,14 @@ public:
 	void	PrecacheFootStepSounds( void );
 	bool	ValidatePlayerModel( const char *pModel );
 
+#ifndef SDK2013CE
 	QAngle GetAnimEyeAngles( void ) { return m_angEyeAngles.Get(); }
+#endif // !SDK2013CE
 
 	Vector GetAttackSpread( CBaseCombatWeapon *pWeapon, CBaseEntity *pTarget = NULL );
+#ifdef SDK2013CE
+	virtual Vector GetAutoaimVector( float flDelta );
+#endif // SDK2013CE
 
 	void CheatImpulseCommands( int iImpulse );
 	void CreateRagdollEntity( void );
@@ -93,7 +110,12 @@ public:
 
 	void NoteWeaponFired( void );
 
+#ifdef SDK2013CE
+	void SetAnimation( PLAYER_ANIM playerAnim );
+#else
 	void ResetAnimation( void );
+#endif // SDK2013CE
+
 	void SetPlayerModel( void );
 	void SetPlayerTeamModel( void );
 	Activity TranslateTeamActivity( Activity ActToTranslate );
@@ -140,8 +162,14 @@ public:
 		
 private:
 
+#ifdef SDK2013CE
+	CHL2MPPlayerAnimState *m_PlayerAnimState;
+#endif // SDK2013CE
+
 	CNetworkQAngle( m_angEyeAngles );
+#ifndef SDK2013CE
 	CPlayerAnimState   m_PlayerAnimState;
+#endif // !SDK2013CE
 
 	int m_iLastWeaponFireUsercmd;
 	int m_iModelType;
@@ -163,6 +191,11 @@ private:
 
     bool m_bEnterObserver;
 	bool m_bReady;
+
+#ifdef SDK2013CE
+	CNetworkVar( int, m_cycleLatch ); // Network the cycle to clients periodically
+	CountdownTimer m_cycleLatchTimer;
+#endif // SDK2013CE
 };
 
 inline CHL2MP_Player *ToHL2MPPlayer( CBaseEntity *pEntity )

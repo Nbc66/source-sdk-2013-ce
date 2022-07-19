@@ -41,7 +41,9 @@ public:
 	#ifdef GAME_DLL
 		DECLARE_DATADESC();
 	
+#ifdef SDK2013CE
 		void SendReloadSoundEvent( void );
+#endif // SDK2013CE
 
 		void Materialize( void );
 		virtual	int	ObjectCaps( void );
@@ -60,6 +62,9 @@ public:
 
 	virtual void FireBullets( const FireBulletsInfo_t &info );
 	virtual void FallInit( void );
+#ifdef SDK2013CE
+	virtual bool Reload();
+#endif // SDK2013CE
 	
 public:
 	#if defined( CLIENT_DLL )
