@@ -1,0 +1,19 @@
+name: Enhancement Request
+description: Suggest a new feature
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: detailed-improvement
+    attributes:
+      label: Detailed Improvement
+      description: Provide information about your improvement.
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating System
+      description: Windows 10, Arch Linux, MacOS, etc
+      placeholder: Arch Linux
+    validations:
+      required: false
