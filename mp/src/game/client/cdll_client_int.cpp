@@ -319,10 +319,6 @@ static ConVar s_CV_ShowParticleCounts("showparticlecounts", "0", 0, "Display num
 static ConVar s_cl_team("cl_team", "default", FCVAR_USERINFO|FCVAR_ARCHIVE, "Default team when joining a game");
 static ConVar s_cl_class("cl_class", "default", FCVAR_USERINFO|FCVAR_ARCHIVE, "Default class when joining a game");
 
-#ifdef HL1MP_CLIENT_DLL
-static ConVar s_cl_load_hl1_content("cl_load_hl1_content", "0", FCVAR_ARCHIVE, "Mount the content from Half-Life: Source if possible");
-#endif
-
 
 // Physics system
 bool g_bLevelInitialized;
@@ -1127,22 +1123,6 @@ void CHLClient::PostInit()
 #endif
 
 	g_ClientVirtualReality.StartupComplete();
-
-#ifdef HL1MP_CLIENT_DLL
-	if ( s_cl_load_hl1_content.GetBool() && steamapicontext && steamapicontext->SteamApps() )
-	{
-		char szPath[ MAX_PATH*2 ];
-		int ccFolder= steamapicontext->SteamApps()->GetAppInstallDir( 280, szPath, sizeof(szPath) );
-		if ( ccFolder > 0 )
-		{
-			V_AppendSlash( szPath, sizeof(szPath) );
-			V_strncat( szPath, "hl1", sizeof( szPath ) );
-
-			g_pFullFileSystem->AddSearchPath( szPath, "HL1" );
-			g_pFullFileSystem->AddSearchPath( szPath, "GAME" );
-		}
-	}
-#endif
 }
 
 //-----------------------------------------------------------------------------
