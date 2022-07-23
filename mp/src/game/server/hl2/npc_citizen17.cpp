@@ -457,11 +457,6 @@ void CNPC_Citizen::Spawn()
 {
 	BaseClass::Spawn();
 
-#ifdef _XBOX
-	// Always fade the corpse
-	AddSpawnFlags( SF_NPC_FADE_CORPSE );
-#endif // _XBOX
-
 	if ( ShouldAutosquad() )
 	{
 		if ( m_SquadName == GetPlayerSquadName() )

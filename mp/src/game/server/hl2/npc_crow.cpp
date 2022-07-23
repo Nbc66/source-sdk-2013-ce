@@ -90,11 +90,6 @@ void CNPC_Crow::Spawn( void )
 {
 	BaseClass::Spawn();
 
-#ifdef _XBOX
-	// Always fade the corpse
-	AddSpawnFlags( SF_NPC_FADE_CORPSE );
-#endif // _XBOX
-
 	char *szModel = (char *)STRING( GetModelName() );
 	if (!szModel || !*szModel)
 	{

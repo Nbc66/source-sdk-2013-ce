@@ -233,11 +233,6 @@ void CBaseHeadcrab::Spawn( void )
 	//Precache();
 	//SetModel( "models/headcrab.mdl" );
 	//m_iHealth			= sk_headcrab_health.GetFloat();
-	
-#ifdef _XBOX
-	// Always fade the corpse
-	AddSpawnFlags( SF_NPC_FADE_CORPSE );
-#endif // _XBOX
 
 	SetHullType(HULL_TINY);
 	SetHullSizeNormal();

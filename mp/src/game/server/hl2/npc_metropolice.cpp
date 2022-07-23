@@ -616,11 +616,6 @@ void CNPC_MetroPolice::Spawn( void )
 {
 	Precache();
 
-#ifdef _XBOX
-	// Always fade the corpse
-	AddSpawnFlags( SF_NPC_FADE_CORPSE );
-#endif // _XBOX
-
 	SetModel( STRING( GetModelName() ) );
 
 	SetHullType(HULL_HUMAN);

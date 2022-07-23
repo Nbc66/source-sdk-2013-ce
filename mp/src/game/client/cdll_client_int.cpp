@@ -1687,10 +1687,6 @@ void CHLClient::LevelShutdown( void )
 #endif
 	UncacheAllMaterials();
 
-#ifdef _XBOX
-	ReleaseRenderTargets();
-#endif
-
 	// string tables are cleared on disconnect from a server, so reset our global pointers to NULL
 	ResetStringTablePointers();
 

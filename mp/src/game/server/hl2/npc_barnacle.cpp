@@ -2063,11 +2063,7 @@ void CNPC_Barnacle::Event_Killed( const CTakeDamageInfo &info )
 	}
 
 	// Puke blood
-#ifdef _XBOX
-	UTIL_BloodSpray( GetAbsOrigin(), Vector(0,0,-1), BLOOD_COLOR_YELLOW, 8, FX_BLOODSPRAY_ALL );
-#else
 	UTIL_BloodSpray( GetAbsOrigin(), Vector(0,0,-1), BLOOD_COLOR_RED, 8, FX_BLOODSPRAY_ALL );
-#endif
 
 	// Put blood on the ground if near enough
 	trace_t bloodTrace;
@@ -2075,11 +2071,7 @@ void CNPC_Barnacle::Event_Killed( const CTakeDamageInfo &info )
 	
 	if ( bloodTrace.fraction < 1.0f )
 	{
-#ifdef _XBOX
-		UTIL_BloodDecalTrace( &bloodTrace, BLOOD_COLOR_YELLOW );
-#else
 		UTIL_BloodDecalTrace( &bloodTrace, BLOOD_COLOR_RED );
-#endif
 	}
 
 	EmitSound( "NPC_Barnacle.Die" );

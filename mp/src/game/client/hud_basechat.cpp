@@ -724,14 +724,6 @@ void CBaseHudChat::Reset( void )
 #endif
 }
 
-#ifdef _XBOX
-bool CBaseHudChat::ShouldDraw()
-{
-	// never think, never draw
-	return false;
-}
-#endif
-
 void CBaseHudChat::Paint( void )
 {
 #ifndef _XBOX

@@ -1280,11 +1280,7 @@ void CNPC_Manhack::MoveToTarget(float flInterval, const Vector &vMoveTarget)
 
 		flDist	= FLT_MAX;
 		myDecay	 = 0.3f;
-#ifdef _XBOX
-		myAccel	 = 500;
-#else
 		myAccel	 = 400;
-#endif // _XBOX
 		myZAccel = MIN( 500, zDist / flInterval );
 	}
 	else
@@ -2364,11 +2360,6 @@ void CNPC_Manhack::Spawn(void)
 {
 	Precache();
 
-#ifdef _XBOX
-	// Always fade the corpse
-	AddSpawnFlags( SF_NPC_FADE_CORPSE );
-#endif // _XBOX
-
 	SetModel( "models/manhack.mdl" );
 	SetHullType(HULL_TINY_CENTERED); 
 	SetHullSizeNormal();
@@ -2921,11 +2912,8 @@ bool CNPC_Manhack::IsInEffectiveTargetZone( CBaseEntity *pTarget )
 	
 	// Get the enemies top and bottom point
 	pTarget->CollisionProp()->NormalizedToWorldSpace( Vector(0.0f,0.0f,1.0f), &vecMaxPos );
-#ifdef _XBOX
-	pTarget->CollisionProp()->NormalizedToWorldSpace( Vector(0.0f,0.0f,0.5f), &vecMinPos ); // Only half the body is valid
-#else
 	pTarget->CollisionProp()->NormalizedToWorldSpace( Vector(0.0f,0.0f,0.0f), &vecMinPos );
-#endif // _XBOX
+
 	// See if we're within that range
 	if ( ourHeight > vecMinPos.z && ourHeight < vecMaxPos.z )
 		return true;

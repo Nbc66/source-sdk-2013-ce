@@ -1090,21 +1090,6 @@ bool CHL2GameMovement::LadderMove( void )
 			}
 		}
 
-#ifdef _XBOX
-		if( sv_ladders_useonly.GetBool() )
-		{
-			// Stick up climbs up, stick down climbs down. No matter which way you're looking.
-			if ( mv->m_nButtons & IN_FORWARD )
-			{
-				factor = 1.0f;
-			}
-			else if( mv->m_nButtons & IN_BACK )
-			{
-				factor = -1.0f;
-			}
-		}
-#endif//_XBOX
-
 		mv->m_vecVelocity = MAX_CLIMB_SPEED * factor * ladderUp;
 	}
 	else

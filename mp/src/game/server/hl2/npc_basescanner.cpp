@@ -85,12 +85,6 @@ CNPC_BaseScanner::CNPC_BaseScanner()
 //-----------------------------------------------------------------------------
 void CNPC_BaseScanner::Spawn(void)
 {
-#ifdef _XBOX
-	// Always fade the corpse
-	AddSpawnFlags( SF_NPC_FADE_CORPSE );
-	AddEffects( EF_NOSHADOW );
-#endif // _XBOX
-
 	SetHullType( HULL_TINY_CENTERED );
 	SetHullSizeNormal();
 

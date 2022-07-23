@@ -266,11 +266,6 @@ void CNPC_Antlion::Spawn( void )
 {
 	Precache();
 
-#ifdef _XBOX
-	// Always fade the corpse
-	AddSpawnFlags( SF_NPC_FADE_CORPSE );
-#endif // _XBOX
-
 #ifdef HL2_EPISODIC
 	if ( IsWorker() )
 	{

@@ -271,11 +271,7 @@ void C_BaseExplosionEffect::CreateCore( void )
 	#ifdef INVASION_CLIENT_DLL
 				pParticle->m_flDieTime	= random->RandomFloat( 0.5f, 1.0f );
 	#endif
-	#ifdef _XBOX
-				pParticle->m_flDieTime	= 1.0f;
-	#else
 				pParticle->m_flDieTime	= random->RandomFloat( 2.0f, 3.0f );
-	#endif
 
 				pParticle->m_vecVelocity.Random( -spread, spread );
 				pParticle->m_vecVelocity += ( m_vecDirection * random->RandomFloat( 1.0f, 6.0f ) );
@@ -634,14 +630,8 @@ void C_BaseExplosionEffect::CreateDebris( void )
 
 	// Setup our collision information
 	fleckEmitter->m_ParticleCollision.Setup( m_vecOrigin, &m_vecDirection, 0.9f, 512, 1024, 800, 0.5f );
-	
 
-#ifdef _XBOX
-	int	numFlecks = random->RandomInt( 8, 16 );
-#else	
 	int	numFlecks = random->RandomInt( 16, 32 );
-#endif // _XBOX
-
 
 	// Dump out flecks
 	for ( i = 0; i < numFlecks; i++ )
