@@ -272,8 +272,8 @@ typedef unsigned int		uint;
 	#if _MSC_FULL_VER < 140050727
 		#error You must install VS 2005 SP1
 	#endif
+	*/
 #endif
-*/
 #endif
 
 // This can be used to ensure the size of pointers to members when declaring

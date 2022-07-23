@@ -1,3 +1,6 @@
 Y:\source-sdk-2013-mm\source-sdk-2013-mm\mp\src\game\client\Release_mod_sdk2013ce\client.dll.lastcodeanalysissucceeded
 Y:\source-sdk-2013-mm\source-sdk-2013-mm\mp\src\game\client\Release_mod_sdk2013ce\NativeCodeAnalysis.read.1.tlog
 Y:\source-sdk-2013-mm\source-sdk-2013-mm\mp\src\game\client\Release_mod_sdk2013ce\client.dll
+\\OPENMEDIAVAULT\code\source-sdk-2013-mm\source-sdk-2013-mm\mp\src\game\client\Release_mod_sdk2013ce\client.dll.lastcodeanalysissucceeded
+\\OPENMEDIAVAULT\code\source-sdk-2013-mm\source-sdk-2013-mm\mp\src\game\client\Release_mod_sdk2013ce\NativeCodeAnalysis.read.1.tlog
+\\OPENMEDIAVAULT\code\source-sdk-2013-mm\source-sdk-2013-mm\mp\src\game\client\Release_mod_sdk2013ce\client.dll
