@@ -64,12 +64,6 @@ using sixenseMath::Line;
 #include "filesystem.h"
 #include "sourcevr/isourcevirtualreality.h"
 
-#ifdef TF_CLIENT_DLL
-#include "tf_hud_menu_engy_build.h"
-#include "tf_hud_menu_engy_destroy.h"
-#include "tf_hud_menu_spy_disguise.h"
-#endif 
-
 #ifdef PORTAL2
 #include "BasePanel.h"
 #include "usermessages.h"

@@ -260,6 +260,7 @@ typedef unsigned int		uint;
 // number can be obtained by looking at the compiler output when you type 'cl'
 // and removing the last two digits and the periods: 16.00.40219.01 becomes 160040219
 #if _MSC_FULL_VER > 180000000
+/*
 	#if _MSC_FULL_VER < 180030723
 		#error You must install VS 2013 Update 3
 	#endif
@@ -272,6 +273,7 @@ typedef unsigned int		uint;
 		#error You must install VS 2005 SP1
 	#endif
 #endif
+*/
 #endif
 
 // This can be used to ensure the size of pointers to members when declaring

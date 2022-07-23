@@ -1866,8 +1866,6 @@ void CTempEnts::MuzzleFlash( const Vector& pos1, const QAngle& angles, int type,
 		break;
 	}
 
-#endif
-
 }
 
 //-----------------------------------------------------------------------------

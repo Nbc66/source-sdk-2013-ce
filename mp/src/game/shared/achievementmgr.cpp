@@ -20,9 +20,6 @@
 #include "achievement_notification_panel.h"
 #include "c_playerresource.h"
 #include "gamestats.h"
-#ifdef TF_CLIENT_DLL
-#include "econ_item_inventory.h"
-#endif //TF_CLIENT_DLL
 #else
 #include "enginecallback.h"
 #endif // CLIENT_DLL
@@ -310,13 +307,6 @@ bool CAchievementMgr::Init()
 	ListenForGameEvent( "player_stats_updated" );
 	usermessages->HookMessage( "AchievementEvent", MsgFunc_AchievementEvent );
 #endif // CLIENT_DLL
-
-#ifdef TF_CLIENT_DLL
-	ListenForGameEvent( "localplayer_changeclass" );
-	ListenForGameEvent( "localplayer_changeteam" );
-	ListenForGameEvent( "teamplay_round_start" );	
-	ListenForGameEvent( "teamplay_round_win" );
-#endif // TF_CLIENT_DLL
 
 	return true;
 }

@@ -487,12 +487,6 @@ bool ClientModeShared::ShouldDrawEntity(C_BaseEntity *pEnt)
 //-----------------------------------------------------------------------------
 bool ClientModeShared::ShouldDrawParticles( )
 {
-#ifdef TF_CLIENT_DLL
-	C_TFPlayer *pTFPlayer = C_TFPlayer::GetLocalTFPlayer();
-	if ( pTFPlayer && !pTFPlayer->ShouldPlayerDrawParticles() )
-		return false;
-#endif // TF_CLIENT_DLL
-
 	return true;
 }
 

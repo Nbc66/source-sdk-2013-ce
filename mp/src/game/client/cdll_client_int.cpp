@@ -262,11 +262,6 @@ INetworkStringTable *g_pStringTableInfoPanel = NULL;
 INetworkStringTable *g_pStringTableClientSideChoreoScenes = NULL;
 INetworkStringTable *g_pStringTableServerMapCycle = NULL;
 
-#ifdef TF_CLIENT_DLL
-INetworkStringTable *g_pStringTableServerPopFiles = NULL;
-INetworkStringTable *g_pStringTableServerMapCycleMvM = NULL;
-#endif
-
 static CGlobalVarsBase dummyvars( true );
 // So stuff that might reference gpGlobals during DLL initialization won't have a NULL pointer.
 // Once the engine calls Init on this DLL, this pointer gets assigned to the shared data in the engine
@@ -1622,11 +1617,6 @@ void CHLClient::ResetStringTablePointers()
 	g_pStringTableInfoPanel = NULL;
 	g_pStringTableClientSideChoreoScenes = NULL;
 	g_pStringTableServerMapCycle = NULL;
-
-#ifdef TF_CLIENT_DLL
-	g_pStringTableServerPopFiles = NULL;
-	g_pStringTableServerMapCycleMvM = NULL;
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -1849,16 +1839,6 @@ void CHLClient::InstallStringTableCallback( const char *tableName )
 	{
 		g_pStringTableServerMapCycle = networkstringtable->FindTable( tableName );
 	}
-#ifdef TF_CLIENT_DLL
-	else if ( !Q_strcasecmp( tableName, "ServerPopFiles" ) )
-	{
-		g_pStringTableServerPopFiles = networkstringtable->FindTable( tableName );
-	}
-	else if ( !Q_strcasecmp( tableName, "ServerMapCycleMvM" ) )
-	{
-		g_pStringTableServerMapCycleMvM = networkstringtable->FindTable( tableName );
-	}
-#endif
 
 	InstallStringTableCallback_GameRules();
 }
@@ -2502,36 +2482,6 @@ void CHLClient::FileReceived( const char * fileName, unsigned int transferID )
 
 void CHLClient::ClientAdjustStartSoundParams( StartSoundParams_t& params )
 {
-#ifdef TF_CLIENT_DLL
-	CBaseEntity *pEntity = ClientEntityList().GetEnt( params.soundsource );
-
-	// A player speaking
-	if ( params.entchannel == CHAN_VOICE && GameRules() && pEntity && pEntity->IsPlayer() )
-	{
-		// Use high-pitched voices for other players if the local player has an item that allows them to hear it (Pyro Goggles)
-		if ( !GameRules()->IsLocalPlayer( params.soundsource ) && IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_PYRO ) )
-		{
-			params.pitch *= 1.3f;
-		}
-		// Halloween voice futzery?
-		else
-		{
-			float flVoicePitchScale = 1.f;
-			CALL_ATTRIB_HOOK_FLOAT_ON_OTHER( pEntity, flVoicePitchScale, voice_pitch_scale );
-
-			int iHalloweenVoiceSpell = 0;
-			CALL_ATTRIB_HOOK_INT_ON_OTHER( pEntity, iHalloweenVoiceSpell, halloween_voice_modulation );
-			if ( iHalloweenVoiceSpell > 0 )
-			{
-				params.pitch *= 0.8f;
-			}
-			else if( flVoicePitchScale != 1.f )
-			{
-				params.pitch *= flVoicePitchScale;
-			}
-		}
-	}
-#endif
 }
 
 const char* CHLClient::TranslateEffectForVisionFilter( const char *pchEffectType, const char *pchEffectName )
@@ -2545,10 +2495,6 @@ const char* CHLClient::TranslateEffectForVisionFilter( const char *pchEffectType
 bool CHLClient::DisconnectAttempt( void )
 {
 	bool bRet = false;
-
-#if defined( TF_CLIENT_DLL )
-	bRet = HandleDisconnectAttempt();
-#endif
 
 	return bRet;
 }

@@ -13,9 +13,6 @@
 #include "vphysics/object_hash.h"
 #include "mathlib/IceKey.H"
 #include "checksum_crc.h"
-#ifdef TF_CLIENT_DLL
-#include "cdll_util.h"
-#endif
 #include "particle_parse.h"
 #include "KeyValues.h"
 #include "time.h"
@@ -797,14 +794,6 @@ bool UTIL_IsLowViolence( void )
 	// violence when the engine is in normal violence mode.
 	if ( !violence_hblood.GetBool() || !violence_ablood.GetBool() || !violence_hgibs.GetBool() || !violence_agibs.GetBool() )
 		return true;
-
-#ifdef TF_CLIENT_DLL
-	// Use low violence if the local player has an item that allows them to see it (Pyro Goggles)
-	if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_PYRO ) )
-	{
-		return true;
-	}
-#endif
 
 	return engine->IsLowViolence();
 }

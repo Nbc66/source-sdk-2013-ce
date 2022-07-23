@@ -749,10 +749,6 @@ CBaseEntity *BreakModelCreateSingle( CBaseEntity *pOwner, breakmodel_t *pModel, 
 	pEntity->m_nSkin = nSkin;
 	pEntity->m_iHealth = pModel->health;
 
-#ifdef TF_CLIENT_DLL
-	pEntity->SetCollisionGroup( COLLISION_GROUP_DEBRIS );
-#endif
-
 #ifdef DOD_DLL
 	pEntity->SetCollisionGroup( COLLISION_GROUP_DEBRIS );
 #endif

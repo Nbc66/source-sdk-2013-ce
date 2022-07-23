@@ -473,10 +473,6 @@ BEGIN_RECV_TABLE_NOBASE(C_BaseEntity, DT_BaseEntity)
 	RecvPropInt		( RECVINFO( m_bAnimatedEveryTick ), 0, RecvProxy_InterpolationAmountChanged ),
 	RecvPropBool	( RECVINFO( m_bAlternateSorting ) ),
 
-#ifdef TF_CLIENT_DLL
-	RecvPropArray3( RECVINFO_ARRAY(m_nModelIndexOverrides),	RecvPropInt( RECVINFO(m_nModelIndexOverrides[0]) ) ),
-#endif
-
 END_RECV_TABLE()
 
 const float coordTolerance = 2.0f / (float)( 1 << COORD_FRACTIONAL_BITS );
@@ -960,12 +956,6 @@ C_BaseEntity::C_BaseEntity() :
 	m_bRecordInTools = true;
 #endif
 
-#ifdef TF_CLIENT_DLL
-	m_bValidatedOwner = false;
-	m_bDeemedInvalid = false;
-	m_bWasDeemedInvalid = false;
-#endif
-
 	ParticleProp()->Init( this );
 }
 
@@ -1342,56 +1332,6 @@ void C_BaseEntity::GetVectors(Vector* pForward, Vector* pRight, Vector* pUp) con
 
 void C_BaseEntity::UpdateVisibility()
 {
-#ifdef TF_CLIENT_DLL
-	// TF prevents drawing of any entity attached to players that aren't items in the inventory of the player.
-	// This is to prevent servers creating fake cosmetic items and attaching them to players.
-	if ( !engine->IsPlayingDemo() )
-	{
-		static bool bIsStaging = ( engine->GetAppID() == 810 );
-		if ( !m_bValidatedOwner )
-		{
-			bool bRetry = false;
-
-			// Check it the first time we call update visibility (Source TV doesn't bother doing validation)
-			m_bDeemedInvalid = engine->IsHLTV() ? false : !ValidateEntityAttachedToPlayer( bRetry );
-			m_bValidatedOwner = !bRetry;
-		}
-
-		if ( m_bDeemedInvalid )
-		{
-			if ( bIsStaging )
-			{
-				if ( !m_bWasDeemedInvalid )
-				{
-					m_PreviousRenderMode = GetRenderMode();
-					m_PreviousRenderColor = GetRenderColor();
-					m_bWasDeemedInvalid = true;
-				}
-
-				SetRenderMode( kRenderTransColor );
-				SetRenderColor( 255, 0, 0, 200 );
-
-			}
-			else
-			{
-				RemoveFromLeafSystem();
-				return;
-			}
-		}
-		else if ( m_bWasDeemedInvalid )
-		{
-			if ( bIsStaging )
-			{
-				// We need to fix up the rendering.
-				SetRenderMode( m_PreviousRenderMode );
-				SetRenderColor( m_PreviousRenderColor.r, m_PreviousRenderColor.g, m_PreviousRenderColor.b, m_PreviousRenderColor.a );
-			}
-
-			m_bWasDeemedInvalid = false;
-		}
-	}
-#endif
-
 	if ( ShouldDraw() && !IsDormant() && ( !ToolsEnabled() || IsEnabledInToolView() ) )
 	{
 		// add/update leafsystem
@@ -2373,10 +2313,6 @@ void C_BaseEntity::HierarchySetParent( C_BaseEntity *pNewParent )
 	}
 
 	InvalidatePhysicsRecursive( POSITION_CHANGED | ANGLES_CHANGED | VELOCITY_CHANGED );
-
-#ifdef TF_CLIENT_DLL
-	m_bValidatedOwner = false;
-#endif
 }
 
 
@@ -2465,41 +2401,6 @@ void C_BaseEntity::UnlinkFromHierarchy()
 //-----------------------------------------------------------------------------
 void C_BaseEntity::ValidateModelIndex( void )
 {
-#ifdef TF_CLIENT_DLL
-	if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_HALLOWEEN ) )
-	{
-		if ( m_nModelIndexOverrides[VISION_MODE_HALLOWEEN] > 0 )
-		{
-			SetModelByIndex( m_nModelIndexOverrides[VISION_MODE_HALLOWEEN] );
-			return;
-		}
-	}
-		
-	if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_PYRO ) )
-	{
-		if ( m_nModelIndexOverrides[VISION_MODE_PYRO] > 0 )
-		{
-			SetModelByIndex( m_nModelIndexOverrides[VISION_MODE_PYRO] );
-			return;
-		}
-	}
-
-	if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_ROME ) )
-	{
-		if ( m_nModelIndexOverrides[VISION_MODE_ROME] > 0 )
-		{
-			SetModelByIndex( m_nModelIndexOverrides[VISION_MODE_ROME] );
-			return;
-		}
-	}
-
-	if ( m_nModelIndexOverrides[VISION_MODE_NONE] > 0 ) 
-	{
-		SetModelByIndex( m_nModelIndexOverrides[VISION_MODE_NONE] );		
-		return;
-	}
-#endif
-
 	SetModelByIndex( m_nModelIndex );
 }
 
@@ -2904,10 +2805,6 @@ bool C_BaseEntity::Interpolate( float currentTime )
 
 CStudioHdr *C_BaseEntity::OnNewModel()
 {
-#ifdef TF_CLIENT_DLL
-	m_bValidatedOwner = false;
-#endif
-
 	return NULL;
 }
 
@@ -6287,61 +6184,6 @@ void C_BaseEntity::RemoveFromTeleportList()
 		m_TeleportListEntry = 0xFFFF;
 	}
 }
-
-#ifdef TF_CLIENT_DLL
-bool C_BaseEntity::ValidateEntityAttachedToPlayer( bool &bShouldRetry )
-{
-	bShouldRetry = false;
-	C_BaseEntity *pParent = GetRootMoveParent();
-	if ( pParent == this )
-		return true;
-
-	// Some wearables parent to the view model
-	C_BasePlayer *pPlayer = ToBasePlayer( pParent );
-	if ( pPlayer && pPlayer->GetViewModel() == this )
-	{
-		return true;
-	}
-
-	// always allow the briefcase model
-	const char *pszModel = modelinfo->GetModelName( GetModel() );
-	if ( pszModel && pszModel[0] )
-	{
-		if ( FStrEq( pszModel, "models/flag/briefcase.mdl" ) )
-			return true;
-
-		if ( FStrEq( pszModel, "models/passtime/ball/passtime_ball.mdl" ) )
-			return true;
-
-		if ( FStrEq( pszModel, "models/props_doomsday/australium_container.mdl" ) )
-			return true;
-
-		// Temp for MVM testing
-		if ( FStrEq( pszModel, "models/buildables/sapper_placement_sentry1.mdl" ) )
-			return true;
-
-		if ( FStrEq( pszModel, "models/props_td/atom_bomb.mdl" ) )
-			return true;
-
-		if ( FStrEq( pszModel, "models/props_lakeside_event/bomb_temp_hat.mdl" ) )
-			return true;
-
-		if ( FStrEq( pszModel, "models/props_moonbase/powersupply_flag.mdl" ) )
-			return true;
-
-		// The Halloween 2014 doomsday flag replacement
-		if ( FStrEq( pszModel, "models/flag/ticket_case.mdl" ) )
-			return true;
-
-		if ( FStrEq( pszModel, "models/weapons/c_models/c_grapple_proj/c_grapple_proj.mdl" ) )
-			return true;
-	}
-
-	// Any entity that's not an item parented to a player is invalid.
-	// This prevents them creating some other entity to pretend to be a cosmetic item.
-	return !pParent->IsPlayer();
-}
-#endif // TF_CLIENT_DLL
 
 
 void C_BaseEntity::AddVar( void *data, IInterpolatedVar *watcher, int type, bool bSetup )
