@@ -652,27 +652,6 @@ bool CRopeManager::IsHolidayLightMode( void )
 
 	bool bDrawHolidayLights = false;
 
-#ifdef USES_ECON_ITEMS
-	if ( !m_bHolidayInitialized && GameRules() )
-	{
-		m_bHolidayInitialized = true;
-		m_bDrawHolidayLights = GameRules()->IsHolidayActive( kHoliday_Christmas );
-	}
-
-	bDrawHolidayLights = m_bDrawHolidayLights;
-	m_nHolidayLightsStyle = 0;
-
-#ifdef TF_CLIENT_DLL
-	// Turn them on in Pyro-vision too
-	if ( IsLocalPlayerUsingVisionFilterFlags( TF_VISION_FILTER_PYRO ) )
-	{
-		bDrawHolidayLights = true;
-		m_nHolidayLightsStyle = 1;
-	}
-#endif // TF_CLIENT_DLL
-
-#endif // USES_ECON_ITEMS
-
 	return bDrawHolidayLights;
 }
 

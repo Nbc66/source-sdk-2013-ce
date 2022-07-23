@@ -20,12 +20,6 @@
 #include "KeyValues.h"
 #include "time.h"
 
-#ifdef USES_ECON_ITEMS
-	#include "econ_item_constants.h"
-	#include "econ_holidays.h"
-	#include "rtime.h"
-#endif // USES_ECON_ITEMS
-
 #ifdef CLIENT_DLL
 	#include "c_te_effect_dispatch.h"
 #else
@@ -1092,48 +1086,9 @@ int find_day_of_week( struct tm& found_day, int day_of_week, int step )
 	return 0;
 }
 
-//-----------------------------------------------------------------------------
-// Purpose: 
-//-----------------------------------------------------------------------------
-#ifdef USES_ECON_ITEMS
-static bool					  s_HolidaysCalculated = false;
-static CBitVec<kHolidayCount> s_HolidaysActive;
-
-//-----------------------------------------------------------------------------
-// Purpose: Used at level change and round start to re-calculate which holiday is active
-//-----------------------------------------------------------------------------
-void UTIL_CalculateHolidays()
+bool UTIL_IsHolidayActive( int eHoliday )
 {
-	s_HolidaysActive.ClearAll();
-
-	CRTime::UpdateRealTime();
-	for ( int iHoliday = 0; iHoliday < kHolidayCount; iHoliday++ )
-	{
-		if ( EconHolidays_IsHolidayActive( iHoliday, CRTime::RTime32TimeCur() ) )
-		{
-			s_HolidaysActive.Set( iHoliday );
-		}
-	}
-
-	s_HolidaysCalculated = true;
-}
-#endif // USES_ECON_ITEMS
-
-bool UTIL_IsHolidayActive( /*EHoliday*/ int eHoliday )
-{
-#ifdef USES_ECON_ITEMS
-	if ( IsX360() )
-		return false;
-
-	if ( !s_HolidaysCalculated )
-	{
-		UTIL_CalculateHolidays();
-	}
-
-	return s_HolidaysActive.IsBitSet( eHoliday );
-#else
 	return false;
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -1141,14 +1096,7 @@ bool UTIL_IsHolidayActive( /*EHoliday*/ int eHoliday )
 //-----------------------------------------------------------------------------
 int	UTIL_GetHolidayForString( const char* pszHolidayName )
 {
-#ifdef USES_ECON_ITEMS
-	if ( !pszHolidayName )
-		return kHoliday_None;
-
-	return EconHolidays_GetHolidayForString( pszHolidayName );
-#else
 	return 0;
-#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -1156,9 +1104,5 @@ int	UTIL_GetHolidayForString( const char* pszHolidayName )
 //-----------------------------------------------------------------------------
 const char* UTIL_GetActiveHolidayString()
 {
-#ifdef USES_ECON_ITEMS
-	return EconHolidays_GetActiveHolidayString();
-#else
 	return NULL;
-#endif
 }

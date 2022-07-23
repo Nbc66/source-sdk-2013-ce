@@ -1193,9 +1193,6 @@ void CBaseCombatWeapon::SetViewModel()
 //-----------------------------------------------------------------------------
 bool CBaseCombatWeapon::SendWeaponAnim( int iActivity )
 {
-#ifdef USES_ECON_ITEMS
-	iActivity = TranslateViewmodelHandActivity( (Activity)iActivity );
-#endif		
 	// NVNT notify the haptics system of this weapons new activity
 #ifdef WIN32
 #ifdef CLIENT_DLL

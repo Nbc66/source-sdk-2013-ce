@@ -135,10 +135,6 @@
 #include "abuse_report.h"
 #endif
 
-#ifdef USES_ECON_ITEMS
-#include "econ_item_system.h"
-#endif // USES_ECON_ITEMS
-
 #if defined( TF_CLIENT_DLL )
 #include "econ/tool_items/custom_texture_cache.h"
 
@@ -1587,14 +1583,6 @@ void CHLClient::LevelInitPreEntity( char const* pMapName )
 	ResetToneMapping(1.0);
 
 	IGameSystem::LevelInitPreEntityAllSystems(pMapName);
-
-#ifdef USES_ECON_ITEMS
-	GameItemSchema_t *pItemSchema = ItemSystem()->GetItemSchema();
-	if ( pItemSchema )
-	{
-		pItemSchema->BInitFromDelayedBuffer();
-	}
-#endif // USES_ECON_ITEMS
 
 	ResetWindspeed();
 

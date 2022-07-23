@@ -113,10 +113,6 @@ extern ConVar tf_mm_servermode;
 #include "NextBotManager.h"
 #endif
 
-#ifdef USES_ECON_ITEMS
-#include "econ_item_system.h"
-#endif // USES_ECON_ITEMS
-
 #ifdef CSTRIKE_DLL // BOTPORT: TODO: move these ifdefs out
 #include "bot/bot.h"
 #endif
@@ -948,14 +944,6 @@ bool CServerGameDLL::IsRestoring()
 bool CServerGameDLL::LevelInit( const char *pMapName, char const *pMapEntities, char const *pOldLevel, char const *pLandmarkName, bool loadGame, bool background )
 {
 	VPROF("CServerGameDLL::LevelInit");
-
-#ifdef USES_ECON_ITEMS
-	GameItemSchema_t *pItemSchema = ItemSystem()->GetItemSchema();
-	if ( pItemSchema )
-	{
-		pItemSchema->BInitFromDelayedBuffer();
-	}
-#endif // USES_ECON_ITEMS
 
 	ResetWindspeed();
 	UpdateChapterRestrictions( pMapName );
