@@ -268,9 +268,6 @@ void C_BaseExplosionEffect::CreateCore( void )
 			{
 				pParticle->m_flLifetime = 0.0f;
 
-	#ifdef INVASION_CLIENT_DLL
-				pParticle->m_flDieTime	= random->RandomFloat( 0.5f, 1.0f );
-	#endif
 				pParticle->m_flDieTime	= random->RandomFloat( 2.0f, 3.0f );
 
 				pParticle->m_vecVelocity.Random( -spread, spread );
@@ -323,11 +320,7 @@ void C_BaseExplosionEffect::CreateCore( void )
 			{
 				pParticle->m_flLifetime = 0.0f;
 
-	#ifdef INVASION_CLIENT_DLL
 				pParticle->m_flDieTime	= random->RandomFloat( 0.5f, 1.0f );
-	#else
-				pParticle->m_flDieTime	= random->RandomFloat( 0.5f, 1.0f );
-	#endif
 
 				pParticle->m_vecVelocity.Random( -spread, spread );
 				pParticle->m_vecVelocity += ( m_vecDirection * random->RandomFloat( 1.0f, 6.0f ) );
@@ -1103,11 +1096,7 @@ void C_WaterExplosionEffect::CreateDebris( void )
 		{
 			pParticle->m_flLifetime = 0.0f;
 
-#ifdef INVASION_CLIENT_DLL
-			pParticle->m_flDieTime	= random->RandomFloat( 0.5f, 1.0f );
-#else
 			pParticle->m_flDieTime	= random->RandomFloat( 2.0f, 3.0f );
-#endif
 
 			pParticle->m_vecVelocity.Random( -spread, spread );
 			pParticle->m_vecVelocity += ( m_vecDirection * random->RandomFloat( 1.0f, 6.0f ) );

@@ -134,34 +134,6 @@ private:
 private:
 	C_BaseCombatCharacter( const C_BaseCombatCharacter & ); // not defined, not accessible
 
-
-//-----------------------
-#ifdef INVASION_CLIENT_DLL
-public:
-	virtual void	Release( void );
-	virtual void	SetDormant( bool bDormant );
-	virtual void	OnPreDataChanged( DataUpdateType_t updateType );
-	virtual void	OnDataChanged( DataUpdateType_t updateType );
-	virtual void	ClientThink( void );
-
-	// TF2 Powerups
-	virtual bool	CanBePoweredUp( void ) { return true; }
-	bool			HasPowerup( int iPowerup ) { return ( m_iPowerups & (1 << iPowerup) ) != 0; };
-	virtual void	PowerupStart( int iPowerup, bool bInitial );
-	virtual void	PowerupEnd( int iPowerup );
-	void			RemoveAllPowerups( void );
-
-	// Powerup effects
-	void			AddEMPEffect( float flSize );
-	void			AddBuffEffect( float flSize );
-
-	C_WeaponCombatShield		*GetShield( void );
-
-public:
-	int				m_iPowerups;
-	int				m_iPrevPowerups;
-#endif
-
 };
 
 inline C_BaseCombatCharacter *ToBaseCombatCharacter( C_BaseEntity *pEntity )

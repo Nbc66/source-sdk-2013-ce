@@ -180,10 +180,6 @@ BEGIN_RECV_TABLE(C_BaseCombatCharacter, DT_BaseCombatCharacter)
 	RecvPropBool( RECVINFO( m_bGlowEnabled ) ),
 #endif // GLOWS_ENABLE
 
-#ifdef INVASION_CLIENT_DLL
-	RecvPropInt( RECVINFO( m_iPowerups ) ),
-#endif
-
 END_RECV_TABLE()
 
 
