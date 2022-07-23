@@ -113,10 +113,6 @@ extern ConVar tf_mm_servermode;
 #include "NextBotManager.h"
 #endif
 
-#ifdef CSTRIKE_DLL // BOTPORT: TODO: move these ifdefs out
-#include "bot/bot.h"
-#endif
-
 #if defined( REPLAY_ENABLED )
 #include "replay/ireplaysystem.h"
 #endif
@@ -695,10 +691,6 @@ bool CServerGameDLL::DLLInit( CreateInterfaceFn appSystemFactory,
 	// load Mod specific game events ( MUST be before InitAllSystems() so it can pickup the mod specific events)
 	gameeventmanager->LoadEventsFromFile("resource/ModEvents.res");
 
-#ifdef CSTRIKE_DLL // BOTPORT: TODO: move these ifdefs out
-	InstallBotControl();
-#endif
-
 	if ( !IGameSystem::InitAllSystems() )
 		return false;
 
@@ -765,10 +757,6 @@ void CServerGameDLL::DLLShutdown( void )
 	g_TextStatsMgr.WriteFile( filesystem );
 
 	IGameSystem::ShutdownAllSystems();
-
-#ifdef CSTRIKE_DLL // BOTPORT: TODO: move these ifdefs out
-	RemoveBotControl();
-#endif
 
 #ifndef _XBOX
 #ifdef USE_NAV_MESH
@@ -1115,10 +1103,6 @@ void CServerGameDLL::ServerActivate( edict_t *pEdictList, int edictCount, int cl
 	TheNavMesh->Load();
 	TheNavMesh->OnServerActivate();
 #endif
-#endif
-
-#ifdef CSTRIKE_DLL // BOTPORT: TODO: move these ifdefs out
-	TheBots->ServerActivate();
 #endif
 
 #ifdef NEXT_BOT

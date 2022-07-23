@@ -49,17 +49,6 @@
 
 ConVar	cc_achievement_debug( "achievement_debug", "0", FCVAR_CHEAT | FCVAR_REPLICATED, "Turn on achievement debug msgs." );
 
-#ifdef CSTRIKE_DLL
-//=============================================================================
-// HPE_BEGIN:
-// [Forrest] Allow achievements/stats to be turned off for a server
-//=============================================================================
-ConVar	sv_nostats( "sv_nostats", "0", FCVAR_REPLICATED | FCVAR_NOTIFY, "Disable collecting statistics and awarding achievements." );
-//=============================================================================
-// HPE_END
-//=============================================================================
-#endif // CSTRIKE_DLL
-
 const char *COM_GetModDirectory();
 
 extern ConVar developer;
@@ -1064,29 +1053,6 @@ bool CAchievementMgr::CheckAchievementsEnabled()
 		return false;
 	}
 #endif // CLIENT_DLL
-
-#ifdef CSTRIKE_DLL
-	//=============================================================================
-	// HPE_BEGIN:
-	// [Forrest] Allow achievements/stats to be turned off for a server
-	//=============================================================================
-	if ( sv_nostats.GetBool() )
-	{
-		// prevent message spam
-		const float fNotificationCooldown = 60.0f;
-		static float fNextNotification = 0.0f;
-		if (gpGlobals->curtime >= fNextNotification)
-		{
-			Msg( "Achievements and stats disabled: sv_nostats is set.\n" );
-			fNextNotification = gpGlobals->curtime + fNotificationCooldown;
-		}
-
-		return false;
-	}
-	//=============================================================================
-	// HPE_END
-	//=============================================================================
-#endif // CSTRIKE_DLL	
 
 #if defined(TF_DLL) || defined(TF_CLIENT_DLL)
 	// no achievements for now in training

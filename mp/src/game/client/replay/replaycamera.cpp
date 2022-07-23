@@ -31,10 +31,6 @@
 #include "vgui/IInput.h"
 #include "mathlib/noise.h"
 
-#ifdef CSTRIKE_DLL
-	#include "c_cs_player.h"
-#endif
-
 ConVar replay_editor_camera_length( "replay_editor_camera_length", "15", FCVAR_CLIENTDLL | FCVAR_ARCHIVE, "This is the camera length used to simulate camera shake in the replay editor.  The larger this number, the more the actual position will change.  It can also be set to negative values." );
 
 //ConVar spec_autodirector( "spec_autodirector", "1", FCVAR_CLIENTDLL | FCVAR_CLIENTCMD_CAN_EXECUTE, "Auto-director chooses best view modes while spectating" );

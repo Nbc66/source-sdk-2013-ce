@@ -20,12 +20,6 @@
 
 #include "tier1/lzmaDecoder.h"
 
-#ifdef CSTRIKE_DLL
-#include "cs_shareddefs.h"
-#include "nav_pathfind.h"
-#include "cs_nav_area.h"
-#endif
-
 // NOTE: This has to be the last file included!
 #include "tier0/memdbgon.h"
 
@@ -847,65 +841,10 @@ float NavAreaTravelDistance( const Vector &startPos, const Vector &goalPos, Cost
  */
 void CNavArea::ComputeEarliestOccupyTimes( void )
 {
-#ifdef CSTRIKE_DLL
-	/// @todo Derive cstrike-specific navigation classes
-
-	for( int i=0; i<MAX_NAV_TEAMS; ++i )
-	{
-		// no spot in the map should take longer than this to reach
-		m_earliestOccupyTime[i] = 120.0f;
-	}
-
-	if (nav_quicksave.GetBool())
-		return;
-
-	// maximum player speed in units/second
-	const float playerSpeed = 240.0f;
-
-	ShortestPathCost cost;
-	CBaseEntity *spot;
-
-	// determine the shortest time it will take a Terrorist to reach this area
-	int team = TEAM_TERRORIST % MAX_NAV_TEAMS;
-	for( spot = gEntList.FindEntityByClassname( NULL, "info_player_terrorist" );
-		 spot;
-		 spot = gEntList.FindEntityByClassname( spot, "info_player_terrorist" ) )
-	{
-		float travelDistance = NavAreaTravelDistance( spot->GetAbsOrigin(), m_center, cost );
-		if (travelDistance < 0.0f)
-			continue;
-
-		float travelTime = travelDistance / playerSpeed;
-		if (travelTime < m_earliestOccupyTime[ team ])
-		{
-			m_earliestOccupyTime[ team ] = travelTime;
-		}
-	}
-
-
-	// determine the shortest time it will take a CT to reach this area
-	team = TEAM_CT % MAX_NAV_TEAMS;
-	for( spot = gEntList.FindEntityByClassname( NULL, "info_player_counterterrorist" );
-		 spot;
-		 spot = gEntList.FindEntityByClassname( spot, "info_player_counterterrorist" ) )
-	{
-		float travelDistance = NavAreaTravelDistance( spot->GetAbsOrigin(), m_center, cost );
-		if (travelDistance < 0.0f)
-			continue;
-
-		float travelTime = travelDistance / playerSpeed;
-		if (travelTime < m_earliestOccupyTime[ team ])
-		{
-			m_earliestOccupyTime[ team ] = travelTime;
-		}
-	}
-
-#else
 	for( int i=0; i<MAX_NAV_TEAMS; ++i )
 	{
 		m_earliestOccupyTime[i] = 0.0f;
 	}
-#endif
 }
 
 
@@ -915,64 +854,6 @@ void CNavArea::ComputeEarliestOccupyTimes( void )
  */
 void CNavMesh::ComputeBattlefrontAreas( void )
 {
-#if 0
-#ifdef CSTRIKE_DLL
-	ShortestPathCost cost;
-	CBaseEntity *tSpawn, *ctSpawn;
-
-	for( tSpawn = gEntList.FindEntityByClassname( NULL, "info_player_terrorist" );
-		 tSpawn;
-		 tSpawn = gEntList.FindEntityByClassname( tSpawn, "info_player_terrorist" ) )
-	{
-		CNavArea *tArea = TheNavMesh->GetNavArea( tSpawn->GetAbsOrigin() );
-		if (tArea == NULL)
-			continue;
-
-		for( ctSpawn = gEntList.FindEntityByClassname( NULL, "info_player_counterterrorist" );
-			 ctSpawn;
-			 ctSpawn = gEntList.FindEntityByClassname( ctSpawn, "info_player_counterterrorist" ) )
-		{
-			CNavArea *ctArea = TheNavMesh->GetNavArea( ctSpawn->GetAbsOrigin() );
-
-			if (ctArea == NULL)
-				continue;
-
-			if (tArea == ctArea)
-			{
-				m_isBattlefront = true;
-				return;
-			}
-
-			// build path between these two spawn points - assume if path fails, it at least got close
-			// (ie: imagine spawn points that you jump down from - can't path to)
-			CNavArea *goalArea = NULL;
-			NavAreaBuildPath( tArea, ctArea, NULL, cost, &goalArea );
-
-			if (goalArea == NULL)
-				continue;
-
-
-/**
- * @todo Need to enumerate ALL paths between all pairs of spawn points to find all battlefront areas
- */
-
-			// find the area with the earliest overlapping occupy times
-			CNavArea *battlefront = NULL;
-			float earliestTime = 999999.9f;
-
-			const float epsilon = 1.0f;
-			CNavArea *area;
-			for( area = goalArea; area; area = area->GetParent() )
-			{
-				if (fabs(area->GetEarliestOccupyTime( TEAM_TERRORIST ) - area->GetEarliestOccupyTime( TEAM_CT )) < epsilon)
-				{
-				}
-				
-			}
-		}
-	}
-#endif
-#endif
 }
 
 
@@ -1034,35 +915,6 @@ static void WarnIfMeshNeedsAnalysis( int version )
 			return;
 		}
 	}
-#ifdef CSTRIKE_DLL
-	else
-	{
-		bool hasApproachAreas = false;
-		bool hasSpotEncounters = false;
-
-		FOR_EACH_VEC( TheNavAreas, it )
-		{
-			CCSNavArea *area = dynamic_cast< CCSNavArea * >( TheNavAreas[ it ] );
-			if ( area )
-			{
-				if ( area->GetApproachInfoCount() )
-				{
-					hasApproachAreas = true;
-				}
-
-				if ( area->GetSpotEncounterCount() )
-				{
-					hasSpotEncounters = true;
-				}
-			}
-		}
-
-		if ( !hasApproachAreas || !hasSpotEncounters )
-		{
-			Warning( "The nav mesh needs a full nav_analyze\n" );
-		}
-	}
-#endif
 }
 
 /**

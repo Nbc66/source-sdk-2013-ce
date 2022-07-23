@@ -509,11 +509,7 @@ void CBreakableSurface::TraceAttack( const CTakeDamageInfo &info, const Vector &
 
 			float flDot = DotProduct(m_vNormal,vecDir);
 
-#ifdef CSTRIKE_DLL
-			float damageMultiplier = info.GetDamage();
-#else
 			float damageMultiplier = 1.0f;
-#endif
 
 			Vector vBlastDir;
 			if (flDot > 0)

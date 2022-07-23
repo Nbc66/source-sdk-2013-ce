@@ -39,11 +39,7 @@ LINK_ENTITY_TO_CLASS( aitesthull, CAI_TestHull );
 //-----------------------------------------------------------------------------
 CAI_TestHull*	CAI_TestHull::pTestHull			= NULL;
 
-#ifdef CSTRIKE_DLL
-#define PLAYER_MODEL "models/player/ct_urban.mdl"
-#else
 #define PLAYER_MODEL "models/player.mdl"
-#endif
 
 //-----------------------------------------------------------------------------
 // Purpose: Make sure we have a "player.mdl" hull to test with

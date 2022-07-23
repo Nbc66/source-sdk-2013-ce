@@ -352,16 +352,6 @@ void CHudHistoryResource::Paint( void )
 						itemAmmoIcon = NULL;
 					}
 
-#ifdef CSTRIKE_DLL
-					// show grenades as the weapon icon
-					if ( pWpnInfo && pWpnInfo->iFlags & ITEM_FLAG_EXHAUSTIBLE )	
-					{
-						itemIcon = pWpnInfo->iconActive;
-						itemAmmoIcon = NULL;
-						bHalfHeight = false;
-					}
-#endif
-
 					iAmount = m_PickupHistory[i].iCount;
 				}
 				break;

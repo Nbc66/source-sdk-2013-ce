@@ -1803,12 +1803,6 @@ void CTempEnts::MuzzleFlash( int type, ClientEntityHandle_t hEntity, int attachm
 //-----------------------------------------------------------------------------
 void CTempEnts::MuzzleFlash( const Vector& pos1, const QAngle& angles, int type, ClientEntityHandle_t hEntity, bool firstPerson )
 {
-#ifdef CSTRIKE_DLL
-
-	return;
-
-#else
-
 	//NOTENOTE: This function is becoming obsolete as the muzzles are moved over to being local to attachments
 
 	switch ( type )
@@ -2190,27 +2184,6 @@ void CTempEnts::PlaySound ( C_LocalTempEntity *pTemp, float damp )
 			soundname = "Bounce.Concrete";
 		}
 		break;
-
-#ifdef CSTRIKE_DLL
-
-		case TE_PISTOL_SHELL:
-		{
-			soundname = "Bounce.PistolShell";
-		}
-		break;
-
-		case TE_RIFLE_SHELL:
-		{
-			soundname = "Bounce.RifleShell";
-		}
-		break;
-
-		case TE_SHOTGUN_SHELL:
-		{
-			soundname = "Bounce.ShotgunShell";
-		}
-		break;
-#endif
 	}
 
 	zvel = abs( pTemp->GetVelocity()[2] );

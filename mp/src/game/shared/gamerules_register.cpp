@@ -96,11 +96,6 @@ CGameRulesRegister* CGameRulesRegister::FindByName( const char *pName )
 	{
 		// Create the string tables
 		g_StringTableGameRules = networkstringtable->CreateStringTable( GAMERULES_STRINGTABLE_NAME, 1 );
-
-#ifdef CSTRIKE_DLL
-		void CreateBlackMarketString( void );
-		CreateBlackMarketString();
-#endif
 	}
 
 	void CreateGameRulesObject( const char *pClassName )

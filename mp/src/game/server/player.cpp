@@ -85,13 +85,8 @@
 ConVar autoaim_max_dist( "autoaim_max_dist", "2160" ); // 2160 = 180 feet
 ConVar autoaim_max_deflect( "autoaim_max_deflect", "0.99" );
 
-#ifdef CSTRIKE_DLL
-ConVar	spec_freeze_time( "spec_freeze_time", "5.0", FCVAR_CHEAT | FCVAR_REPLICATED, "Time spend frozen in observer freeze cam." );
-ConVar	spec_freeze_traveltime( "spec_freeze_traveltime", "0.7", FCVAR_CHEAT | FCVAR_REPLICATED, "Time taken to zoom in to frame a target in observer freeze cam.", true, 0.01, false, 0 );
-#else
 ConVar	spec_freeze_time( "spec_freeze_time", "4.0", FCVAR_CHEAT | FCVAR_REPLICATED, "Time spend frozen in observer freeze cam." );
 ConVar	spec_freeze_traveltime( "spec_freeze_traveltime", "0.4", FCVAR_CHEAT | FCVAR_REPLICATED, "Time taken to zoom in to frame a target in observer freeze cam.", true, 0.01, false, 0 );
-#endif
 
 ConVar sv_bonus_challenge( "sv_bonus_challenge", "0", FCVAR_REPLICATED, "Set to values other than 0 to select a bonus map challenge type." );
 
@@ -5932,29 +5927,11 @@ void CBasePlayer::ImpulseCommands( )
 		}
 
 		if ( tr.fraction != 1.0 )
-		{// line hit something, so paint a decal
+		{
+			// line hit something, so paint a decal
 			m_flNextDecalTime = gpGlobals->curtime + decalfrequency.GetFloat();
 			CSprayCan *pCan = CREATE_UNSAVED_ENTITY( CSprayCan, "spraycan" );
-			pCan->Spawn( this );
-
-#ifdef CSTRIKE_DLL
-			//=============================================================================
-			// HPE_BEGIN:
-			// [pfreese] Fire off a game event - the Counter-Strike stats manager listens
-			// to these achievements for one of the CS achievements.
-			//=============================================================================
-			
-			IGameEvent * event = gameeventmanager->CreateEvent( "player_decal" );
-			if ( event )
-			{
-				event->SetInt("userid", GetUserID() );
-				gameeventmanager->FireEvent( event );
-			}
-
-			//=============================================================================
-			// HPE_END
-			//=============================================================================
-#endif			
+			pCan->Spawn( this );	
 		}
 
 		break;

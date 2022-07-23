@@ -399,9 +399,6 @@ public:
 	virtual void			PackDeadPlayerItems( void );
 	virtual void			RemoveAllItems( bool removeSuit );
 	bool					IsDead() const;
-#ifdef CSTRIKE_DLL
-	virtual bool			IsRunning( void ) const	{ return false; } // bot support under cstrike (AR)
-#endif
 
 	bool					HasPhysicsFlag( unsigned int flag ) { return (m_afPhysicsFlags & flag) != 0; }
 

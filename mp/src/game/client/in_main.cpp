@@ -956,13 +956,6 @@ void CInput::ControllerMove( float frametime, CUserCmd *cmd )
 			haptics->MenuProcess();
 			return;
 		}
-#ifdef CSTRIKE_DLL
-		// NVNT cstrike fov grabing.
-		C_BasePlayer *player = C_BasePlayer::GetLocalPlayer();
-		if(player){
-			haptics->UpdatePlayerFOV(player->GetFOV());
-		}
-#endif
 		// NVNT calculate move with the navigation on the haptics system.
 		haptics->CalculateMove(cmd->forwardmove, cmd->sidemove, frametime);
 		// NVNT send a game process to the haptics system.

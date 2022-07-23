@@ -573,11 +573,7 @@ void CBasePlayer::UpdateStepSound( surfacedata_t *psurface, const Vector &vecOri
 
 		SetStepSoundTime( STEPSOUNDTIME_ON_LADDER, bWalking );
 	}
-#ifdef CSTRIKE_DLL
-	else if ( enginetrace->GetPointContents( knee ) & MASK_WATER )  // we want to use the knee for Cstrike, not the waist
-#else
 	else if ( GetWaterLevel() == WL_Waist )
-#endif // CSTRIKE_DLL
 	{
 		static int iSkipStep = 0;
 
@@ -1070,10 +1066,6 @@ CBaseEntity *CBasePlayer::FindUseEntity()
 	// NOTE: Some debris objects are useable too, so hit those as well
 	// A button, etc. can be made out of clip brushes, make sure it's +useable via a traceline, too.
 	int useableContents = MASK_SOLID | CONTENTS_DEBRIS | CONTENTS_PLAYERCLIP;
-
-#ifdef CSTRIKE_DLL
-	useableContents = MASK_NPCSOLID_BRUSHONLY | MASK_OPAQUE_AND_NPCS;
-#endif
 
 #ifdef HL1_DLL
 	useableContents = MASK_SOLID;
