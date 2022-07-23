@@ -41,10 +41,6 @@
 // left / right
 #define	YAW		1
 
-#ifdef PORTAL
-	bool g_bUpsideDown = false; // Set when the player is upside down in Portal to invert the mouse.
-#endif //#ifdef PORTAL
-
 extern ConVar lookstrafe;
 extern ConVar cl_pitchdown;
 extern ConVar cl_pitchup;
@@ -454,35 +450,26 @@ void CInput::ApplyMouse( QAngle& viewangles, CUserCmd *cmd, float mouse_x, float
 {
 	if ( !((in_strafe.state & 1) || lookstrafe.GetInt()) )
 	{
-#ifdef PORTAL
-		if ( g_bUpsideDown )
+		if ( CAM_IsThirdPerson() && thirdperson_platformer.GetInt() )
 		{
-			viewangles[ YAW ] += m_yaw.GetFloat() * mouse_x;
+			if ( mouse_x )
+			{
+				Vector vTempOffset = g_ThirdPersonManager.GetCameraOffsetAngles();
+
+				// use the mouse to orbit the camera around the player, and update the idealAngle
+				vTempOffset[ YAW ] -= m_yaw.GetFloat() * mouse_x;
+				cam_idealyaw.SetValue( vTempOffset[ YAW ] - viewangles[ YAW ] );
+
+				g_ThirdPersonManager.SetCameraOffsetAngles( vTempOffset );
+
+				// why doesn't this work??? CInput::AdjustYaw is why
+				//cam_idealyaw.SetValue( cam_idealyaw.GetFloat() - m_yaw.GetFloat() * mouse_x );
+			}
 		}
 		else
-#endif //#ifdef PORTAL
 		{
-			if ( CAM_IsThirdPerson() && thirdperson_platformer.GetInt() )
-			{
-				if ( mouse_x )
-				{
-					Vector vTempOffset = g_ThirdPersonManager.GetCameraOffsetAngles();
-
-					// use the mouse to orbit the camera around the player, and update the idealAngle
-					vTempOffset[ YAW ] -= m_yaw.GetFloat() * mouse_x;
-					cam_idealyaw.SetValue( vTempOffset[ YAW ] - viewangles[ YAW ] );
-
-					g_ThirdPersonManager.SetCameraOffsetAngles( vTempOffset );
-
-					// why doesn't this work??? CInput::AdjustYaw is why
-					//cam_idealyaw.SetValue( cam_idealyaw.GetFloat() - m_yaw.GetFloat() * mouse_x );
-				}
-			}
-			else
-			{
-				// Otherwize, use mouse to spin around vertical axis
-				viewangles[YAW] -= CAM_CapYaw( m_yaw.GetFloat() * mouse_x );
-			}
+			// Otherwize, use mouse to spin around vertical axis
+			viewangles[YAW] -= CAM_CapYaw( m_yaw.GetFloat() * mouse_x );
 		}
 	}
 	else
@@ -496,44 +483,35 @@ void CInput::ApplyMouse( QAngle& viewangles, CUserCmd *cmd, float mouse_x, float
 	//  to adjust view pitch.
 	if (!(in_strafe.state & 1))
 	{
-#ifdef PORTAL
-		if ( g_bUpsideDown )
+		if ( CAM_IsThirdPerson() && thirdperson_platformer.GetInt() )
 		{
-			viewangles[PITCH] -= m_pitch->GetFloat() * mouse_y;
+			if ( mouse_y )
+			{
+				Vector vTempOffset = g_ThirdPersonManager.GetCameraOffsetAngles();
+
+				// use the mouse to orbit the camera around the player, and update the idealAngle
+				vTempOffset[ PITCH ] += m_pitch->GetFloat() * mouse_y;
+				cam_idealpitch.SetValue( vTempOffset[ PITCH ] - viewangles[ PITCH ] );
+
+				g_ThirdPersonManager.SetCameraOffsetAngles( vTempOffset );
+
+				// why doesn't this work??? CInput::AdjustYaw is why
+				//cam_idealpitch.SetValue( cam_idealpitch.GetFloat() + m_pitch->GetFloat() * mouse_y );
+			}
 		}
 		else
-#endif //#ifdef PORTAL
 		{
-			if ( CAM_IsThirdPerson() && thirdperson_platformer.GetInt() )
-			{
-				if ( mouse_y )
-				{
-					Vector vTempOffset = g_ThirdPersonManager.GetCameraOffsetAngles();
+			viewangles[PITCH] += CAM_CapPitch( m_pitch->GetFloat() * mouse_y );
+		}
 
-					// use the mouse to orbit the camera around the player, and update the idealAngle
-					vTempOffset[ PITCH ] += m_pitch->GetFloat() * mouse_y;
-					cam_idealpitch.SetValue( vTempOffset[ PITCH ] - viewangles[ PITCH ] );
-
-					g_ThirdPersonManager.SetCameraOffsetAngles( vTempOffset );
-
-					// why doesn't this work??? CInput::AdjustYaw is why
-					//cam_idealpitch.SetValue( cam_idealpitch.GetFloat() + m_pitch->GetFloat() * mouse_y );
-				}
-			}
-			else
-			{
-				viewangles[PITCH] += CAM_CapPitch( m_pitch->GetFloat() * mouse_y );
-			}
-
-			// Check pitch bounds
-			if (viewangles[PITCH] > cl_pitchdown.GetFloat())
-			{
-				viewangles[PITCH] = cl_pitchdown.GetFloat();
-			}
-			if (viewangles[PITCH] < -cl_pitchup.GetFloat())
-			{
-				viewangles[PITCH] = -cl_pitchup.GetFloat();
-			}
+		// Check pitch bounds
+		if (viewangles[PITCH] > cl_pitchdown.GetFloat())
+		{
+			viewangles[PITCH] = cl_pitchdown.GetFloat();
+		}
+		if (viewangles[PITCH] < -cl_pitchup.GetFloat())
+		{
+			viewangles[PITCH] = -cl_pitchup.GetFloat();
 		}
 	}
 	else
