@@ -53,6 +53,13 @@ void CC_DropPrimary( void )
 
 static ConCommand dropprimary("dropprimary", CC_DropPrimary, "dropprimary: Drops the primary weapon of the player.");
 
+#ifdef SDK2013CE
+// link to the correct class.
+#if !defined ( HL2MP )
+LINK_ENTITY_TO_CLASS( player, C_BaseHLPlayer );
+#endif
+#endif // SDK2013CE
+
 //-----------------------------------------------------------------------------
 // Constructor
 //-----------------------------------------------------------------------------

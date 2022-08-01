@@ -14,7 +14,7 @@ $Configuration
 {
 	$Compiler
 	{
-		$AdditionalIncludeDirectories		"$BASE;$SRCDIR\game\shared\hl2;$SRCDIR\game\shared\hl2mp;$SRCDIR\game\shared\sdk2013ce;.\hl2;.\hl2\elements;.\hl2mp;hl2mp\ui;.\sdk2013ce"
+		$AdditionalIncludeDirectories		"$BASE;$SRCDIR\game\shared\hl2;$SRCDIR\game\shared\hl2mp;$SRCDIR\game\shared\sdk2013ce;.\hl2;.\hl2\elements;.\hl2mp;hl2mp\ui;.\sdk2013ce,$SRCDIR\game\shared\Multiplayer"
 		$PreprocessorDefinitions			"$BASE;HL2MP;HL2_CLIENT_DLL;SDK2013CE"
 	}
 }
@@ -131,6 +131,10 @@ $Project "Client"
 			$File	"$SRCDIR\game\shared\hl2mp\hl2mp_player_shared.h"
 			$File	"$SRCDIR\game\shared\hl2mp\hl2mp_weapon_parse.cpp"
 			$File	"$SRCDIR\game\shared\hl2mp\hl2mp_weapon_parse.h"
+			$File	"$SRCDIR\game\shared\hl2mp\hl2mp_playeranimstate.h"
+			$File	"$SRCDIR\game\shared\hl2mp\hl2mp_playeranimstate.cpp"
+			$File	"$SRCDIR\game\shared\Multiplayer\multiplayer_animstate.h"
+			$File	"$SRCDIR\game\shared\Multiplayer\multiplayer_animstate.cpp"
 
 			$Folder	"Weapons"
 			{

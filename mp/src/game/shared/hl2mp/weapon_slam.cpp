@@ -14,7 +14,11 @@
 	#include "c_hl2mp_player.h"
 #else
 	#include "hl2mp_player.h"
+#ifdef SDK2013CE
+	#include "hl2mp/grenade_tripmine.h" // Load the hl2mp version!
+#else
 	#include "grenade_tripmine.h"
+#endif // SDK2013CE
 	#include "grenade_satchel.h"
 	#include "entitylist.h"
 	#include "eventqueue.h"
@@ -26,6 +30,9 @@
 #include "tier0/memdbgon.h"
 
 #define	SLAM_PRIMARY_VOLUME		450
+#ifdef SDK2013CE
+#define SLAM_REFIRE_DELAY		0.05f
+#endif // SDK2013CE
 
 IMPLEMENT_NETWORKCLASS_ALIASED( Weapon_SLAM, DT_Weapon_SLAM )
 
@@ -91,9 +98,26 @@ BEGIN_DATADESC( CWeapon_SLAM )
 	DEFINE_FUNCTION( SlamTouch ),
 
 END_DATADESC()
+#endif
 
+#if !defined( CLIENT_DLL ) || defined( SDK2013CE )
 acttable_t	CWeapon_SLAM::m_acttable[] = 
 {
+#ifdef SDK2013CE
+	{ ACT_MP_STAND_IDLE,				ACT_HL2MP_IDLE_SLAM,					false },
+	{ ACT_MP_CROUCH_IDLE,				ACT_HL2MP_IDLE_CROUCH_SLAM,				false },
+
+	{ ACT_MP_RUN,						ACT_HL2MP_RUN_SLAM,						false },
+	{ ACT_MP_CROUCHWALK,				ACT_HL2MP_WALK_CROUCH_SLAM,				false },
+
+	{ ACT_MP_ATTACK_STAND_PRIMARYFIRE,	ACT_HL2MP_GESTURE_RANGE_ATTACK_SLAM,	false },
+	{ ACT_MP_ATTACK_CROUCH_PRIMARYFIRE,	ACT_HL2MP_GESTURE_RANGE_ATTACK_SLAM,	false },
+
+	{ ACT_MP_RELOAD_STAND,				ACT_HL2MP_GESTURE_RELOAD_SLAM,			false },
+	{ ACT_MP_RELOAD_CROUCH,				ACT_HL2MP_GESTURE_RELOAD_SLAM,			false },
+
+	{ ACT_MP_JUMP,						ACT_HL2MP_JUMP_SLAM,					false },
+#else
 	{ ACT_RANGE_ATTACK1, ACT_RANGE_ATTACK_SLAM, true },
 	{ ACT_HL2MP_IDLE,					ACT_HL2MP_IDLE_SLAM,					false },
 	{ ACT_HL2MP_RUN,					ACT_HL2MP_RUN_SLAM,					false },
@@ -102,6 +126,7 @@ acttable_t	CWeapon_SLAM::m_acttable[] =
 	{ ACT_HL2MP_GESTURE_RANGE_ATTACK,	ACT_HL2MP_GESTURE_RANGE_ATTACK_SLAM,	false },
 	{ ACT_HL2MP_GESTURE_RELOAD,			ACT_HL2MP_GESTURE_RELOAD_SLAM,		false },
 	{ ACT_HL2MP_JUMP,					ACT_HL2MP_JUMP_SLAM,					false },
+#endif // SDK2013CE
 };
 
 IMPLEMENT_ACTTABLE(CWeapon_SLAM);
@@ -327,8 +352,13 @@ void CWeapon_SLAM::StartSatchelDetonate()
 	}
 	SatchelDetonate();
 
+#ifdef SDK2013CE
+	// needs a higher delay on all of these, a minimum time really - to elimiate refires.
+	m_flNextPrimaryAttack	= m_flNextSecondaryAttack = SLAM_REFIRE_DELAY + gpGlobals->curtime + SequenceDuration();
+#else
 	m_flNextPrimaryAttack	= gpGlobals->curtime + SequenceDuration();
 	m_flNextSecondaryAttack = gpGlobals->curtime + SequenceDuration();
+#endif // SDK2013CE
 }
 
 
@@ -376,7 +406,10 @@ void CWeapon_SLAM::TripmineAttach( void )
 
 			CTripmineGrenade *pMine = (CTripmineGrenade *)pEnt;
 			pMine->m_hOwner = GetOwner();
-
+#ifdef SDK2013CE
+			// Attempt to attach to entity, or just sit still in place.
+			pMine->AttachToEntity( pEntity );
+#endif // SDK2013CE
 #endif
 
 			pOwner->RemoveAmmo( 1, m_iSecondaryAmmoType );
@@ -392,7 +425,11 @@ void CWeapon_SLAM::TripmineAttach( void )
 void CWeapon_SLAM::StartTripmineAttach( void )
 {
 	// Only the player fires this way so we can cast
+#ifdef SDK2013CE
+	CHL2MP_Player *pPlayer = ToHL2MPPlayer( GetOwner() );
+#else
 	CBasePlayer *pPlayer = ToBasePlayer( GetOwner() );
+#endif // SDK2013CE
 	if (!pPlayer)
 	{
 		return;
@@ -419,7 +456,11 @@ void CWeapon_SLAM::StartTripmineAttach( void )
 		if (pEntity && !(pEntity->GetFlags() & FL_CONVEYOR))
 		{
 			// player "shoot" animation
+#ifdef SDK2013CE
+			pPlayer->DoAnimationEvent( PLAYERANIMEVENT_ATTACK_PRIMARY );
+#else
 			pPlayer->SetAnimation( PLAYER_ATTACK1 );
+#endif // SDK2013CE
 
 			// -----------------------------------------
 			//  Play attach animation
@@ -443,9 +484,14 @@ void CWeapon_SLAM::StartTripmineAttach( void )
 			// ALERT( at_console, "no deploy\n" );
 		}
 	}
-	
+
+#ifdef SDK2013CE
+	// needs a higher delay on all of these, a minimum time really - to elimiate refires.
+	m_flNextPrimaryAttack	= m_flNextSecondaryAttack = SLAM_REFIRE_DELAY + gpGlobals->curtime + SequenceDuration();
+#else
 	m_flNextPrimaryAttack	= gpGlobals->curtime + SequenceDuration();
 	m_flNextSecondaryAttack	= gpGlobals->curtime + SequenceDuration();
+#endif // SDK2013CE
 //	SetWeaponIdleTime( gpGlobals->curtime + SequenceDuration() );
 }
 
@@ -456,11 +502,18 @@ void CWeapon_SLAM::StartTripmineAttach( void )
 //-----------------------------------------------------------------------------
 void CWeapon_SLAM::SatchelThrow( void )
 {	
+#ifdef SDK2013CE
+	// Only the player fires this way so we can cast
+	CHL2MP_Player *pPlayer = ToHL2MPPlayer( GetOwner() );
+#endif // SDK2013CE
+
 #ifndef CLIENT_DLL
 	m_bThrowSatchel = false;
 
+#ifndef SDK2013CE
 	// Only the player fires this way so we can cast
 	CBasePlayer *pPlayer = ToBasePlayer( GetOwner() );
+#endif // !SDK2013CE
 
 	Vector vecSrc	 = pPlayer->WorldSpaceCenter();
 	Vector vecFacing = pPlayer->BodyDirection3D( );
@@ -492,9 +545,16 @@ void CWeapon_SLAM::SatchelThrow( void )
 	}
 
 	pPlayer->RemoveAmmo( 1, m_iSecondaryAmmoType );
+#ifndef SDK2013CE
 	pPlayer->SetAnimation( PLAYER_ATTACK1 );
+#endif // !SDK2013CE
 
 #endif
+
+#ifdef SDK2013CE
+	//Tony; is there a different anim in the player? must check..
+	pPlayer->DoAnimationEvent( PLAYERANIMEVENT_ATTACK_PRIMARY );
+#endif // SDK2013CE
 
 	// Play throw sound
 	EmitSound( "Weapon_SLAM.SatchelThrow" );
@@ -527,8 +587,12 @@ void CWeapon_SLAM::StartSatchelThrow( void )
 	m_bNeedReload		= true;
 	m_bThrowSatchel		= true;
 
+#ifdef SDK2013CE
+	m_flNextPrimaryAttack	= m_flNextSecondaryAttack = SLAM_REFIRE_DELAY + gpGlobals->curtime + SequenceDuration();
+#else
 	m_flNextPrimaryAttack	= gpGlobals->curtime + SequenceDuration();
 	m_flNextSecondaryAttack = gpGlobals->curtime + SequenceDuration();
+#endif // SDK2013CE
 }
 
 //-----------------------------------------------------------------------------
@@ -587,7 +651,11 @@ void CWeapon_SLAM::SatchelAttach( void )
 void CWeapon_SLAM::StartSatchelAttach( void )
 {
 #ifndef CLIENT_DLL
+#ifdef SDK2013CE
+	CHL2MP_Player *pOwner = ToHL2MPPlayer( GetOwner() );
+#else
 	CBaseCombatCharacter *pOwner  = GetOwner();
+#endif // SDK2013CE
 	if (!pOwner)
 	{
 		return;
@@ -605,11 +673,16 @@ void CWeapon_SLAM::StartSatchelAttach( void )
 		CBaseEntity *pEntity = tr.m_pEnt;
 		if (pEntity && !(pEntity->GetFlags() & FL_CONVEYOR))
 		{
+#ifndef SDK2013CE
 			// Only the player fires this way so we can cast
 			CBasePlayer *pPlayer = ToBasePlayer( pOwner );
 
 			// player "shoot" animation
 			pPlayer->SetAnimation( PLAYER_ATTACK1 );
+#else
+			// player "shoot" animation
+			pOwner->DoAnimationEvent( PLAYERANIMEVENT_ATTACK_PRIMARY );
+#endif // !SDK2013CE
 
 			// -----------------------------------------
 			//  Play attach animation
@@ -631,7 +704,11 @@ void CWeapon_SLAM::StartSatchelAttach( void )
 			m_bNeedReload		= true;
 			m_bAttachSatchel	= true;
 
+#ifdef SDK2013CE
+			m_flNextPrimaryAttack	= m_flNextSecondaryAttack = SLAM_REFIRE_DELAY + gpGlobals->curtime + SequenceDuration();
+#else
 			m_flNextPrimaryAttack = gpGlobals->curtime + SequenceDuration();
+#endif // SDK2013CE
 		}
 	}
 #endif

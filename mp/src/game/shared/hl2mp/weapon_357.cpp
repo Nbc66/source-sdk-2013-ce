@@ -36,7 +36,7 @@ public:
 	DECLARE_NETWORKCLASS(); 
 	DECLARE_PREDICTABLE();
 
-#ifndef CLIENT_DLL
+#if !defined( CLIENT_DLL ) || defined( SDK2013CE )
 	DECLARE_ACTTABLE();
 #endif
 
@@ -57,9 +57,24 @@ LINK_ENTITY_TO_CLASS( weapon_357, CWeapon357 );
 PRECACHE_WEAPON_REGISTER( weapon_357 );
 
 
-#ifndef CLIENT_DLL
+#if !defined( CLIENT_DLL ) || defined( SDK2013CE )
 acttable_t CWeapon357::m_acttable[] = 
 {
+#ifdef SDK2013CE
+	{ ACT_MP_STAND_IDLE,				ACT_HL2MP_IDLE_PISTOL,					false },
+	{ ACT_MP_CROUCH_IDLE,				ACT_HL2MP_IDLE_CROUCH_PISTOL,			false },
+
+	{ ACT_MP_RUN,						ACT_HL2MP_RUN_PISTOL,					false },
+	{ ACT_MP_CROUCHWALK,				ACT_HL2MP_WALK_CROUCH_PISTOL,			false },
+
+	{ ACT_MP_ATTACK_STAND_PRIMARYFIRE,	ACT_HL2MP_GESTURE_RANGE_ATTACK_PISTOL,	false },
+	{ ACT_MP_ATTACK_CROUCH_PRIMARYFIRE,	ACT_HL2MP_GESTURE_RANGE_ATTACK_PISTOL,	false },
+
+	{ ACT_MP_RELOAD_STAND,				ACT_HL2MP_GESTURE_RELOAD_PISTOL,		false },
+	{ ACT_MP_RELOAD_CROUCH,				ACT_HL2MP_GESTURE_RELOAD_PISTOL,		false },
+
+	{ ACT_MP_JUMP,						ACT_HL2MP_JUMP_PISTOL,					false },
+#else
 	{ ACT_HL2MP_IDLE,					ACT_HL2MP_IDLE_PISTOL,					false },
 	{ ACT_HL2MP_RUN,					ACT_HL2MP_RUN_PISTOL,					false },
 	{ ACT_HL2MP_IDLE_CROUCH,			ACT_HL2MP_IDLE_CROUCH_PISTOL,			false },
@@ -68,6 +83,7 @@ acttable_t CWeapon357::m_acttable[] =
 	{ ACT_HL2MP_GESTURE_RELOAD,			ACT_HL2MP_GESTURE_RELOAD_PISTOL,		false },
 	{ ACT_HL2MP_JUMP,					ACT_HL2MP_JUMP_PISTOL,					false },
 	{ ACT_RANGE_ATTACK1,				ACT_RANGE_ATTACK_PISTOL,				false },
+#endif // SDK2013CE
 };
 
 
@@ -91,7 +107,11 @@ CWeapon357::CWeapon357( void )
 void CWeapon357::PrimaryAttack( void )
 {
 	// Only the player fires this way so we can cast
+#ifdef SDK2013CE
+	CHL2MP_Player *pPlayer = ToHL2MPPlayer( GetOwner() );
+#else
 	CBasePlayer *pPlayer = ToBasePlayer( GetOwner() );
+#endif // SDK2013CE
 
 	if ( !pPlayer )
 	{
@@ -117,7 +137,11 @@ void CWeapon357::PrimaryAttack( void )
 	pPlayer->DoMuzzleFlash();
 
 	SendWeaponAnim( ACT_VM_PRIMARYATTACK );
+#ifdef SDK2013CE
+	pPlayer->DoAnimationEvent( PLAYERANIMEVENT_ATTACK_PRIMARY );
+#else
 	pPlayer->SetAnimation( PLAYER_ATTACK1 );
+#endif // SDK2013CE
 
 	m_flNextPrimaryAttack = gpGlobals->curtime + 0.75;
 	m_flNextSecondaryAttack = gpGlobals->curtime + 0.75;

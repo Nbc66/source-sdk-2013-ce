@@ -83,15 +83,30 @@ private:
 
 	CWeaponFrag( const CWeaponFrag & );
 
-#ifndef CLIENT_DLL
+#if !defined( CLIENT_DLL ) || defined( SDK2013CE )
 	DECLARE_ACTTABLE();
 #endif
 };
 
-#ifndef CLIENT_DLL
+#if !defined( CLIENT_DLL ) || defined( SDK2013CE )
 
 acttable_t	CWeaponFrag::m_acttable[] = 
 {
+#ifdef SDK2013CE
+	{ ACT_MP_STAND_IDLE,				ACT_HL2MP_IDLE_GRENADE,					false },
+	{ ACT_MP_CROUCH_IDLE,				ACT_HL2MP_IDLE_CROUCH_GRENADE,			false },
+
+	{ ACT_MP_RUN,						ACT_HL2MP_RUN_GRENADE,					false },
+	{ ACT_MP_CROUCHWALK,				ACT_HL2MP_WALK_CROUCH_GRENADE,			false },
+
+	{ ACT_MP_ATTACK_STAND_PRIMARYFIRE,	ACT_HL2MP_GESTURE_RANGE_ATTACK_GRENADE,	false },
+	{ ACT_MP_ATTACK_CROUCH_PRIMARYFIRE,	ACT_HL2MP_GESTURE_RANGE_ATTACK_GRENADE,	false },
+
+	{ ACT_MP_RELOAD_STAND,				ACT_HL2MP_GESTURE_RELOAD_GRENADE,		false },
+	{ ACT_MP_RELOAD_CROUCH,				ACT_HL2MP_GESTURE_RELOAD_GRENADE,		false },
+
+	{ ACT_MP_JUMP,						ACT_HL2MP_JUMP_GRENADE,					false },
+#else
 	{ ACT_HL2MP_IDLE,					ACT_HL2MP_IDLE_GRENADE,					false },
 	{ ACT_HL2MP_RUN,					ACT_HL2MP_RUN_GRENADE,					false },
 	{ ACT_HL2MP_IDLE_CROUCH,			ACT_HL2MP_IDLE_CROUCH_GRENADE,			false },
@@ -99,6 +114,7 @@ acttable_t	CWeaponFrag::m_acttable[] =
 	{ ACT_HL2MP_GESTURE_RANGE_ATTACK,	ACT_HL2MP_GESTURE_RANGE_ATTACK_GRENADE,	false },
 	{ ACT_HL2MP_GESTURE_RELOAD,			ACT_HL2MP_GESTURE_RELOAD_GRENADE,		false },
 	{ ACT_HL2MP_JUMP,					ACT_HL2MP_JUMP_GRENADE,					false },
+#endif // SDK2013CE
 };
 
 IMPLEMENT_ACTTABLE(CWeaponFrag);
@@ -341,7 +357,11 @@ void CWeaponFrag::ItemPostFrame( void )
 {
 	if( m_fDrawbackFinished )
 	{
+#ifdef SDK2013CE
+		CHL2MP_Player *pOwner = ToHL2MPPlayer( GetOwner() );
+#else
 		CBasePlayer *pOwner = ToBasePlayer( GetOwner() );
+#endif // SDK2013CE
 
 		if (pOwner)
 		{
@@ -351,6 +371,9 @@ void CWeaponFrag::ItemPostFrame( void )
 				if( !(pOwner->m_nButtons & IN_ATTACK) )
 				{
 					SendWeaponAnim( ACT_VM_THROW );
+#ifdef SDK2013CE
+					pOwner->DoAnimationEvent( PLAYERANIMEVENT_ATTACK_PRIMARY );
+#endif // SDK2013CE
 					m_fDrawbackFinished = false;
 				}
 				break;
@@ -369,6 +392,11 @@ void CWeaponFrag::ItemPostFrame( void )
 						//Send the weapon animation
 						SendWeaponAnim( ACT_VM_HAULBACK );
 					}
+
+#ifdef SDK2013CE
+					//Tony; the grenade really should have a secondary anim. but it doesn't on the player.
+					pOwner->DoAnimationEvent( PLAYERANIMEVENT_ATTACK_PRIMARY );
+#endif // SDK2013CE
 
 					m_fDrawbackFinished = false;
 				}

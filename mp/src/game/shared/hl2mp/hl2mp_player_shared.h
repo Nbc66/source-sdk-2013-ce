@@ -34,6 +34,7 @@ enum HL2MPPlayerState
 #define CHL2MP_Player C_HL2MP_Player
 #endif
 
+#ifndef SDK2013CE
 class CPlayerAnimState
 {
 public:
@@ -93,5 +94,6 @@ private:
 
 	float				m_flTurnCorrectionTime;
 };
+#endif // !SDK2013CE
 
 #endif //HL2MP_PLAYER_SHARED_h
