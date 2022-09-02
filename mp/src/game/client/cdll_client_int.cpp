@@ -353,9 +353,9 @@ void ApplyShaderConstantHack()
 	CMaterialConfigWrapper Wrapper;
 
 	Wrapper.PrintPixelConstants();
-	Wrapper.SetNumPixelConstants(225);
-	Wrapper.SetNumBooleanPixelConstants(225);
-	Wrapper.SetNumIntegerPixelConstants(225);
+	Wrapper.SetNumPixelConstants(254);
+	Wrapper.SetNumBooleanPixelConstants(16);
+	Wrapper.SetNumIntegerPixelConstants(16);
 	Wrapper.PrintPixelConstants();
 }
 #endif
