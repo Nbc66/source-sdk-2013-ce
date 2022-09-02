@@ -37,6 +37,7 @@ $Project "Client"
 
 		$Folder	"SDK2013CE DLL"
 		{
+			$File	"shaderapihack.h"
 		}
 
 		$Folder	"HL2 DLL"
