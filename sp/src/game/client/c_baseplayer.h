@@ -61,6 +61,7 @@ public:
 #define CHASE_CAM_DISTANCE_MIN	16.0f
 #define CHASE_CAM_DISTANCE_MAX	96.0f
 #define WALL_OFFSET				6.0f
+#define CHASE_CAM_DISTANCE 64.0f
 
 
 bool IsInFreezeCam( void );
@@ -445,6 +446,7 @@ public:
 
 protected:
 
+	virtual void        CalcThirdPersonDeathView(Vector& eyeOrigin, QAngle& eyeAngles, float& fov);
 	void				CalcPlayerView( Vector& eyeOrigin, QAngle& eyeAngles, float& fov );
 	void				CalcVehicleView(IClientVehicle *pVehicle, Vector& eyeOrigin, QAngle& eyeAngles,
 							float& zNear, float& zFar, float& fov );

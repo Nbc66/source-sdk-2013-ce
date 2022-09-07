@@ -27,7 +27,7 @@ ConVar spec_autodirector( "spec_autodirector", "1", FCVAR_CLIENTDLL | FCVAR_CLIE
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-#define CHASE_CAM_DISTANCE		96.0f
+//#define CHASE_CAM_DISTANCE		96.0f
 #define WALL_OFFSET				6.0f
 
 static Vector WALL_MIN(-WALL_OFFSET,-WALL_OFFSET,-WALL_OFFSET);

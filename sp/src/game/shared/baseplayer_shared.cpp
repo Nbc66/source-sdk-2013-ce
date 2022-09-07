@@ -13,6 +13,10 @@
 #include "tf_gamerules.h"
 #endif
 
+#ifdef CLIENT_DLL
+#include "input.h"
+#endif
+
 #if defined( CLIENT_DLL )
 
 	#include "iclientvehicle.h"
@@ -1564,6 +1568,12 @@ void CBasePlayer::CalcView( Vector &eyeOrigin, QAngle &eyeAngles, float &zNear, 
 #if defined( CLIENT_DLL )
 	if(IsLocalPlayer() && haptics)
 		haptics->UpdatePlayerFOV(fov);
+#endif
+#ifdef CLIENT_DLL
+	else if (!this->IsAlive() && ::input->CAM_IsThirdPerson())
+	{
+		CalcThirdPersonDeathView(eyeOrigin, eyeAngles, fov);
+	}
 #endif
 }
 

@@ -1217,6 +1217,8 @@ public:
 
 	DECLARE_SERVERCLASS();
 	DECLARE_DATADESC();
+	
+	DECLARE_ACTTABLE();
 
 	CWeaponPhysCannon( void );
 
@@ -1392,6 +1394,20 @@ IMPLEMENT_SERVERCLASS_ST(CWeaponPhysCannon, DT_WeaponPhysCannon)
 	SendPropBool( SENDINFO( m_bIsCurrentlyUpgrading ) ),
 	SendPropFloat( SENDINFO( m_flTimeForceView ) ),
 END_SEND_TABLE()
+
+acttable_t CWeaponPhysCannon::m_acttable[] =
+{
+    { ACT_HL2MP_IDLE,                    ACT_HL2MP_IDLE_PHYSGUN,                    false },
+    { ACT_HL2MP_RUN,                    ACT_HL2MP_RUN_PHYSGUN,                    false },
+    { ACT_HL2MP_IDLE_CROUCH,            ACT_HL2MP_IDLE_CROUCH_PHYSGUN,            false },
+    { ACT_HL2MP_WALK_CROUCH,            ACT_HL2MP_WALK_CROUCH_PHYSGUN,            false },
+    { ACT_HL2MP_GESTURE_RANGE_ATTACK,    ACT_HL2MP_GESTURE_RANGE_ATTACK_PHYSGUN,    false },
+    { ACT_HL2MP_GESTURE_RELOAD,            ACT_HL2MP_GESTURE_RELOAD_PHYSGUN,        false },
+    { ACT_HL2MP_JUMP,                    ACT_HL2MP_JUMP_PHYSGUN,                    false },
+    { ACT_RANGE_ATTACK1,                ACT_RANGE_ATTACK_SLAM,                false },
+};
+
+IMPLEMENT_ACTTABLE( CWeaponPhysCannon );
 
 LINK_ENTITY_TO_CLASS( weapon_physcannon, CWeaponPhysCannon );
 PRECACHE_WEAPON_REGISTER( weapon_physcannon );

@@ -41,6 +41,8 @@ public:
 
 	DECLARE_SERVERCLASS();
 	DECLARE_DATADESC();
+	
+	DECLARE_ACTTABLE();
 };
 
 LINK_ENTITY_TO_CLASS( weapon_357, CWeapon357 );
@@ -49,6 +51,20 @@ PRECACHE_WEAPON_REGISTER( weapon_357 );
 
 IMPLEMENT_SERVERCLASS_ST( CWeapon357, DT_Weapon357 )
 END_SEND_TABLE()
+
+acttable_t CWeapon357::m_acttable[] =
+{
+    { ACT_HL2MP_IDLE,                    ACT_HL2MP_IDLE_PISTOL,                    false },
+    { ACT_HL2MP_RUN,                    ACT_HL2MP_RUN_PISTOL,                    false },
+    { ACT_HL2MP_IDLE_CROUCH,            ACT_HL2MP_IDLE_CROUCH_PISTOL,            false },
+    { ACT_HL2MP_WALK_CROUCH,            ACT_HL2MP_WALK_CROUCH_PISTOL,            false },
+    { ACT_HL2MP_GESTURE_RANGE_ATTACK,    ACT_HL2MP_GESTURE_RANGE_ATTACK_PISTOL,    false },
+    { ACT_HL2MP_GESTURE_RELOAD,            ACT_HL2MP_GESTURE_RELOAD_PISTOL,        false },
+    { ACT_HL2MP_JUMP,                    ACT_HL2MP_JUMP_PISTOL,                    false },
+    { ACT_RANGE_ATTACK1,                ACT_RANGE_ATTACK_PISTOL,                false },
+};
+
+IMPLEMENT_ACTTABLE( CWeapon357 );
 
 BEGIN_DATADESC( CWeapon357 )
 END_DATADESC()
