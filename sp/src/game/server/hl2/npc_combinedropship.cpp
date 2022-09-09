@@ -389,13 +389,10 @@ void	CNPC_CombineDropship::PopulatePoseParameters( void )
 		m_poseBody_Sway			= LookupPoseParameter( "body_sway" );
 		m_poseCargo_Body_Accel  = LookupPoseParameter( "cargo_body_accel" );
 		m_poseCargo_Body_Sway   = LookupPoseParameter( "cargo_body_sway" );
-	#ifdef SDK2013CE
-		m_poseWeapon_Pitch		= m_hContainer->LookupPoseParameter( "weapon_pitch" );
-		m_poseWeapon_Yaw		= m_hContainer->LookupPoseParameter( "weapon_yaw" );
-	#else
-		m_poseWeapon_Pitch		= LookupPoseParameter( "weapon_pitch" );
-		m_poseWeapon_Yaw		= LookupPoseParameter( "weapon_yaw" );
-	#endif
+#ifndef SDK2013CE
+		m_poseWeapon_Pitch		= LookupPoseParameter("weapon_pitch");
+		m_poseWeapon_Yaw		= LookupPoseParameter("weapon_yaw");
+#endif
 
 		m_sbStaticPoseParamsLoaded = true;
 	}
@@ -2800,6 +2797,11 @@ void CNPC_CombineDropship::UpdateContainerGunFacing( Vector &vecMuzzle, Vector &
 {
 	Assert( m_hContainer );
 
+#ifdef SDK2013CE
+	m_poseWeapon_Pitch = m_hContainer->LookupPoseParameter("weapon_pitch");
+	m_poseWeapon_Yaw = m_hContainer->LookupPoseParameter("weapon_yaw");
+#endif
+
 	// Get the desired aim vector
 	vecToTarget = GetEnemy()->WorldSpaceCenter( );
 
@@ -3004,6 +3006,5 @@ AI_BEGIN_CUSTOM_NPC( npc_combinedropship, CNPC_CombineDropship )
 	DECLARE_ACTIVITY( ACT_DROPSHIP_FLY_IDLE_CARGO );
 
 AI_END_CUSTOM_NPC()
-
 
 
