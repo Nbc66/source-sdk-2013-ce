@@ -240,12 +240,14 @@ protected:
 #ifdef HL2_EPISODIC
 	string_t				m_iszAmmoType;		// The name of the ammodef that we use when we fire. Bullet damage still comes from keyvalues.
 	int						m_iAmmoType;		// The cached index of the ammodef that we use when we fire.
-#else
+#endif // HL2_EPISODIC
+
+//HL2 fix
+#ifdef SDK2013CE
 	int						m_iSmallAmmoType;
 	int						m_iMediumAmmoType;
 	int						m_iLargeAmmoType;
-#endif // HL2_EPISODIC
-
+#endif
 	int						m_spread;		// firing spread
 
 	EntityMatrix			m_parentMatrix;
