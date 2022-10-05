@@ -33,16 +33,16 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-extern IParticleSystemQuery *g_pParticleSystemQuery;
+extern IParticleSystemQuery* g_pParticleSystemQuery;
 
 static int g_nParticlesDrawn;
 // CCycleCount	g_ParticleTimer;
 
 ConVar r_DrawParticles("r_drawparticles", "1", FCVAR_CHEAT, "Enable/disable particle rendering");
-static ConVar particle_simulateoverflow( "particle_simulateoverflow", "0", FCVAR_CHEAT, "Used for stress-testing particle systems. Randomly denies creation of particles." );
-ConVar cl_particleeffect_aabb_buffer( "cl_particleeffect_aabb_buffer", "2", FCVAR_CHEAT, "Add this amount to a particle effect's bbox in the leaf system so if it's growing slowly, it won't have to be reinserted as often." );
-ConVar cl_particle_show_bbox( "cl_particle_show_bbox", "0", FCVAR_CHEAT );
-ConVar cl_particle_show_bbox_cost( "cl_particle_show_bbox_cost", "0", FCVAR_CHEAT, "Show # of particles: green->blue->red. Use a negative number to show ALL particles even cheap ones" );
+static ConVar particle_simulateoverflow("particle_simulateoverflow", "0", FCVAR_CHEAT, "Used for stress-testing particle systems. Randomly denies creation of particles.");
+ConVar cl_particleeffect_aabb_buffer("cl_particleeffect_aabb_buffer", "2", FCVAR_CHEAT, "Add this amount to a particle effect's bbox in the leaf system so if it's growing slowly, it won't have to be reinserted as often.");
+ConVar cl_particle_show_bbox("cl_particle_show_bbox", "0", FCVAR_CHEAT);
+ConVar cl_particle_show_bbox_cost("cl_particle_show_bbox_cost", "0", FCVAR_CHEAT, "Show # of particles: green->blue->red. Use a negative number to show ALL particles even cheap ones");
 
 // These reflect the convars so we don't parse the string every particle!
 bool g_cl_particle_show_bbox = false;
@@ -52,9 +52,9 @@ int g_cl_particle_show_bbox_cost = 0;
 static void StatsParticlesStart();
 static void StatsParticlesStop();
 
-static ConCommand cl_particle_stats_start( "cl_particle_stats_start", StatsParticlesStart, "Start or restart particle stats - also dumps to particle_stats.csv") ;
-static ConCommand cl_particle_stats_stop( "cl_particle_stats_stop", StatsParticlesStop, "Stop particle stats, or snapshot this frame - also dumps to particle_stats.csv") ;
-static ConVar cl_particle_stats_trigger_count( "cl_particle_stats_trigger_count", "0", 0, "Dump stats if the particle count exceeds this number." );
+static ConCommand cl_particle_stats_start("cl_particle_stats_start", StatsParticlesStart, "Start or restart particle stats - also dumps to particle_stats.csv");
+static ConCommand cl_particle_stats_stop("cl_particle_stats_stop", StatsParticlesStop, "Stop particle stats, or snapshot this frame - also dumps to particle_stats.csv");
+static ConVar cl_particle_stats_trigger_count("cl_particle_stats_trigger_count", "0", 0, "Dump stats if the particle count exceeds this number.");
 
 
 
@@ -69,7 +69,7 @@ static ConVar cl_particle_stats_trigger_count( "cl_particle_stats_trigger_count"
 
 #define PARTICLE_SIZE	96
 
-CParticleMgr *ParticleMgr()
+CParticleMgr* ParticleMgr()
 {
 	static CParticleMgr s_ParticleMgr;
 	return &s_ParticleMgr;
@@ -97,8 +97,8 @@ CParticleSubTextureGroup::~CParticleSubTextureGroup()
 
 CParticleSubTexture::CParticleSubTexture()
 {
-	m_tCoordMins[0] = m_tCoordMins[1] = 0;
-	m_tCoordMaxs[0] = m_tCoordMaxs[1] = 1;
+	m_tCoordMins[0] = m_tCoordMins[0] = 0;
+	m_tCoordMaxs[0] = m_tCoordMaxs[0] = 1;
 	m_pGroup = &m_DefaultGroup;
 	m_pMaterial = NULL;
 
@@ -191,7 +191,7 @@ const QAngle& CParticleEffectBinding::GetRenderAngles( void )
 	return vec3_angle;
 }
 
-const matrix3x4_t &	CParticleEffectBinding::RenderableToWorldTransform()
+const matrix3x4_t&	CParticleEffectBinding::RenderableToWorldTransform()
 {
 	static matrix3x4_t mat;
 	SetIdentityMatrix( mat );
@@ -201,7 +201,7 @@ const matrix3x4_t &	CParticleEffectBinding::RenderableToWorldTransform()
 
 void CParticleEffectBinding::GetRenderBounds( Vector& mins, Vector& maxs )
 {
-	const Vector &vSortOrigin = m_pSim->GetSortOrigin();
+	const Vector& vSortOrigin = m_pSim->GetSortOrigin();
 
 	// Convert to local space (around the sort origin).
 	mins = m_Min - vSortOrigin;
@@ -223,11 +223,11 @@ bool CParticleEffectBinding::IsTransparent( void )
 
 
 inline void CParticleEffectBinding::StartDrawMaterialParticles(
-	CEffectMaterial *pMaterial,
+	CEffectMaterial* pMaterial,
 	float flTimeDelta,
-	IMesh* &pMesh,
-	CMeshBuilder &builder,
-	ParticleDraw &particleDraw,
+	IMesh*& pMesh,
+	CMeshBuilder& builder,
+	ParticleDraw& particleDraw,
 	bool bWireframe )
 {
 	CMatRenderContextPtr pRenderContext( m_pParticleMgr->m_pMaterialSystem );
@@ -235,7 +235,7 @@ inline void CParticleEffectBinding::StartDrawMaterialParticles(
 	// Setup the ParticleDraw and bind the material.
 	if( bWireframe )
 	{
-		IMaterial *pMaterial = m_pParticleMgr->m_pMaterialSystem->FindMaterial( "debug/debugparticlewireframe", TEXTURE_GROUP_OTHER );
+		IMaterial* pMaterial = m_pParticleMgr->m_pMaterialSystem->FindMaterial( "debug/debugparticlewireframe", TEXTURE_GROUP_OTHER );
 		pRenderContext->Bind( pMaterial, NULL );
 	}
 	else
@@ -250,7 +250,7 @@ inline void CParticleEffectBinding::StartDrawMaterialParticles(
 }
 
 
-void CParticleEffectBinding::BBoxCalcStart( Vector &bbMin, Vector &bbMax )
+void CParticleEffectBinding::BBoxCalcStart( Vector& bbMin, Vector& bbMax )
 {
 	if ( !GetAutoUpdateBBox() )
 		return;
@@ -261,7 +261,7 @@ void CParticleEffectBinding::BBoxCalcStart( Vector &bbMin, Vector &bbMax )
 }
 
 
-void CParticleEffectBinding::BBoxCalcEnd( bool bboxSet, Vector &bbMin, Vector &bbMax )
+void CParticleEffectBinding::BBoxCalcEnd( bool bboxSet, Vector& bbMin, Vector& bbMax )
 {
 	if ( !GetAutoUpdateBBox() )
 		return;
@@ -346,7 +346,7 @@ int CParticleEffectBinding::DrawModel( int flags )
 	bool bWireframe = false;
 	FOR_EACH_LL( m_Materials, iMaterial )
 	{
-		CEffectMaterial *pMaterial = m_Materials[iMaterial];
+		CEffectMaterial* pMaterial = m_Materials[iMaterial];
 		
 		if ( pMaterial->m_pGroup->m_pPageMaterial && pMaterial->m_pGroup->m_pPageMaterial->NeedsPowerOfTwoFrameBufferTexture() )
 		{
@@ -370,7 +370,7 @@ int CParticleEffectBinding::DrawModel( int flags )
 		bWireframe = true;
 		FOR_EACH_LL( m_Materials, iDrawMaterial )
 		{
-			CEffectMaterial *pMaterial = m_Materials[iDrawMaterial];
+			CEffectMaterial* pMaterial = m_Materials[iDrawMaterial];
 			
 			DrawMaterialParticles( 
 				bBucketSort,
@@ -383,7 +383,7 @@ int CParticleEffectBinding::DrawModel( int flags )
 
 	if ( !IsRetail() )
 	{
-		CParticleMgr *pMgr = ParticleMgr();
+		CParticleMgr* pMgr = ParticleMgr();
 		if ( pMgr->m_bStatsRunning )
 		{
 			pMgr->StatsOldParticleEffectDrawn ( this );
@@ -481,7 +481,7 @@ int CParticleEffectBinding::DrawModel( int flags )
 }
 
 
-PMaterialHandle CParticleEffectBinding::FindOrAddMaterial( const char *pMaterialName )
+PMaterialHandle CParticleEffectBinding::FindOrAddMaterial( const char* pMaterialName )
 {
 	if ( !m_pParticleMgr )
 	{
@@ -519,7 +519,7 @@ Particle* CParticleEffectBinding::AddParticle( int sizeInBytes, PMaterialHandle 
 		return NULL;
 
 	// Link it in
-	CEffectMaterial *pEffectMat = GetEffectMaterial( hMaterial );
+	CEffectMaterial* pEffectMat = GetEffectMaterial( hMaterial );
 	InsertParticleAfter( pParticle, &pEffectMat->m_Particles );
 	
 	if ( hMaterial )
@@ -531,7 +531,7 @@ Particle* CParticleEffectBinding::AddParticle( int sizeInBytes, PMaterialHandle 
 	return pParticle;
 }
 
-void CParticleEffectBinding::SetBBox( const Vector &bbMin, const Vector &bbMax, bool bDisableAutoUpdate )
+void CParticleEffectBinding::SetBBox( const Vector& bbMin, const Vector& bbMax, bool bDisableAutoUpdate )
 {
 	m_Min = bbMin;
 	m_Max = bbMax;
@@ -540,7 +540,7 @@ void CParticleEffectBinding::SetBBox( const Vector &bbMin, const Vector &bbMax, 
 		SetAutoUpdateBBox( false );
 }
 
-void CParticleEffectBinding::GetWorldspaceBounds( Vector *pMins, Vector *pMaxs )
+void CParticleEffectBinding::GetWorldspaceBounds( Vector* pMins, Vector* pMaxs )
 {
 	*pMins = m_Min;
 	*pMaxs = m_Max;
@@ -559,7 +559,7 @@ void CParticleEffectBinding::SetLocalSpaceTransform( const matrix3x4_t &transfor
 	}
 }
 
-bool CParticleEffectBinding::EnlargeBBoxToContain( const Vector &pt )
+bool CParticleEffectBinding::EnlargeBBoxToContain( const Vector& pt )
 {
 	if ( m_nActiveParticles == 0 )
 	{
@@ -631,13 +631,13 @@ void CParticleEffectBinding::DetectChanges()
 }
 
 
-void CParticleEffectBinding::GrowBBoxFromParticlePositions( CEffectMaterial *pMaterial, bool &bboxSet, Vector &bbMin, Vector &bbMax )
+void CParticleEffectBinding::GrowBBoxFromParticlePositions( CEffectMaterial* pMaterial, bool& bboxSet, Vector& bbMin, Vector& bbMax )
 {
 	// If its bbox is manually set, don't bother updating it here.
 	if ( !GetAutoUpdateBBox() )
 		return;
 
-	for( Particle *pCur=pMaterial->m_Particles.m_pNext; pCur != &pMaterial->m_Particles; pCur=pCur->m_pNext )
+	for( Particle* pCur=pMaterial->m_Particles.m_pNext; pCur != &pMaterial->m_Particles; pCur=pCur->m_pNext )
 	{
 		// Update bounding box 
 		VectorMin( bbMin, pCur->m_Pos, bbMin );
@@ -687,7 +687,7 @@ void CParticleEffectBinding::SimulateParticles( float flTimeDelta )
 		}
 		FOR_EACH_LL( m_Materials, i )
 		{
-			CEffectMaterial *pMaterial = m_Materials[i];
+			CEffectMaterial* pMaterial = m_Materials[i];
 
 			CParticleSimulateIterator simulateIterator;
 
@@ -744,14 +744,14 @@ int CParticleEffectBinding::GetNumActiveParticles()
 }
 
 // Build a list of all active particles
-int CParticleEffectBinding::GetActiveParticleList( int nCount, Particle **ppParticleList )
+int CParticleEffectBinding::GetActiveParticleList( int nCount, Particle** ppParticleList )
 {
 	int nCurrCount = 0;
 
 	FOR_EACH_LL( m_Materials, i )
 	{
-		CEffectMaterial *pMaterial = m_Materials[i];
-		Particle *pParticle = pMaterial->m_Particles.m_pNext;
+		CEffectMaterial* pMaterial = m_Materials[i];
+		Particle* pParticle = pMaterial->m_Particles.m_pNext;
 		for ( ; pParticle != &pMaterial->m_Particles; pParticle = pParticle->m_pNext )
 		{
 			ppParticleList[nCurrCount] = pParticle;
@@ -766,7 +766,7 @@ int CParticleEffectBinding::GetActiveParticleList( int nCount, Particle **ppPart
 
 int CParticleEffectBinding::DrawMaterialParticles( 
 	bool bBucketSort,
-	CEffectMaterial *pMaterial, 
+	CEffectMaterial* pMaterial, 
 	float flTimeDelta,
 	bool bWireframe
 	 )
@@ -774,7 +774,7 @@ int CParticleEffectBinding::DrawMaterialParticles(
 	// Setup everything.
 	CMeshBuilder builder;
 	ParticleDraw particleDraw;
-	IMesh *pMesh = NULL;
+	IMesh* pMesh = NULL;
 	StartDrawMaterialParticles( pMaterial, flTimeDelta, pMesh, builder, particleDraw, bWireframe );
 
 	if ( m_nActiveParticles > MAX_TOTAL_PARTICLES )
@@ -805,7 +805,7 @@ int CParticleEffectBinding::DrawMaterialParticles(
 }
 
 
-void CParticleEffectBinding::RenderStart( VMatrix &tempModel, VMatrix &tempView )
+void CParticleEffectBinding::RenderStart( VMatrix& tempModel, VMatrix& tempView )
 {
 	if( IsEffectCameraSpace() )
 	{
@@ -1540,14 +1540,11 @@ static ConVar r_threaded_particles( "r_threaded_particles", "1" );
 
 static float s_flThreadedPSystemTimeStep;
 
-static void ProcessPSystem( ParticleSimListEntry_t& pSimListEntry )
+static void ProcessPSystem(CNewParticleEffect*& pNewEffect)
 {
 	// Enable FP exceptions here when FP_EXCEPTIONS_ENABLED is defined,
 	// to help track down bad math.
 	FPExceptionEnabler enableExceptions;
-
-	CNewParticleEffect* pNewEffect = pSimListEntry.m_pNewParticleEffect;
-	//bool updateBboxOnly = pSimListEntry.m_bBoundingBoxOnly;
 
 	// If this is a new effect, then update its bbox so it goes in the
 	// right leaves (if it has particles).
@@ -1567,12 +1564,12 @@ static void ProcessPSystem( ParticleSimListEntry_t& pSimListEntry )
 
 	if ( pNewEffect->GetFirstFrameFlag() )
 	{
-		//pNewEffect->Simulate( 0.0f, updateBboxOnly );
-		pNewEffect->SetFirstFrameFlag( false );
+		pNewEffect->Simulate(0.0f);
+		pNewEffect->SetFirstFrameFlag(false);
 	}
 	else if ( pNewEffect->ShouldSimulate() )
 	{
-		//pNewEffect->Simulate( s_flThreadedPSystemTimeStep, updateBboxOnly );
+		pNewEffect->Simulate(s_flThreadedPSystemTimeStep);
 	}
 
 	if ( pNewEffect->IsFinished() )
@@ -1687,11 +1684,11 @@ bool CParticleMgr::RetireParticleCollections( CParticleSystemDefinition* pDef,
 // Next, see if there are new particle systems that need early retirement
 static ConVar cl_particle_retire_cost( "cl_particle_retire_cost", "0", FCVAR_CHEAT );
 
-bool CParticleMgr::EarlyRetireParticleSystems( int nCount, ParticleSimListEntry_t *ppEffects )
+bool CParticleMgr::EarlyRetireParticleSystems(int nCount, CNewParticleEffect** ppEffects)
 {
 	// NOTE: Doing a cheap and hacky estimate of worst-case fillrate
-	const CViewSetup *pViewSetup = view->GetPlayerViewSetup();
-	if ( pViewSetup->width == 0 || pViewSetup->height == 0 )
+	const CViewSetup* pViewSetup = view->GetPlayerViewSetup();
+	if (pViewSetup->width == 0 || pViewSetup->height == 0)
 		return false;
 
 	float flMaxScreenArea = cl_particle_retire_cost.GetFloat() * 1000.0f;
@@ -1702,14 +1699,14 @@ bool CParticleMgr::EarlyRetireParticleSystems( int nCount, ParticleSimListEntry_
 	CParticleSystemDefinition **ppDefs = (CParticleSystemDefinition**)stackalloc( nCount * sizeof(CParticleSystemDefinition*) );
 	for ( int i = 0; i < nCount; ++i )
 	{
-		CParticleSystemDefinition *pDef = ppEffects[i].m_pNewParticleEffect->m_pDef;
+		CParticleSystemDefinition* pDef = ppEffects[i]->m_pDef;
 
 		// Skip stuff that doesn't have a cull radius set
 		if ( pDef->GetCullRadius() == 0.0f )
 			continue;
 
 		// Only perform the cull check on creation
-		if ( !ppEffects[i].m_pNewParticleEffect->GetFirstFrameFlag() )
+		if (!ppEffects[i]->GetFirstFrameFlag())
 			continue;
 
 		if ( pDef->HasRetirementBeenChecked( gpGlobals->framecount ) )
@@ -1717,7 +1714,7 @@ bool CParticleMgr::EarlyRetireParticleSystems( int nCount, ParticleSimListEntry_
 
 		pDef->MarkRetirementCheck( gpGlobals->framecount );
 
-		ppDefs[nDefCount++] = ppEffects[i].m_pNewParticleEffect->m_pDef;
+		ppDefs[nDefCount++] = ppEffects[i]->m_pDef;
 	}
 
 	if ( nDefCount == 0 )
@@ -1725,7 +1722,7 @@ bool CParticleMgr::EarlyRetireParticleSystems( int nCount, ParticleSimListEntry_
 
 	for ( int i = 0; i < nCount; ++i )
 	{
-		ppEffects[i].m_pNewParticleEffect->MarkShouldPerformCullCheck( true );
+		ppEffects[i]->MarkShouldPerformCullCheck(false);
 	}
 
 	Vector vecCameraForward;
@@ -1752,21 +1749,20 @@ bool CParticleMgr::EarlyRetireParticleSystems( int nCount, ParticleSimListEntry_
 
 	for ( int i = 0; i < nCount; ++i )
 	{
-		ppEffects[i].m_pNewParticleEffect->MarkShouldPerformCullCheck( false );
+		ppEffects[i]->MarkShouldPerformCullCheck(true);
 	}
 	return bRetiredCollections;
 }
 
 static ConVar particle_sim_alt_cores( "particle_sim_alt_cores", "2" );
 
-void CParticleMgr::BuildParticleSimList( CUtlVector< ParticleSimListEntry_t > &list )
+void CParticleMgr::BuildParticleSimList(CUtlVector< CNewParticleEffect* >& list)
 {
 	float flNow = g_pParticleSystemMgr->GetLastSimulationTime();
 	for( CNewParticleEffect *pNewEffect=m_NewEffects.m_pHead; pNewEffect;
 		pNewEffect=pNewEffect->m_pNext )
 	{
 		bool bSkip = false;
-		bool bNeedsBboxUpdate = false;
 
 		if ( flNow >= pNewEffect->m_flNextSleepTime && pNewEffect->m_nActiveParticles > 0 )
 			bSkip = true;
@@ -1777,20 +1773,8 @@ void CParticleMgr::BuildParticleSimList( CUtlVector< ParticleSimListEntry_t > &l
 		{
 			g_nNumParticlesSimulated += pNewEffect->m_nActiveParticles;
 		}
-		
-		// Particles that are attached to moving things will need to update their bboxes even if they
-		// otherwise would like to skip the updates. Check that here.
-		if (bSkip)
-		{
-			//bNeedsBboxUpdate = pNewEffect->HasMoved();
-			//bSkip = !bNeedsBboxUpdate;
-		}
 
-		if (!bSkip)
-		{
-			ParticleSimListEntry_t entry = { pNewEffect, bNeedsBboxUpdate };
-			list.AddToTail( entry );
-		}
+		list.AddToTail(pNewEffect);
 	}
 }
 
@@ -1832,25 +1816,25 @@ void CParticleMgr::UpdateNewEffects( float flTimeDelta )
 	int nParticleStatsTriggerCount = cl_particle_stats_trigger_count.GetInt();
 
 	BeginSimulateParticles();
+
+	CUtlVector<CNewParticleEffect*> particlesToSimulate;
+	BuildParticleSimList(particlesToSimulate);
 	s_flThreadedPSystemTimeStep = flTimeDelta;
+
+	int nCount = particlesToSimulate.Count();
 
 	// first, run non-reentrant part to get CP updates from entities
 	// This is done on all particles, because it updates control point locations which we need to determine whether or not we should 
 	// do full simulation later. 
-	for (CNewParticleEffect *pNewEffect = m_NewEffects.m_pHead; pNewEffect;
-		pNewEffect = pNewEffect->m_pNext)
+	for (int i = 0; i < nCount; i++)
 	{
 		// this one can call into random entity code which may not be thread-safe
-		pNewEffect->Update( s_flThreadedPSystemTimeStep );
-		if ( nParticleStatsTriggerCount > 0 )
+		particlesToSimulate[i]->Update(s_flThreadedPSystemTimeStep);
+		if (nParticleStatsTriggerCount > 0)
 		{
-			nParticleActiveParticlesCount += CountParticleSystemActiveParticles( pNewEffect );
+			nParticleActiveParticlesCount += CountParticleSystemActiveParticles(particlesToSimulate[i]);
 		}
 	}
-
-	CUtlVector<ParticleSimListEntry_t> particlesToSimulate;
-	BuildParticleSimList(particlesToSimulate);
-	int nCount = particlesToSimulate.Count();
 
 
 	// See if there are new particle systems that need early retirement
@@ -1885,9 +1869,9 @@ void CParticleMgr::UpdateNewEffects( float flTimeDelta )
 				{
 					nAltCore = 2;
 				}
-				CParallelProcessor<ParticleSimListEntry_t, CFuncJobItemProcessor<ParticleSimListEntry_t> > processor( "CParticleMgr::UpdateNewEffects" );
-				processor.m_ItemProcessor.Init( ProcessPSystem, NULL, NULL );
-				processor.Run( particlesToSimulate.Base(), nCount, INT_MAX, m_pThreadPool[nAltCore-1] );
+				CParallelProcessor<CNewParticleEffect*, CFuncJobItemProcessor<CNewParticleEffect*> > processor("CParticleMgr::UpdateNewEffects");
+				processor.m_ItemProcessor.Init(ProcessPSystem, NULL, NULL);
+				processor.Run(particlesToSimulate.Base(), nCount, INT_MAX, m_pThreadPool[nAltCore - 1]);
 			}
 		}
 	}
@@ -1896,7 +1880,7 @@ void CParticleMgr::UpdateNewEffects( float flTimeDelta )
 	for( int i=0; i<nCount; i++)
 	{
 		// this one can call into random entity code which may not be thread-safe
-		particlesToSimulate[i].m_pNewParticleEffect->DetectChanges();
+		particlesToSimulate[i]->DetectChanges();
 	}
 
 	EndSimulateParticles();

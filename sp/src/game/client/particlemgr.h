@@ -113,7 +113,7 @@ entities. Each one is useful under different conditions.
 #include "materialsystem/imaterialsystem.h"
 #include "mathlib/vector.h"
 #include "mathlib/vmatrix.h"
-//#include "mathlib/mathlib.h"
+#include "mathlib/mathlib.h"
 #include "iclientrenderable.h"
 #include "clientleafsystem.h"
 #include "tier0/fasttimer.h"
@@ -237,15 +237,8 @@ public:
 #ifdef _DEBUG
 	char *m_szDebugName;
 #endif
-	
-	IMaterial *m_pMaterial;
-};
 
-// Particle simulation list, used to determine what particles to simulate and how.
-struct ParticleSimListEntry_t
-{
-	CNewParticleEffect* m_pNewParticleEffect;
-	bool m_bBoundingBoxOnly;
+	IMaterial* m_pMaterial;
 };
 
 
@@ -726,11 +719,10 @@ private:
 	int ComputeParticleDefScreenArea( int nInfoCount, RetireInfo_t *pInfo, float *pTotalArea, CParticleSystemDefinition* pDef, 
 		const CViewSetup& view, const VMatrix &worldToPixels, float flFocalDist );
 
-	bool RetireParticleCollections( CParticleSystemDefinition* pDef, int nCount, RetireInfo_t *pInfo, float flScreenArea, float flMaxTotalArea );
-
-	void BuildParticleSimList( CUtlVector< ParticleSimListEntry_t > &list );
-	bool EarlyRetireParticleSystems( int nCount, ParticleSimListEntry_t *ppEffects );
-	static int RetireSort( const void *p1, const void *p2 ); 
+	bool RetireParticleCollections(CParticleSystemDefinition* pDef, int nCount, RetireInfo_t* pInfo, float flScreenArea, float flMaxTotalArea);
+	void BuildParticleSimList(CUtlVector< CNewParticleEffect* >& list);
+	bool EarlyRetireParticleSystems(int nCount, CNewParticleEffect** ppEffects);
+	static int RetireSort(const void* p1, const void* p2);
 
 private:
 
