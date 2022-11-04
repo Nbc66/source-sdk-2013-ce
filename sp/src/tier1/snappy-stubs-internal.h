@@ -138,7 +138,7 @@ class LogMessage {
 class LogMessageCrash : public LogMessage {
  public:
   LogMessageCrash() { }
-#if _MSC_VER == 1700 || _MSC_VER == 1800 || _MSC_VER == 1929 || _MSC_VER == 1930 || _MSC_VER == 1931 || _MSC_VER == 1933
+#if _MSC_VER == 1700 || _MSC_VER == 1800 || _MSC_VER == 1929 || _MSC_VER == 1930 || _MSC_VER == 1931 || _MSC_VER >= 1933
 // Bogus warning from VS 2012 and VS 2013:
 // warning C4722: 'snappy::LogMessageCrash::~LogMessageCrash' : destructor never returns, potential memory leak
 #pragma warning(push)
@@ -150,7 +150,7 @@ class LogMessageCrash : public LogMessage {
     abort();
   }
 };
-#if _MSC_VER == 1700 || _MSC_VER == 1800 || _MSC_VER == 1929 || _MSC_VER == 1930 || _MSC_VER == 1933
+#if _MSC_VER == 1700 || _MSC_VER == 1800 || _MSC_VER == 1929 || _MSC_VER == 1930 || _MSC_VER >= 1933
 #pragma warning(pop)
 #endif
 
