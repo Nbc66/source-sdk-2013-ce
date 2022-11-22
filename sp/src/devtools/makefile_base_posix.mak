@@ -2,9 +2,9 @@
 # Base makefile for Linux.
 #
 # !!!!! Note to future editors !!!!!
-# 
+#
 # before you make changes, make sure you grok:
-# 1. the difference between =, :=, +=, and ?= 
+# 1. the difference between =, :=, +=, and ?=
 # 2. how and when this base makefile gets included in the generated makefile(s)
 #  ( see http://www.gnu.org/software/make/manual/make.html#Flavors )
 #
@@ -48,7 +48,7 @@ else
 endif
 
 # CPPFLAGS == "c/c++ *preprocessor* flags" - not "cee-plus-plus flags"
-ARCH_FLAGS = 
+ARCH_FLAGS =
 BUILDING_MULTI_ARCH = 0
 # Preserve cflags set in environment
 ENV_CFLAGS := $(CFLAGS)
@@ -62,7 +62,7 @@ ifeq ($(CLANG_BUILD),1)
 	CXXFLAGS = $(BASE_CFLAGS) -std=gnu++0x -Wno-c++11-narrowing -Wno-dangling-else $(ENV_CXXFLAGS)
 else
         # !!! ABI COMPAT: -fabi-compat-version=2 is needed to generate the proper symbols for linking
-	CXXFLAGS = $(BASE_CFLAGS) -std=gnu++0x -fpermissive -fabi-compat-version=2 $(ENV_CXXFLAGS)
+	CXXFLAGS = $(BASE_CFLAGS) -std=gnu++17 -fpermissive -fabi-compat-version=2 $(ENV_CXXFLAGS)
         # Diagnostics coloring
 	CXXFLAGS += -fdiagnostics-color=always
 endif
@@ -74,16 +74,16 @@ DEFINES += -DVPROF_LEVEL=1 -DGNUC -DNO_HOOK_MALLOC -DNO_MALLOC_OVERRIDE
 # DEFINES += -D_FILE_OFFSET_BITS=64
 
 LDFLAGS = $(CFLAGS) $(GCC_ExtraLinkerFlags) $(OptimizerLevel)
-GENDEP_CXXFLAGS = -MMD -MP -MF $(@:.o=.P) 
+GENDEP_CXXFLAGS = -MMD -MP -MF $(@:.o=.P)
 MAP_FLAGS =
-Srv_GAMEOUTPUTFILE = 
+Srv_GAMEOUTPUTFILE =
 COPY_DLL_TO_SRV = 0
 
 # We should always specify -Wl,--build-id, as documented at:
 # http://linux.die.net/man/1/ld and http://fedoraproject.org/wiki/Releases/FeatureBuildId.http://fedoraproject.org/wiki/Releases/FeatureBuildId
 LDFLAGS += -Wl,--build-id
 
-GCC_VER =
+GCC_VER = -9
 P4BIN = p4
 CRYPTOPPDIR=ubuntu12_32
 
@@ -116,7 +116,7 @@ ifeq ($(origin AR), default)
 	AR = ar crs
 endif
 ifeq ($(origin CC), default)
-	CC = $(CCACHE) gcc$(GCC_VER)	
+	CC = $(CCACHE) gcc$(GCC_VER)
 endif
 ifeq ($(origin CXX), default)
 	CXX = $(CCACHE) g++$(GCC_VER)
@@ -143,17 +143,20 @@ endif
 
 ifeq ($(CLANG_BUILD),1)
 	# Clang specific flags
-else ifeq ($(GCC_VER),-4.8)
+else ifeq ($(GCC_VER),-9)
 	WARN_FLAGS += -Wno-unused-local-typedefs
 	WARN_FLAGS += -Wno-unused-result
 	WARN_FLAGS += -Wno-narrowing
+	WARN_FLAGS += -Wno-class-memaccess
 	# WARN_FLAGS += -Wno-unused-function
 endif
 
 WARN_FLAGS += -Wno-unknown-pragmas -Wno-unused-parameter -Wno-unused-value -Wno-missing-field-initializers
 WARN_FLAGS += -Wno-sign-compare -Wno-reorder -Wno-invalid-offsetof -Wno-float-equal -Werror=return-type -Wno-narrowing
 WARN_FLAGS += -fdiagnostics-show-option -Wformat -Wformat-security
-WARN_FLAGS += -Wno-class-memaccess -Wno-unused-local-typedefs -Wno-ignored-attributes
+# WARN_FLAGS += -Wno-class-memaccess -Wno-unused-local-typedefs -Wno-ignored-attributes
+
+WARN_FLAGS += -Werror=parentheses
 
 ifeq ($(TARGET_PLATFORM),linux64)
 	# nocona = pentium4 + 64bit + MMX, SSE, SSE2, SSE3 - no SSSE3 (that's three s's - added in core2)
@@ -163,10 +166,10 @@ ifeq ($(TARGET_PLATFORM),linux64)
 	LIBSTDCXXPIC := $(shell $(CXX) -print-file-name=libstdc++-pic.a)
 else
 	# pentium4 = MMX, SSE, SSE2 - no SSE3 (added in prescott) # -msse3 -mfpmath=sse
-	ARCH_FLAGS += -m32 -march=$(MARCH_TARGET) -mtune=core2 $(SSE_GEN_FLAGS)
+	ARCH_FLAGS += -m32 -fabi-compat-version=2 -march=$(MARCH_TARGET) -mtune=core2 $(SSE_GEN_FLAGS)
 	LD_SO = ld-linux.so.2
-	LIBSTDCXX := $(shell $(CXX) $(ARCH_FLAGS) -print-file-name=libstdc++.so)
-	LIBSTDCXXPIC := $(shell $(CXX) $(ARCH_FLAGS) -print-file-name=libstdc++.so)
+	LIBSTDCXX := $(shell $(CXX) $(ARCH_FLAGS) -print-file-name=libstdc++.a)
+	LIBSTDCXXPIC := $(shell $(CXX) $(ARCH_FLAGS) -print-file-name=libstdc++.a)
 	LDFLAGS += -m32
 endif
 
@@ -197,7 +200,7 @@ PATHWRAP = $(_WRAP)fopen $(_WRAP)freopen $(_WRAP)open    $(_WRAP)creat    $(_WRA
 	   $(_WRAP)mount $(_WRAP)mkfifo  $(_WRAP)mkdir   $(_WRAP)rmdir    $(_WRAP)scandir $(_WRAP)realpath
 
 LIB_START_EXE = $(PATHWRAP) -static-libgcc -Wl,--start-group
-LIB_END_EXE = -Wl,--end-group -lm -ldl $(LIBSTDCXX) -lpthread 
+LIB_END_EXE = -Wl,--end-group -lm -ldl $(LIBSTDCXX) -lpthread
 
 LIB_START_SHLIB = $(PATHWRAP) -static-libgcc -Wl,--start-group
 LIB_END_SHLIB = -Wl,--end-group -lm -ldl $(LIBSTDCXXPIC) -lpthread -l:$(LD_SO) -Wl,--version-script=$(SRCROOT)/devtools/version_script.linux.txt
@@ -227,8 +230,8 @@ C_TO_OBJ = $(MM_TO_OBJ:.c=.o)
 OBJS = $(addprefix $(OBJ_DIR)/, $(notdir $(C_TO_OBJ)))
 
 ifeq ($(MAKE_VERBOSE),1)
-	QUIET_PREFIX = 
-	QUIET_ECHO_POSTFIX = 
+	QUIET_PREFIX =
+	QUIET_ECHO_POSTFIX =
 else
 	QUIET_PREFIX = @
 	QUIET_ECHO_POSTFIX = > /dev/null
@@ -253,9 +256,9 @@ endif
 # we generate dependencies as a side-effect of compilation now
 GEN_DEP_FILE=
 
-PRE_COMPILE_FILE = 
+PRE_COMPILE_FILE =
 
-POST_COMPILE_FILE = 
+POST_COMPILE_FILE =
 
 ifeq ($(BUILDING_MULTI_ARCH),1)
 	SINGLE_ARCH_CXXFLAGS=$(subst -arch x86_64,,$(CXXFLAGS))
@@ -298,8 +301,8 @@ else
 
 	P4_EDIT_START := for f in
 	P4_EDIT_END := ; do if [ -n $$f ]; then if [ -d $$f ]; then find $$f -type f -print | $(P4BIN) -x - edit -c $(P4_EDIT_CHANGELIST); else $(P4BIN) edit -c $(P4_EDIT_CHANGELIST) $$f; fi; fi; done $(QUIET_ECHO_POSTFIX)
-	P4_REVERT_START := for f in  
-	P4_REVERT_END := ; do if [ -n $$f ]; then if [ -d $$f ]; then find $$f -type f -print | $(P4BIN) -x - revert; else $(P4BIN) revert $$f; fi; fi; done $(QUIET_ECHO_POSTFIX) 
+	P4_REVERT_START := for f in
+	P4_REVERT_END := ; do if [ -n $$f ]; then if [ -d $$f ]; then find $$f -type f -print | $(P4BIN) -x - revert; else $(P4BIN) revert $$f; fi; fi; done $(QUIET_ECHO_POSTFIX)
 endif
 
 ifeq ($(CONFTYPE),dll)
@@ -386,8 +389,8 @@ cleantargets:
 	$(QUIET_PREFIX) rm -f $(OUTPUTFILE) $(GAMEOUTPUTFILE)
 
 
-$(LIB_File): $(OTHER_DEPENDENCIES) $(OBJS) 
-	$(QUIET_PREFIX) -$(P4_EDIT_START) $(LIB_File) $(P4_EDIT_END); 
+$(LIB_File): $(OTHER_DEPENDENCIES) $(OBJS)
+	$(QUIET_PREFIX) -$(P4_EDIT_START) $(LIB_File) $(P4_EDIT_END);
 	$(QUIET_PREFIX) $(AR) $(LIB_File) $(OBJS) $(LIBFILES);
 
 SO_GameOutputFile = $(GAMEOUTPUTFILE)
@@ -405,7 +408,7 @@ $(SO_GameOutputFile): $(SO_File)
 	$(QUIET_PREFIX) rm -f $(GAMEOUTPUTFILE) $(QUIET_ECHO_POSTFIX);
 	$(QUIET_PREFIX) cp -v $(OUTPUTFILE) $(GAMEOUTPUTFILE) $(QUIET_ECHO_POSTFIX);
 	$(QUIET_PREFIX) -$(P4_EDIT_START) $(GAMEOUTPUTFILE)$(SYM_EXT) $(P4_EDIT_END);
-	$(QUIET_PREFIX) $(GEN_SYM) $(GAMEOUTPUTFILE); 
+	$(QUIET_PREFIX) $(GEN_SYM) $(GAMEOUTPUTFILE);
 	$(QUIET_PREFIX) -$(STRIP) $(GAMEOUTPUTFILE);
 	$(QUIET_PREFIX) $(VSIGN) -signvalve $(GAMEOUTPUTFILE);
 	$(QUIET_PREFIX) if [ "$(COPY_DLL_TO_SRV)" = "1" ]; then\

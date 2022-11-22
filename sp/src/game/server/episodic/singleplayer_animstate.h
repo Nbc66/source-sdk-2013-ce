@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2005, Valve Corporation, All rights reserved. ============//
+//========= Copyright ï¿½ 1996-2005, Valve Corporation, All rights reserved. ============//
 //
 // Purpose: Single Player animation state 'handler'. This utility is used
 //            to evaluate the pose parameter value based on the direction
@@ -13,7 +13,7 @@
 #endif
 
 #include "cbase.h"
-#include "..\public\datacache\imdlcache.h"
+#include "datacache/imdlcache.h"
 
 #ifdef CLIENT_DLL
 #include "c_baseplayer.h"

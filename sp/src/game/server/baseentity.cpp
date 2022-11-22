@@ -111,7 +111,7 @@ void SendProxy_AnimTime( const SendProp *pProp, const void *pStruct, const void 
 		Assert( !pAnimating->IsUsingClientSideAnimation() );
 	}
 #endif
-	
+
 	int ticknumber = TIME_TO_TICKS( pEntity->m_flAnimTime );
 	// Tickbase is current tick rounded down to closes 100 ticks
 	int tickbase = gpGlobals->GetNetworkBase( gpGlobals->tickcount, pEntity->entindex() );
@@ -151,12 +151,12 @@ void* SendProxy_ClientSideAnimation( const SendProp *pProp, const void *pStruct,
 		return (void*)pVarData;
 	else
 		return NULL;	// Don't send animtime unless the client needs it.
-}	
+}
 REGISTER_SEND_PROXY_NON_MODIFIED_POINTER( SendProxy_ClientSideAnimation );
 
 
 BEGIN_SEND_TABLE_NOBASE( CBaseEntity, DT_AnimTimeMustBeFirst )
-	// NOTE:  Animtime must be sent before origin and angles ( from pev ) because it has a 
+	// NOTE:  Animtime must be sent before origin and angles ( from pev ) because it has a
 	//  proxy on the client that stores off the old values before writing in the new values and
 	//  if it is sent after the new values, then it will only have the new origin and studio model, etc.
 	//  interpolation will be busted
@@ -178,7 +178,7 @@ static void* SendProxy_SendPredictableId( const SendProp *pProp, const void *pSt
 
 	int id_player_index = pEntity->m_PredictableID->GetPlayer();
 	pRecipients->SetOnly( id_player_index );
-	
+
 	return ( void * )pVarData;
 }
 REGISTER_SEND_PROXY_NON_MODIFIED_POINTER( SendProxy_SendPredictableId );
@@ -261,7 +261,7 @@ IMPLEMENT_SERVERCLASS_ST_NOBASE( CBaseEntity, DT_BaseEntity )
 	SendPropDataTable( "AnimTimeMustBeFirst", 0, &REFERENCE_SEND_TABLE(DT_AnimTimeMustBeFirst), SendProxy_ClientSideAnimation ),
 	SendPropInt			(SENDINFO(m_flSimulationTime),	SIMULATION_TIME_WINDOW_BITS, SPROP_UNSIGNED|SPROP_CHANGES_OFTEN|SPROP_ENCODED_AGAINST_TICKCOUNT, SendProxy_SimulationTime),
 
-#if PREDICTION_ERROR_CHECK_LEVEL > 1 
+#if PREDICTION_ERROR_CHECK_LEVEL > 1
 	SendPropVector	(SENDINFO(m_vecOrigin), -1,  SPROP_NOSCALE|SPROP_CHANGES_OFTEN, 0.0f, HIGH_DEFAULT, SendProxy_Origin ),
 #else
 	SendPropVector	(SENDINFO(m_vecOrigin), -1,  SPROP_COORD|SPROP_CHANGES_OFTEN, 0.0f, HIGH_DEFAULT, SendProxy_Origin ),
@@ -285,7 +285,7 @@ IMPLEMENT_SERVERCLASS_ST_NOBASE( CBaseEntity, DT_BaseEntity )
 
 	SendPropInt		(SENDINFO_NAME( m_MoveType, movetype ), MOVETYPE_MAX_BITS, SPROP_UNSIGNED ),
 	SendPropInt		(SENDINFO_NAME( m_MoveCollide, movecollide ), MOVECOLLIDE_MAX_BITS, SPROP_UNSIGNED ),
-#if PREDICTION_ERROR_CHECK_LEVEL > 1 
+#if PREDICTION_ERROR_CHECK_LEVEL > 1
 	SendPropVector	(SENDINFO(m_angRotation), -1, SPROP_NOSCALE|SPROP_CHANGES_OFTEN, 0, HIGH_DEFAULT, SendProxy_Angles ),
 #else
 	SendPropQAngles	(SENDINFO(m_angRotation), 13, SPROP_CHANGES_OFTEN, SendProxy_Angles ),
@@ -490,14 +490,14 @@ void CBaseEntity::PostConstructor( const char *szClassname )
 			NetworkProp()->AttachEdict( g_pForceAttachEdict );
 			g_pForceAttachEdict = NULL;
 		}
-		
+
 		// Some ents like the player override the AttachEdict function and do it at a different time.
 		// While precaching, they don't ever have an edict, so we don't need to add them to
 		// the entity list in that case.
 		if ( edict() )
 		{
 			gEntList.AddNetworkableEntity( this, entindex() );
-			
+
 			// Cache our IServerNetworkable pointer for the engine for fast access.
 			if ( edict() )
 				edict()->m_pNetworkable = NetworkProp();
@@ -540,7 +540,7 @@ static void AddDataMapFieldNamesToList( KeyValueNameList_t &list, datamap_t *pDa
 				list.AddToTail( pField->externalName );
 			}
 		}
-	
+
 		pDataMap = pDataMap->baseMap;
 	}
 }
@@ -629,11 +629,11 @@ void CBaseEntity::SetModelIndex( int index )
 		{
 			sg_DynamicLoadHandlers.Remove( this );
 		}
-		
+
 		modelinfo->ReleaseDynamicModel( m_nModelIndex );
 		modelinfo->AddRefDynamicModel( index );
 		m_nModelIndex = index;
-		
+
 		m_bDynamicModelSetBounds = false;
 
 		if ( IsDynamicModelIndex( index ) )
@@ -668,15 +668,15 @@ void CBaseEntity::SetModelIndexOverride( int index, int nValue )
 		if ( nValue != m_nModelIndexOverrides[index] )
 		{
 			m_nModelIndexOverrides.Set( index, nValue );
-		}	
+		}
 	}
 #endif
 }
-	  
+
 // position to shoot at
-Vector CBaseEntity::BodyTarget( const Vector &posSrc, bool bNoisy) 
-{ 
-	return WorldSpaceCenter( ); 
+Vector CBaseEntity::BodyTarget( const Vector &posSrc, bool bNoisy)
+{
+	return WorldSpaceCenter( );
 }
 
 // return the position of my head. someone's trying to attack it.
@@ -691,7 +691,7 @@ struct TimedOverlay_t
 	char 			*msg;
 	int				msgEndTime;
 	int				msgStartTime;
-	TimedOverlay_t	*pNextTimedOverlay; 
+	TimedOverlay_t	*pNextTimedOverlay;
 };
 
 //-----------------------------------------------------------------------------
@@ -757,7 +757,7 @@ void CBaseEntity::DrawAbsBoxOverlay()
 }
 
 void CBaseEntity::DrawRBoxOverlay()
-{	
+{
 
 }
 
@@ -814,7 +814,7 @@ void CBaseEntity::DrawTimedOverlays(void)
 		Q_snprintf( tempstr, sizeof( tempstr ), "[%s]", GetDebugName() );
 		EntityText(0,tempstr, 0);
 	}
-	
+
 	// Now draw overlays
 	TimedOverlay_t* pTO		= m_pTimedOverlay;
 	TimedOverlay_t* pNextTO = NULL;
@@ -843,7 +843,7 @@ void CBaseEntity::DrawTimedOverlays(void)
 		else
 		{
 			int nAlpha = 0;
-			
+
 			// If messages aren't paused fade out
 			if (!CBaseEntity::Debug_IsPaused())
 			{
@@ -876,25 +876,25 @@ void CBaseEntity::DrawTimedOverlays(void)
 // Input  :
 // Output : Current text offset from the top
 //-----------------------------------------------------------------------------
-void CBaseEntity::DrawDebugGeometryOverlays(void) 
+void CBaseEntity::DrawDebugGeometryOverlays(void)
 {
 	DrawTimedOverlays();
 	DrawDebugTextOverlays();
 
-	if (m_debugOverlays & OVERLAY_NAME_BIT) 
-	{	
+	if (m_debugOverlays & OVERLAY_NAME_BIT)
+	{
 		EntityText(0,GetDebugName(), 0);
 	}
-	if (m_debugOverlays & OVERLAY_BBOX_BIT) 
-	{	
+	if (m_debugOverlays & OVERLAY_BBOX_BIT)
+	{
 		DrawBBoxOverlay();
 	}
 	if (m_debugOverlays & OVERLAY_ABSBOX_BIT )
 	{
 		DrawAbsBoxOverlay();
 	}
-	if (m_debugOverlays & OVERLAY_PIVOT_BIT) 
-	{	
+	if (m_debugOverlays & OVERLAY_PIVOT_BIT)
+	{
 		SendDebugPivotOverlay();
 	}
 	if( m_debugOverlays & OVERLAY_RBOX_BIT )
@@ -952,7 +952,7 @@ void CBaseEntity::DrawDebugGeometryOverlays(void)
 
 		if( ((int)gpGlobals->curtime) % 2 == 1 )
 		{
-			r = 255; 
+			r = 255;
 			g = 255;
 			b = 255;
 
@@ -994,10 +994,10 @@ void CBaseEntity::DrawDebugGeometryOverlays(void)
 // Purpose: Draw any text overlays (override in subclass to add additional text)
 // Output : Current text offset from the top
 //-----------------------------------------------------------------------------
-int CBaseEntity::DrawDebugTextOverlays(void) 
+int CBaseEntity::DrawDebugTextOverlays(void)
 {
 	int offset = 1;
-	if (m_debugOverlays & OVERLAY_TEXT_BIT) 
+	if (m_debugOverlays & OVERLAY_TEXT_BIT)
 	{
 		char tempstr[512];
 		Q_snprintf( tempstr, sizeof(tempstr), "(%d) Name: %s (%s)", entindex(), GetDebugName(), GetClassname() );
@@ -1032,7 +1032,7 @@ int CBaseEntity::DrawDebugTextOverlays(void)
 	}
 
 	if (m_debugOverlays & OVERLAY_VIEWOFFSET)
-	{	
+	{
 		NDebugOverlay::Cross3D( EyePosition(), 16, 255, 0, 0, true, 0.05f );
 	}
 
@@ -1091,7 +1091,7 @@ void CBaseEntity::TransformStepData_ParentToParent( CBaseEntity *pOldParent, CBa
 		// Convert our positions
 		UTIL_ParentToWorldSpace( pOldParent, step->m_Previous2.vecOrigin, step->m_Previous2.qRotation );
 		UTIL_WorldToParentSpace( pNewParent, step->m_Previous2.vecOrigin, step->m_Previous2.qRotation );
-		
+
 		UTIL_ParentToWorldSpace( pOldParent, step->m_Previous.vecOrigin, step->m_Previous.qRotation );
 		UTIL_WorldToParentSpace( pNewParent, step->m_Previous.vecOrigin, step->m_Previous.qRotation );
 	}
@@ -1143,7 +1143,7 @@ void CBaseEntity::SetParent( CBaseEntity *pParentEntity, int iAttachment )
 		Assert(0);
 		m_pParent = NULL;
 	}
-	
+
 	if ( m_pParent == NULL )
 	{
 		m_iParent = NULL_STRING;
@@ -1183,7 +1183,7 @@ void CBaseEntity::SetParent( CBaseEntity *pParentEntity, int iAttachment )
 		matrix.InitFromEntity( const_cast<CBaseEntity *>(pParentEntity), m_iParentAttachment ); // parent->world
 		childMatrix.InitFromEntityLocal( this ); // child->world
 		Vector localOrigin = matrix.WorldToLocal( GetLocalOrigin() );
-		
+
 		// I have the axes of local space in world space. (childMatrix)
 		// I want to compute those world space axes in the parent's local space
 		// and set that transform (as angles) on the child's object so the net
@@ -1223,7 +1223,7 @@ void CBaseEntity::SetParent( CBaseEntity *pParentEntity, int iAttachment )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CBaseEntity::ValidateEntityConnections()
 {
@@ -1276,7 +1276,7 @@ void CBaseEntity::ValidateEntityConnections()
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CBaseEntity::FireNamedOutput( const char *pszOutput, variant_t variant, CBaseEntity *pActivator, CBaseEntity *pCaller, float flDelay )
 {
@@ -1323,7 +1323,7 @@ void CBaseEntity::Activate( void )
 	if (m_iInitialTeamNum)
 	{
 		ChangeTeam( m_iInitialTeamNum );
-	}	
+	}
 
 	// Get a handle to my damage filter entity if there is one.
 	if ( m_iszDamageFilterName != NULL_STRING )
@@ -1332,7 +1332,7 @@ void CBaseEntity::Activate( void )
 	}
 
 	// Add any non-null context strings to our context vector
-	if ( m_iszResponseContext != NULL_STRING ) 
+	if ( m_iszResponseContext != NULL_STRING )
 	{
 		AddContext( m_iszResponseContext.ToCStr() );
 	}
@@ -1345,7 +1345,7 @@ void CBaseEntity::Activate( void )
 ////////////////////////////  old CBaseEntity stuff ///////////////////////////////////
 
 
-// give health. 
+// give health.
 // Returns the amount of health actually taken.
 int CBaseEntity::TakeHealth( float flHealth, int bitsDamageType )
 {
@@ -1389,7 +1389,7 @@ int CBaseEntity::OnTakeDamage( const CTakeDamageInfo &info )
 	// this global is still used for glass and other non-NPC killables, along with decals.
 	g_vecAttackDir = vecTemp;
 	VectorNormalize(g_vecAttackDir);
-		
+
 	// save damage based on the target's armor level
 
 	// figure momentum add (don't let hurt brushes or other triggers move player)
@@ -1403,7 +1403,7 @@ int CBaseEntity::OnTakeDamage( const CTakeDamageInfo &info )
 		}
 		else
 		{
-			if ( info.GetInflictor() && (GetMoveType() == MOVETYPE_WALK || GetMoveType() == MOVETYPE_STEP) && 
+			if ( info.GetInflictor() && (GetMoveType() == MOVETYPE_WALK || GetMoveType() == MOVETYPE_STEP) &&
 				!info.GetAttacker()->IsSolidFlagSet(FSOLID_TRIGGER) )
 			{
 				Vector vecDir, vecInflictorCentroid;
@@ -1413,8 +1413,8 @@ int CBaseEntity::OnTakeDamage( const CTakeDamageInfo &info )
 				VectorNormalize( vecDir );
 
 				float flForce = info.GetDamage() * ((32 * 32 * 72.0) / (WorldAlignSize().x * WorldAlignSize().y * WorldAlignSize().z)) * 5;
-				
-				if (flForce > 1000.0) 
+
+				if (flForce > 1000.0)
 					flForce = 1000.0;
 				ApplyAbsVelocityImpulse( vecDir * flForce );
 			}
@@ -1447,10 +1447,10 @@ void CBaseEntity::TakeDamage( const CTakeDamageInfo &inputInfo )
 	if ( bHasPhysicsForceDamage && inputInfo.GetDamageType() != DMG_GENERIC )
 	{
 		// If you hit this assert, you've called TakeDamage with a damage type that requires a physics damage
-		// force & position without specifying one or both of them. Decide whether your damage that's causing 
-		// this is something you believe should impart physics force on the receiver. If it is, you need to 
+		// force & position without specifying one or both of them. Decide whether your damage that's causing
+		// this is something you believe should impart physics force on the receiver. If it is, you need to
 		// setup the damage force & position inside the CTakeDamageInfo (Utility functions for this are in
-		// takedamageinfo.cpp. If you think the damage shouldn't cause force (unlikely!) then you can set the 
+		// takedamageinfo.cpp. If you think the damage shouldn't cause force (unlikely!) then you can set the
 		// damage type to DMG_GENERIC, or | DMG_CRUSH if you need to preserve the damage type for purposes of HUD display.
 
 		if ( inputInfo.GetDamageForce() == vec3_origin || inputInfo.GetDamagePosition() == vec3_origin )
@@ -1488,7 +1488,7 @@ void CBaseEntity::TakeDamage( const CTakeDamageInfo &inputInfo )
 	else
 	{
 		CTakeDamageInfo info = inputInfo;
-		
+
 		// Scale the damage by the attacker's modifier.
 		if ( info.GetAttacker() )
 		{
@@ -1554,10 +1554,10 @@ int CBaseEntity::VPhysicsTakeDamage( const CTakeDamageInfo &info )
 		Vector offset = info.GetDamagePosition();
 
 		// If you hit this assert, you've called TakeDamage with a damage type that requires a physics damage
-		// force & position without specifying one or both of them. Decide whether your damage that's causing 
-		// this is something you believe should impart physics force on the receiver. If it is, you need to 
+		// force & position without specifying one or both of them. Decide whether your damage that's causing
+		// this is something you believe should impart physics force on the receiver. If it is, you need to
 		// setup the damage force & position inside the CTakeDamageInfo (Utility functions for this are in
-		// takedamageinfo.cpp. If you think the damage shouldn't cause force (unlikely!) then you can set the 
+		// takedamageinfo.cpp. If you think the damage shouldn't cause force (unlikely!) then you can set the
 		// damage type to DMG_GENERIC, or | DMG_CRUSH if you need to preserve the damage type for purposes of HUD display.
 #if !defined( TF_DLL )
 		Assert( force != vec3_origin && offset != vec3_origin );
@@ -1635,7 +1635,7 @@ void CBaseEntity::SendOnKilledGameEvent( const CTakeDamageInfo &info )
 		if ( info.GetInflictor())
 		{
 			event->SetInt( "entindex_inflictor", info.GetInflictor()->entindex() );
-		}		
+		}
 		event->SetInt( "damagebits", info.GetDamageType() );
 		gameeventmanager->FireEvent( event );
 	}
@@ -1806,7 +1806,7 @@ BEGIN_DATADESC_NO_BASE( CBaseEntity )
 
 	DEFINE_KEYFIELD( m_iszDamageFilterName, FIELD_STRING, "damagefilter" ),
 	DEFINE_FIELD( m_hDamageFilter, FIELD_EHANDLE ),
-	
+
 	DEFINE_FIELD( m_debugOverlays, FIELD_INTEGER ),
 
 	DEFINE_GLOBAL_FIELD( m_pParent, FIELD_EHANDLE ),
@@ -1814,7 +1814,7 @@ BEGIN_DATADESC_NO_BASE( CBaseEntity )
 	DEFINE_GLOBAL_FIELD( m_hMoveParent, FIELD_EHANDLE ),
 	DEFINE_GLOBAL_FIELD( m_hMoveChild, FIELD_EHANDLE ),
 	DEFINE_GLOBAL_FIELD( m_hMovePeer, FIELD_EHANDLE ),
-	
+
 	DEFINE_FIELD( m_iEFlags, FIELD_INTEGER ),
 
 	DEFINE_FIELD( m_iName, FIELD_STRING ),
@@ -1838,7 +1838,7 @@ BEGIN_DATADESC_NO_BASE( CBaseEntity )
 	DEFINE_FIELD( m_hGroundEntity, FIELD_EHANDLE ),
 	DEFINE_FIELD( m_flGroundChangeTime, FIELD_TIME ),
 	DEFINE_GLOBAL_KEYFIELD( m_ModelName, FIELD_MODELNAME, "model" ),
-	
+
 	DEFINE_KEYFIELD( m_vecBaseVelocity, FIELD_VECTOR, "basevelocity" ),
 	DEFINE_FIELD( m_vecAbsVelocity, FIELD_VECTOR ),
 	DEFINE_KEYFIELD( m_vecAngVelocity, FIELD_VECTOR, "avelocity" ),
@@ -1969,9 +1969,9 @@ extern bool g_bReceivedChainedUpdateOnRemove;
 //  destructed (especially since the entity list order is more or less random!).
 // NOTE:  You should never call delete directly on an entity (there's an assert now), see note
 //  at CBaseEntity::~CBaseEntity for more information.
-// 
+//
 // NOTE:  You should chain to BaseClass::UpdateOnRemove after doing your own cleanup code, e.g.:
-// 
+//
 // void CDerived::UpdateOnRemove( void )
 // {
 //		... cleanup code
@@ -2048,7 +2048,7 @@ void CBaseEntity::UpdateOnRemove( void )
 	{
 		sg_DynamicLoadHandlers.Remove( this );
 	}
-	
+
 	if ( IsDynamicModelIndex( m_nModelIndex ) )
 	{
 		modelinfo->ReleaseDynamicModel( m_nModelIndex ); // no-op if not dynamic
@@ -2059,7 +2059,7 @@ void CBaseEntity::UpdateOnRemove( void )
 //-----------------------------------------------------------------------------
 // capabilities
 //-----------------------------------------------------------------------------
-int CBaseEntity::ObjectCaps( void ) 
+int CBaseEntity::ObjectCaps( void )
 {
 #if 1
 	model_t *pModel = GetModel();
@@ -2082,7 +2082,7 @@ int CBaseEntity::ObjectCaps( void )
 
 		return caps;
 	}
-	else if ( !bIsBrush ) 
+	else if ( !bIsBrush )
 	{
 		return FCAP_ACROSS_TRANSITION;
 	}
@@ -2096,7 +2096,7 @@ int CBaseEntity::ObjectCaps( void )
 	{
 		parentCaps = GetParent()->ObjectCaps();
 		parentCaps &= ( FCAP_IMPULSE_USE | FCAP_CONTINUOUS_USE | FCAP_ONOFF_USE | FCAP_DIRECTIONAL_USE );
-	}	
+	}
 
 	model_t *pModel = GetModel();
 	if ( pModel && modelinfo->GetModelType( pModel ) == mod_brush )
@@ -2114,8 +2114,8 @@ void CBaseEntity::StartTouch( CBaseEntity *pOther )
 }
 
 void CBaseEntity::Touch( CBaseEntity *pOther )
-{ 
-	if ( m_pfnTouch ) 
+{
+	if ( m_pfnTouch )
 		(this->*m_pfnTouch)( pOther );
 
 	// notify parent of touch
@@ -2138,7 +2138,7 @@ void CBaseEntity::EndTouch( CBaseEntity *pOther )
 // Input  : pOther - The entity that is blocking us.
 //-----------------------------------------------------------------------------
 void CBaseEntity::Blocked( CBaseEntity *pOther )
-{ 
+{
 	if ( m_pfnBlocked )
 	{
 		(this->*m_pfnBlocked)( pOther );
@@ -2156,14 +2156,14 @@ void CBaseEntity::Blocked( CBaseEntity *pOther )
 
 //-----------------------------------------------------------------------------
 // Purpose: Dispatches use events to this entity's use handler, set via SetUse.
-// Input  : pActivator - 
-//			pCaller - 
-//			useType - 
-//			value - 
+// Input  : pActivator -
+//			pCaller -
+//			useType -
+//			value -
 //-----------------------------------------------------------------------------
-void CBaseEntity::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value ) 
+void CBaseEntity::Use( CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value )
 {
-	if ( m_pfnUse != NULL ) 
+	if ( m_pfnUse != NULL )
 	{
 		(this->*m_pfnUse)( pActivator, pCaller, useType, value );
 	}
@@ -2434,7 +2434,7 @@ void CBaseEntity::VPhysicsUpdatePusher( IPhysicsObject *pPhysics )
 	QAngle angles;
 
 	// physics updated the shadow, so check to see if I got blocked
-	// NOTE: SOLID_BSP cannont compute consistent collisions wrt vphysics, so 
+	// NOTE: SOLID_BSP cannont compute consistent collisions wrt vphysics, so
 	// don't allow vphysics to block.  Assume game physics has handled it.
 	if ( GetSolid() != SOLID_BSP && pPhysics->GetShadowPosition( &origin, &angles ) )
 	{
@@ -2602,14 +2602,14 @@ void CBaseEntity::PhysicsTouchTriggers( const Vector *pPrevAbsOrigin )
 	{
 		Assert(CollisionProp());
 		bool isTriggerCheckSolids = IsSolidFlagSet( FSOLID_TRIGGER );
-		bool isSolidCheckTriggers = IsSolid() && !isTriggerCheckSolids;		// NOTE: Moving triggers (items, ammo etc) are not 
+		bool isSolidCheckTriggers = IsSolid() && !isTriggerCheckSolids;		// NOTE: Moving triggers (items, ammo etc) are not
 																			// checked against other triggers to reduce the number of touchlinks created
 		if ( !(isSolidCheckTriggers || isTriggerCheckSolids) )
 			return;
 
-		if ( GetSolid() == SOLID_BSP ) 
+		if ( GetSolid() == SOLID_BSP )
 		{
-			if ( !GetModel() && Q_strlen( STRING( GetModelName() ) ) == 0 ) 
+			if ( !GetModel() && Q_strlen( STRING( GetModelName() ) ) == 0 )
 			{
 				Warning( "Inserted %s with no model\n", GetClassname() );
 				return;
@@ -2756,7 +2756,7 @@ bool CBaseEntity::Intersects( CBaseEntity *pOther )
 	CCollisionProperty *pMyProp = CollisionProp();
 	CCollisionProperty *pOtherProp = pOther->CollisionProp();
 
-	return IsOBBIntersectingOBB( 
+	return IsOBBIntersectingOBB(
 		pMyProp->GetCollisionOrigin(), pMyProp->GetCollisionAngles(), pMyProp->OBBMins(), pMyProp->OBBMaxs(),
 		pOtherProp->GetCollisionOrigin(), pOtherProp->GetCollisionAngles(), pOtherProp->OBBMins(), pOtherProp->OBBMaxs() );
 }
@@ -2777,7 +2777,7 @@ bool CBaseEntity::FVisible( CBaseEntity *pEntity, int traceMask, CBaseEntity **p
 #if HL1_DLL
 	// FIXME: only block LOS through opaque water
 	// don't look through water
-	if ((m_nWaterLevel != 3 && pEntity->m_nWaterLevel == 3) 
+	if ((m_nWaterLevel != 3 && pEntity->m_nWaterLevel == 3)
 		|| (m_nWaterLevel == 3 && pEntity->m_nWaterLevel == 0))
 		return false;
 #endif
@@ -2808,7 +2808,7 @@ bool CBaseEntity::FVisible( CBaseEntity *pEntity, int traceMask, CBaseEntity **p
 		CTraceFilterLOS traceFilter( this, COLLISION_GROUP_NONE, pEntity );
 		UTIL_TraceLine( vecLookerOrigin, vecTargetOrigin, traceMask, &traceFilter, &tr );
 	}
-	
+
 	if (tr.fraction != 1.0 || tr.startsolid )
 	{
 		// If we hit the entity we're looking for, it's visible
@@ -2841,7 +2841,7 @@ bool CBaseEntity::FVisible( CBaseEntity *pEntity, int traceMask, CBaseEntity **p
 bool CBaseEntity::FVisible( const Vector &vecTarget, int traceMask, CBaseEntity **ppBlocker )
 {
 #if HL1_DLL
-	
+
 	// don't look through water
 	// FIXME: only block LOS through opaque water
 	bool inWater = ( UTIL_PointContents( vecTarget ) & (CONTENTS_SLIME|CONTENTS_WATER) ) ? true : false;
@@ -2850,7 +2850,7 @@ bool CBaseEntity::FVisible( const Vector &vecTarget, int traceMask, CBaseEntity 
 	if ( ( m_nWaterLevel == 3 && !inWater ) || ( m_nWaterLevel != 3 && inWater ) )
 		return false;
 
-#endif 
+#endif
 
 	trace_t tr;
 	Vector vecLookerOrigin = EyePosition();// look through the caller's 'eyes'
@@ -2918,7 +2918,7 @@ ConVar ai_debug_los("ai_debug_los", "0", FCVAR_CHEAT, "NPC Line-Of-Sight debug m
 
 
 Class_T CBaseEntity::Classify ( void )
-{ 
+{
 	return CLASS_NONE;
 }
 
@@ -3031,7 +3031,7 @@ void CBaseEntity::MakeDormant( void )
 		return;
 
 	SETBITS( m_iEFlags, EFL_DORMANT );
-	
+
 	// Don't touch
 	AddSolidFlags( FSOLID_NOT_SOLID );
 	// Don't move
@@ -3049,11 +3049,11 @@ int CBaseEntity::IsDormant( void )
 
 
 bool CBaseEntity::IsInWorld( void ) const
-{  
+{
 	if ( !edict() )
 		return true;
 
-	// position 
+	// position
 	if (GetAbsOrigin().x >= MAX_COORD_INTEGER) return false;
 	if (GetAbsOrigin().y >= MAX_COORD_INTEGER) return false;
 	if (GetAbsOrigin().z >= MAX_COORD_INTEGER) return false;
@@ -3194,7 +3194,7 @@ int CBaseEntity::Restore( IRestore &restore )
 			// so update with the worldspace leveltransition transform
 			parentSpaceOffset += pGameInfo->GetLandmark();
 		}
-		
+
 		// NOTE: Do *not* use GetAbsOrigin() here because it will
 		// try to recompute m_rgflCoordinateFrame!
 		MatrixSetColumn( m_vecAbsOrigin, 3, m_rgflCoordinateFrame );
@@ -3252,7 +3252,7 @@ void CBaseEntity::OnRestore()
 		char szMsg[256];
 		V_snprintf( szMsg, sizeof(szMsg), "\nInvalid save, unable to load. Please run \"map %s\" to restart this level manually\n\n", gpGlobals->mapname.ToCStr() );
 		Msg( "%s", szMsg );
-		
+
 		engine->ServerCommand("wait;wait;disconnect;showconsole\n");
 	}
 #endif
@@ -3360,7 +3360,7 @@ void CBaseEntity::operator delete( void *pMem )
 
 #ifdef _DEBUG
 void CBaseEntity::FunctionCheck( void *pFunction, const char *name )
-{ 
+{
 #ifdef USES_SAVERESTORE
 	// Note, if you crash here and your class is using multiple inheritance, it is
 	// probably the case that CBaseEntity (or a descendant) is not the first
@@ -3413,7 +3413,7 @@ void CBaseEntity::SetMoveType( MoveType_t val, MoveCollide_t moveCollide )
 		if ( VPhysicsGetObject() && val != MOVETYPE_NONE )
 		{
 			// What am I supposed to do with the physics object if
-			// you're changing away from MOVETYPE_VPHYSICS without making the object 
+			// you're changing away from MOVETYPE_VPHYSICS without making the object
 			// shadow?  This isn't likely to work, assert.
 			// You probably meant to call VPhysicsInitShadow() instead of VPhysicsInitNormal()!
 			Assert( VPhysicsGetObject()->GetShadowController() );
@@ -3470,7 +3470,7 @@ void CBaseEntity::SetMoveType( MoveType_t val, MoveCollide_t moveCollide )
 	CheckHasGamePhysicsSimulation();
 }
 
-void CBaseEntity::Spawn( void ) 
+void CBaseEntity::Spawn( void )
 {
 }
 
@@ -3498,11 +3498,11 @@ int	CBaseEntity::SetTransmitState( int nFlag)
 		return 0;
 
 	// clear current flags = check ShouldTransmit()
-	ed->ClearTransmitState();	
-	
+	ed->ClearTransmitState();
+
 	int oldFlags = ed->m_fStateFlags;
 	ed->m_fStateFlags |= nFlag;
-	
+
 	// Tell the engine (used for a network backdoor optimization).
 	if ( (oldFlags & FL_EDICT_DONTSEND) != (ed->m_fStateFlags & FL_EDICT_DONTSEND) )
 		engine->NotifyEdictFlagsChange( entindex() );
@@ -3515,10 +3515,10 @@ int CBaseEntity::UpdateTransmitState()
 	// If you get this assert, you should be calling DispatchUpdateTransmitState
 	// instead of UpdateTransmitState.
 	Assert( g_nInsideDispatchUpdateTransmitState > 0 );
-	
+
 	// If an object is the moveparent of something else, don't skip it just because it's marked EF_NODRAW or else
 	//  the client won't have a proper origin for the child since the hierarchy won't be correctly transmitted down
-	if ( IsEffectActive( EF_NODRAW ) && 
+	if ( IsEffectActive( EF_NODRAW ) &&
 		!m_hMoveChild.Get() )
 	{
 		return SetTransmitState( FL_EDICT_DONTSEND );
@@ -3552,20 +3552,20 @@ int CBaseEntity::DispatchUpdateTransmitState()
 	edict_t *ed = edict();
 	if ( m_nTransmitStateOwnedCounter != 0 )
 		return ed ? ed->m_fStateFlags : 0;
-	
+
 	g_nInsideDispatchUpdateTransmitState++;
 	int ret = UpdateTransmitState();
 	g_nInsideDispatchUpdateTransmitState--;
-	
+
 	return ret;
 }
 
 //-----------------------------------------------------------------------------
 // Purpose: Note, an entity can override the send table ( e.g., to send less data or to send minimal data for
 //  objects ( prob. players ) that are not in the pvs.
-// Input  : **ppSendTable - 
-//			*recipient - 
-//			*pvs - 
+// Input  : **ppSendTable -
+//			*recipient -
+//			*pvs -
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
 int CBaseEntity::ShouldTransmit( const CCheckTransmitInfo *pInfo )
@@ -3593,18 +3593,18 @@ int CBaseEntity::ShouldTransmit( const CCheckTransmitInfo *pInfo )
 	CBaseEntity *pRecipientEntity = CBaseEntity::Instance( pInfo->m_pClientEnt );
 
 	Assert( pRecipientEntity->IsPlayer() );
-	
+
 	CBasePlayer *pRecipientPlayer = static_cast<CBasePlayer*>( pRecipientEntity );
 
 
 	// FIXME: Refactor once notion of "team" is moved into HL2 code
 	// Team rules may tell us that we should
-	if ( pRecipientPlayer->GetTeam() ) 
+	if ( pRecipientPlayer->GetTeam() )
 	{
 		if ( pRecipientPlayer->GetTeam()->ShouldTransmitToPlayer( pRecipientPlayer, this ))
 			return FL_EDICT_ALWAYS;
 	}
-	
+
 
 /*#ifdef INVASION_DLL
 	// Check test network vis distance stuff. Eventually network LOD will do this.
@@ -3638,15 +3638,15 @@ void CBaseEntity::SetTransmit( CCheckTransmitInfo *pInfo, bool bAlways )
 	if ( pInfo->m_pTransmitAlways )
 	{
 		// in HLTV/Replay mode always transmit entitys with move-parents
-		// HLTV/Replay can't resolve the mode-parents relationships 
+		// HLTV/Replay can't resolve the mode-parents relationships
 		if ( bAlways || pNetworkParent )
 		{
 			// tell HLTV/Replay that this entity is always transmitted
 			pInfo->m_pTransmitAlways->Set( index );
 		}
-		else 
+		else
 		{
-			// HLTV/Replay will PVS cull this entity, so update the 
+			// HLTV/Replay will PVS cull this entity, so update the
 			// node/cluster infos if necessary
 			m_Network.RecomputePVSInformation();
 		}
@@ -3714,7 +3714,7 @@ const char *CBaseEntity::GetDebugName(void)
 	if ( this == NULL )
 		return "<<null>>";
 
-	if ( m_iName != NULL_STRING ) 
+	if ( m_iName != NULL_STRING )
 	{
 		return STRING(m_iName);
 	}
@@ -3877,7 +3877,7 @@ bool CBaseEntity::AcceptInput( const char *szInputName, CBaseEntity *pActivator,
 			NDebugOverlay::Box( pCaller->GetAbsOrigin(), Vector(-4, -4, -4), Vector(4, 4, 4), 255, 0, 0, 0, 3 );
 		}
 
-		NDebugOverlay::Text( GetAbsOrigin(), szInputName, false, 3 );	
+		NDebugOverlay::Text( GetAbsOrigin(), szInputName, false, 3 );
 		NDebugOverlay::Box( GetAbsOrigin(), Vector(-4, -4, -4), Vector(4, 4, 4), 0, 255, 0, 0, 3 );
 	}
 
@@ -3919,8 +3919,8 @@ bool CBaseEntity::AcceptInput( const char *szInputName, CBaseEntity *pActivator,
 							if ( !Value.Convert( (fieldtype_t)dmap->dataDesc[i].fieldType ) )
 							{
 								// bad conversion
-								Warning( "!! ERROR: bad input/output link:\n!! %s(%s,%s) doesn't match type from %s(%s)\n", 
-									STRING(m_iClassname), GetDebugName(), szInputName, 
+								Warning( "!! ERROR: bad input/output link:\n!! %s(%s,%s) doesn't match type from %s(%s)\n",
+									STRING(m_iClassname), GetDebugName(), szInputName,
 									( pCaller != NULL ) ? STRING(pCaller->m_iClassname) : "<null>",
 									( pCaller != NULL ) ? STRING(pCaller->m_iName) : "<null>" );
 								return false;
@@ -3932,7 +3932,7 @@ bool CBaseEntity::AcceptInput( const char *szInputName, CBaseEntity *pActivator,
 					inputfunc_t pfnInput = dmap->dataDesc[i].inputFunc;
 
 					if ( pfnInput )
-					{ 
+					{
 						// Package the data into a struct for passing to the input handler.
 						inputdata_t data;
 						data.pActivator = pActivator;
@@ -3946,7 +3946,7 @@ bool CBaseEntity::AcceptInput( const char *szInputName, CBaseEntity *pActivator,
 					{
 						// set the value directly
 						Value.SetOther( ((char*)this) + dmap->dataDesc[i].fieldOffset[ TD_OFFSET_NORMAL ]);
-					
+
 						// TODO: if this becomes evil and causes too many full entity updates, then we should make
 						// a macro like this:
 						//
@@ -4054,7 +4054,7 @@ void CBaseEntity::InputDisableDamageForces( inputdata_t &inputdata )
 	AddEFlags( EFL_NO_DAMAGE_FORCES );
 }
 
-	
+
 //-----------------------------------------------------------------------------
 // Purpose: Sets the damage filter on the object
 //-----------------------------------------------------------------------------
@@ -4096,7 +4096,7 @@ void CBaseEntity::InputDispatchEffect( inputdata_t &inputdata )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: Returns the origin at which to play an inputted dispatcheffect 
+// Purpose: Returns the origin at which to play an inputted dispatcheffect
 //-----------------------------------------------------------------------------
 void CBaseEntity::GetInputDispatchEffectPosition( const char *sInputString, Vector &pOrigin, QAngle &pAngles )
 {
@@ -4155,7 +4155,7 @@ void CBaseEntity::InputSetParent( inputdata_t &inputdata )
 }
 
 //------------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //------------------------------------------------------------------------------
 void CBaseEntity::SetParentAttachment( const char *szInputName, const char *szAttachment, bool bMaintainOffset )
 {
@@ -4247,10 +4247,10 @@ void CBaseEntity::GetVelocity(Vector *vVelocity, AngularImpulse *vAngVelocity)
 }
 
 bool CBaseEntity::IsMoving()
-{ 
+{
 	Vector velocity;
 	GetVelocity( &velocity, NULL );
-	return velocity != vec3_origin; 
+	return velocity != vec3_origin;
 }
 
 //-----------------------------------------------------------------------------
@@ -4266,25 +4266,25 @@ void CBaseEntity::GetVectors(Vector* pForward, Vector* pRight, Vector* pUp) cons
 
 	if (pForward != NULL)
 	{
-		MatrixGetColumn( entityToWorld, 0, *pForward ); 
+		MatrixGetColumn( entityToWorld, 0, *pForward );
 	}
 
 	if (pRight != NULL)
 	{
-		MatrixGetColumn( entityToWorld, 1, *pRight ); 
+		MatrixGetColumn( entityToWorld, 1, *pRight );
 		*pRight *= -1.0f;
 	}
 
 	if (pUp != NULL)
 	{
-		MatrixGetColumn( entityToWorld, 2, *pUp ); 
+		MatrixGetColumn( entityToWorld, 2, *pUp );
 	}
 }
 
 
 //-----------------------------------------------------------------------------
 // Purpose: Sets the model, validates that it's of the appropriate type
-// Input  : *szModelName - 
+// Input  : *szModelName -
 //-----------------------------------------------------------------------------
 void CBaseEntity::SetModel( const char *szModelName )
 {
@@ -4362,7 +4362,7 @@ bool CBaseEntity::IsInTeam( CTeam *pTeam ) const
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 int CBaseEntity::GetTeamNumber( void ) const
 {
@@ -4370,7 +4370,7 @@ int CBaseEntity::GetTeamNumber( void ) const
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 bool CBaseEntity::IsInAnyTeam( void ) const
 {
@@ -4487,7 +4487,7 @@ static void TeleportEntity( CBaseEntity *pSourceEntity, TeleportListEntry_t &ent
 static void BuildTeleportList_r( CBaseEntity *pTeleport, CUtlVector<TeleportListEntry_t> &teleportList )
 {
 	TeleportListEntry_t entry;
-	
+
 	entry.pEntity = pTeleport;
 	entry.prevAbsOrigin = pTeleport->GetAbsOrigin();
 	entry.prevAbsAngles = pTeleport->GetAbsAngles();
@@ -4561,7 +4561,7 @@ CStudioHdr *ModelSoundsCache_LoadModel( const char *filename )
 		model_t *mdl = (model_t *)modelinfo->GetModel( idx );
 		if ( mdl )
 		{
-			CStudioHdr *studioHdr = new CStudioHdr( modelinfo->GetStudiomodel( mdl ), mdlcache ); 
+			CStudioHdr *studioHdr = new CStudioHdr( modelinfo->GetStudiomodel( mdl ), mdlcache );
 			if ( studioHdr->IsValid() )
 			{
 				return studioHdr;
@@ -4582,7 +4582,7 @@ void ModelSoundsCache_PrecacheScriptSound( const char *soundname )
 	CBaseEntity::PrecacheScriptSound( soundname );
 }
 
-static CUtlCachedFileData< CModelSoundsCache > g_ModelSoundsCache( "modelsounds.cache", MODELSOUNDSCACHE_VERSION, 0, UTL_CACHED_FILE_USE_FILESIZE, false );																  
+static CUtlCachedFileData< CModelSoundsCache > g_ModelSoundsCache( "modelsounds.cache", MODELSOUNDSCACHE_VERSION, 0, UTL_CACHED_FILE_USE_FILESIZE, false );
 
 void ClearModelSoundsCache()
 {
@@ -4595,7 +4595,7 @@ void ClearModelSoundsCache()
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
 bool ModelSoundsCacheInit()
@@ -4609,7 +4609,7 @@ bool ModelSoundsCacheInit()
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void ModelSoundsCacheShutdown()
 {
@@ -4786,7 +4786,7 @@ void CBaseEntity::PrecacheModelComponents( int nModelIndex )
 		{
 			KeyValues *pParticleEffects = pModelKeyValues->FindKey("Particles");
 			if ( pParticleEffects )
-			{						   
+			{
 				// Start grabbing the sounds and slotting them in
 				for ( KeyValues *pSingleEffect = pParticleEffects->GetFirstSubKey(); pSingleEffect; pSingleEffect = pSingleEffect->GetNextKey() )
 				{
@@ -4800,7 +4800,7 @@ void CBaseEntity::PrecacheModelComponents( int nModelIndex )
 	// model anim event owned components
 	{
 		// Check animevents for particle events
-		CStudioHdr studioHdr( modelinfo->GetStudiomodel( pModel ), mdlcache ); 
+		CStudioHdr studioHdr( modelinfo->GetStudiomodel( pModel ), mdlcache );
 		if ( studioHdr.IsValid() )
 		{
 			// force animation event resolution!!!
@@ -4822,7 +4822,7 @@ void CBaseEntity::PrecacheModelComponents( int nModelIndex )
 							char token[256];
 							const char *pOptions = pEvent->pszOptions();
 							nexttoken( token, pOptions, ' ' );
-							if ( token ) 
+							if ( token )
 							{
 								PrecacheParticleSystem( token );
 							}
@@ -4877,7 +4877,7 @@ void CBaseEntity::PrecacheModelComponents( int nModelIndex )
 								}
 								else
 								{
-									Warning( "-- Error --:  empty soundname, .qc error on AE_CL_PLAYSOUND in model %s, sequence %s, animevent # %i\n", 
+									Warning( "-- Error --:  empty soundname, .qc error on AE_CL_PLAYSOUND in model %s, sequence %s, animevent # %i\n",
 										studioHdr.GetRenderHdr()->pszName(), seq.pszLabel(), j+1 );
 								}
 							}
@@ -4898,7 +4898,7 @@ void CBaseEntity::PrecacheModelComponents( int nModelIndex )
 }
 
 
-			
+
 //-----------------------------------------------------------------------------
 // Purpose: Add model to level precache list
 // Input  : *name - model name
@@ -4942,7 +4942,7 @@ int CBaseEntity::PrecacheModel( const char *name, bool bPreload )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CBaseEntity::Remove( )
 {
@@ -4962,7 +4962,7 @@ extern CBaseEntity *GetNextCommandEntity( CBasePlayer *pPlayer, const char *name
 void ConsoleFireTargets( CBasePlayer *pPlayer, const char *name)
 {
 	// If no name was given use the picker
-	if (FStrEq(name,"")) 
+	if (FStrEq(name,""))
 	{
 		CBaseEntity *pEntity = FindPickerEntity( pPlayer );
 		if ( pEntity && !pEntity->IsMarkedForDeletion())
@@ -4977,7 +4977,7 @@ void ConsoleFireTargets( CBasePlayer *pPlayer, const char *name)
 }
 
 //------------------------------------------------------------------------------
-// Purpose : 
+// Purpose :
 // Input   :
 // Output  :
 //------------------------------------------------------------------------------
@@ -5037,11 +5037,11 @@ void CC_Ent_Remove( const CCommand& args )
 	CBaseEntity *pEntity = NULL;
 
 	// If no name was given set bits based on the picked
-	if ( FStrEq( args[1],"") ) 
+	if ( FStrEq( args[1],"") )
 	{
 		pEntity = FindPickerEntity( UTIL_GetCommandClient() );
 	}
-	else 
+	else
 	{
 		int index = atoi( args[1] );
 		if ( index )
@@ -5054,7 +5054,7 @@ void CC_Ent_Remove( const CCommand& args )
 			CBaseEntity *ent = NULL;
 			while ( (ent = gEntList.NextEnt(ent)) != NULL )
 			{
-				if (  (ent->GetEntityName() != NULL_STRING	&& FStrEq(args[1], STRING(ent->GetEntityName())))	|| 
+				if (  (ent->GetEntityName() != NULL_STRING	&& FStrEq(args[1], STRING(ent->GetEntityName())))	||
 					(ent->m_iClassname != NULL_STRING	&& FStrEq(args[1], STRING(ent->m_iClassname))) ||
 					(ent->GetClassname()!=NULL && FStrEq(args[1], ent->GetClassname())))
 				{
@@ -5082,14 +5082,14 @@ void CC_Ent_RemoveAll( const CCommand& args )
 	{
 		Msg( "Removes all entities of the specified type\n\tArguments:   	{entity_name} / {class_name}\n" );
 	}
-	else 
+	else
 	{
 		// Otherwise remove based on name or classname
 		int iCount = 0;
 		CBaseEntity *ent = NULL;
 		while ( (ent = gEntList.NextEnt(ent)) != NULL )
 		{
-			if (  (ent->GetEntityName() != NULL_STRING	&& FStrEq(args[1], STRING(ent->GetEntityName())))	|| 
+			if (  (ent->GetEntityName() != NULL_STRING	&& FStrEq(args[1], STRING(ent->GetEntityName())))	||
 				  (ent->m_iClassname != NULL_STRING	&& FStrEq(args[1], STRING(ent->m_iClassname))) ||
 				  (ent->GetClassname()!=NULL && FStrEq(args[1], ent->GetClassname())))
 			{
@@ -5126,17 +5126,17 @@ void CC_Ent_SetName( const CCommand& args )
 	else
 	{
 		// If no name was given set bits based on the picked
-		if ( FStrEq( args[2],"") ) 
+		if ( FStrEq( args[2],"") )
 		{
 			pEntity = FindPickerEntity( UTIL_GetCommandClient() );
 		}
-		else 
+		else
 		{
 			// Otherwise set bits based on name or classname
 			CBaseEntity *ent = NULL;
 			while ( (ent = gEntList.NextEnt(ent)) != NULL )
 			{
-				if (  (ent->GetEntityName() != NULL_STRING	&& FStrEq(args[1], STRING(ent->GetEntityName())))	|| 
+				if (  (ent->GetEntityName() != NULL_STRING	&& FStrEq(args[1], STRING(ent->GetEntityName())))	||
 					  (ent->m_iClassname != NULL_STRING	&& FStrEq(args[1], STRING(ent->m_iClassname))) ||
 					  (ent->GetClassname()!=NULL && FStrEq(args[1], ent->GetClassname())))
 				{
@@ -5226,7 +5226,7 @@ void CC_Find_Ent_Index( const CCommand& args )
 }
 static ConCommand find_ent_index("find_ent_index", CC_Find_Ent_Index, "Display data for entity matching specified index.\nFormat: find_ent_index <index>\n", FCVAR_CHEAT);
 
-// Purpose : 
+// Purpose :
 //------------------------------------------------------------------------------
 void CC_Ent_Dump( const CCommand& args )
 {
@@ -5306,7 +5306,7 @@ static ConCommand ent_dump("ent_dump", CC_Ent_Dump, "Usage:\n   ent_dump <entity
 
 
 //------------------------------------------------------------------------------
-// Purpose : 
+// Purpose :
 // Input   :
 // Output  :
 //------------------------------------------------------------------------------
@@ -5346,7 +5346,7 @@ public:
 			target = STRING( AllocPooledString(command.Arg( 1 ) ) );
 
 			// Don't allow them to run anything on a point_servercommand unless they're the host player. Otherwise they can ent_fire
-			// and run any command on the server. Admittedly, they can only do the ent_fire if sv_cheats is on, but 
+			// and run any command on the server. Admittedly, they can only do the ent_fire if sv_cheats is on, but
 			// people complained about users resetting the rcon password if the server briefly turned on cheats like this:
 			//    give point_servercommand
 			//    ent_fire point_servercommand command "rcon_password mynewpassword"
@@ -5566,7 +5566,7 @@ void CC_Ent_CancelPendingEntFires( const CCommand& args )
 static ConCommand ent_cancelpendingentfires("ent_cancelpendingentfires", CC_Ent_CancelPendingEntFires, "Cancels all ent_fire created outputs that are currently waiting for their delay to expire." );
 
 //------------------------------------------------------------------------------
-// Purpose : 
+// Purpose :
 // Input   :
 // Output  :
 //------------------------------------------------------------------------------
@@ -5577,7 +5577,7 @@ void CC_Ent_Info( const CCommand& args )
 	{
 		return;
 	}
-	
+
 	if ( args.ArgC() < 2 )
 	{
 		ClientPrint( pPlayer, HUD_PRINTCONSOLE, "Usage:\n   ent_info <class name>\n" );
@@ -5626,7 +5626,7 @@ static ConCommand ent_info("ent_info", CC_Ent_Info, "Usage:\n   ent_info <class 
 
 
 //------------------------------------------------------------------------------
-// Purpose : 
+// Purpose :
 // Input   :
 // Output  :
 //------------------------------------------------------------------------------
@@ -5638,7 +5638,7 @@ static ConCommand ent_messages("ent_messages", CC_Ent_Messages ,"Toggles input/o
 
 
 //------------------------------------------------------------------------------
-// Purpose : 
+// Purpose :
 // Input   :
 // Output  :
 //------------------------------------------------------------------------------
@@ -5659,7 +5659,7 @@ static ConCommand ent_pause("ent_pause", CC_Ent_Pause, "Toggles pausing of input
 
 
 //------------------------------------------------------------------------------
-// Purpose : Enables the entity picker, revelaing debug information about the 
+// Purpose : Enables the entity picker, revelaing debug information about the
 //           entity under the crosshair.
 // Input   : an optional command line argument "full" enables all debug info.
 // Output  :
@@ -5674,7 +5674,7 @@ void CC_Ent_Picker( void )
 static ConCommand picker("picker", CC_Ent_Picker, "Toggles 'picker' mode.  When picker is on, the bounding box, pivot and debugging text is displayed for whatever entity the player is looking at.\n\tArguments:	full - enables all debug information", FCVAR_CHEAT);
 
 //------------------------------------------------------------------------------
-// Purpose : 
+// Purpose :
 // Input   :
 // Output  :
 //------------------------------------------------------------------------------
@@ -5685,7 +5685,7 @@ void CC_Ent_Pivot( const CCommand& args )
 static ConCommand ent_pivot("ent_pivot", CC_Ent_Pivot, "Displays the pivot for the given entity(ies).\n\t(y=up=green, z=forward=blue, x=left=red). \n\tArguments:   	{entity_name} / {class_name} / no argument picks what player is looking at ", FCVAR_CHEAT);
 
 //------------------------------------------------------------------------------
-// Purpose : 
+// Purpose :
 // Input   :
 // Output  :
 //------------------------------------------------------------------------------
@@ -5757,7 +5757,7 @@ void CBaseEntity::CalcAbsolutePosition( void )
 	MatrixCopy( tmpMatrix, m_rgflCoordinateFrame );
 
 	// pull our absolute position out of the matrix
-	MatrixGetColumn( m_rgflCoordinateFrame, 3, m_vecAbsOrigin ); 
+	MatrixGetColumn( m_rgflCoordinateFrame, 3, m_vecAbsOrigin );
 
 	// if we have any angles, we have to extract our absolute angles from our matrix
 	if (( m_angRotation == vec3_angle ) && ( m_iParentAttachment == 0 ))
@@ -5875,7 +5875,7 @@ matrix3x4_t& CBaseEntity::GetParentToWorldTransform( matrix3x4_t &tempMatrix )
 			return tempMatrix;
 		}
 	}
-	
+
 	// If we fall through to here, then just use the move parent's abs origin and angles.
 	return pMoveParent->EntityToWorldTransform();
 }
@@ -5887,7 +5887,7 @@ matrix3x4_t& CBaseEntity::GetParentToWorldTransform( matrix3x4_t &tempMatrix )
 void CBaseEntity::SetAbsOrigin( const Vector& absOrigin )
 {
 	AssertMsg( absOrigin.IsValid(), "Invalid origin set" );
-	
+
 	// This is necessary to get the other fields of m_rgflCoordinateFrame ok
 	CalcAbsolutePosition();
 
@@ -5899,8 +5899,8 @@ void CBaseEntity::SetAbsOrigin( const Vector& absOrigin )
 	RemoveEFlags( EFL_DIRTY_ABSTRANSFORM );
 
 	m_vecAbsOrigin = absOrigin;
-		
-	MatrixSetColumn( absOrigin, 3, m_rgflCoordinateFrame ); 
+
+	MatrixSetColumn( absOrigin, 3, m_rgflCoordinateFrame );
 
 	Vector vecNewOrigin;
 	CBaseEntity *pMoveParent = GetMoveParent();
@@ -5942,7 +5942,7 @@ void CBaseEntity::SetAbsAngles( const QAngle& absAngles )
 
 	m_angAbsRotation = absAngles;
 	AngleMatrix( absAngles, m_rgflCoordinateFrame );
-	MatrixSetColumn( m_vecAbsOrigin, 3, m_rgflCoordinateFrame ); 
+	MatrixSetColumn( m_vecAbsOrigin, 3, m_rgflCoordinateFrame );
 
 	QAngle angNewRotation;
 	CBaseEntity *pMoveParent = GetMoveParent();
@@ -6067,7 +6067,7 @@ void CBaseEntity::SetLocalOrigin( const Vector& origin )
 		Assert( origin.y >= -largeVal && origin.y <= largeVal );
 		Assert( origin.z >= -largeVal && origin.z <= largeVal );
 #endif
-		
+
 		InvalidatePhysicsRecursive( POSITION_CHANGED );
 		m_vecOrigin = origin;
 		SetSimulationTime( gpGlobals->curtime );
@@ -6194,10 +6194,10 @@ bool CBaseEntity::IsFloating()
 
 //-----------------------------------------------------------------------------
 // Purpose: Created predictable and sets up Id.  Note that persist is ignored on the server.
-// Input  : *classname - 
-//			*module - 
-//			line - 
-//			persist - 
+// Input  : *classname -
+//			*module -
+//			line -
+//			persist -
 // Output : CBaseEntity
 //-----------------------------------------------------------------------------
 CBaseEntity *CBaseEntity::CreatePredictedEntityByName( const char *classname, const char *module, int line, bool persist /* = false */ )
@@ -6289,8 +6289,8 @@ void CBaseEntity::RemoveAllDecals( void )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : set - 
+// Purpose:
+// Input  : set -
 //-----------------------------------------------------------------------------
 void CBaseEntity::ModifyOrAppendCriteria( AI_CriteriaSet& set )
 {
@@ -6317,7 +6317,7 @@ void CBaseEntity::ModifyOrAppendCriteria( AI_CriteriaSet& set )
 
 	// Go through all the global states and append them
 
-	for ( int i = 0; i < GlobalEntity_GetNumGlobals(); i++ ) 
+	for ( int i = 0; i < GlobalEntity_GetNumGlobals(); i++ )
 	{
 		const char *szGlobalName = GlobalEntity_GetName(i);
 		int iGlobalState = (int)GlobalEntity_GetStateByIndex(i);
@@ -6341,9 +6341,9 @@ void CBaseEntity::ModifyOrAppendCriteria( AI_CriteriaSet& set )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : set - 
-//			"" - 
+// Purpose:
+// Input  : set -
+//			"" -
 //-----------------------------------------------------------------------------
 void CBaseEntity::AppendContextToCriteria( AI_CriteriaSet& set, const char *prefix /*= ""*/ )
 {
@@ -6366,7 +6366,7 @@ void CBaseEntity::AppendContextToCriteria( AI_CriteriaSet& set, const char *pref
 
 //-----------------------------------------------------------------------------
 // Purpose: Removes expired concepts from list
-// Output : 
+// Output :
 //-----------------------------------------------------------------------------
 void CBaseEntity::RemoveExpiredConcepts( void )
 {
@@ -6395,8 +6395,8 @@ int CBaseEntity::GetContextCount() const
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : index - 
+// Purpose:
+// Input  : index -
 // Output : const char
 //-----------------------------------------------------------------------------
 const char *CBaseEntity::GetContextName( int index ) const
@@ -6411,8 +6411,8 @@ const char *CBaseEntity::GetContextName( int index ) const
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : index - 
+// Purpose:
+// Input  : index -
 // Output : const char
 //-----------------------------------------------------------------------------
 const char *CBaseEntity::GetContextValue( int index ) const
@@ -6428,7 +6428,7 @@ const char *CBaseEntity::GetContextValue( int index ) const
 
 //-----------------------------------------------------------------------------
 // Purpose: Check if context has expired
-// Input  : index - 
+// Input  : index -
 // Output : bool
 //-----------------------------------------------------------------------------
 bool CBaseEntity::ContextExpired( int index ) const
@@ -6449,7 +6449,7 @@ bool CBaseEntity::ContextExpired( int index ) const
 
 //-----------------------------------------------------------------------------
 // Purpose: Search for index of named context string
-// Input  : *name - 
+// Input  : *name -
 // Output : int
 //-----------------------------------------------------------------------------
 int CBaseEntity::FindContextByName( const char *name ) const
@@ -6465,8 +6465,8 @@ int CBaseEntity::FindContextByName( const char *name ) const
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : inputdata - 
+// Purpose:
+// Input  : inputdata -
 //-----------------------------------------------------------------------------
 void CBaseEntity::InputAddContext( inputdata_t& inputdata )
 {
@@ -6511,8 +6511,8 @@ void CBaseEntity::InputFireUser4( inputdata_t& inputdata )
 
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : *contextName - 
+// Purpose:
+// Input  : *contextName -
 //-----------------------------------------------------------------------------
 void CBaseEntity::AddContext( const char *contextName )
 {
@@ -6549,8 +6549,8 @@ void CBaseEntity::AddContext( const char *contextName )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : inputdata - 
+// Purpose:
+// Input  : inputdata -
 //-----------------------------------------------------------------------------
 void CBaseEntity::InputRemoveContext( inputdata_t& inputdata )
 {
@@ -6563,8 +6563,8 @@ void CBaseEntity::InputRemoveContext( inputdata_t& inputdata )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : inputdata - 
+// Purpose:
+// Input  : inputdata -
 //-----------------------------------------------------------------------------
 void CBaseEntity::InputClearContext( inputdata_t& inputdata )
 {
@@ -6572,7 +6572,7 @@ void CBaseEntity::InputClearContext( inputdata_t& inputdata )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 // Output : IResponseSystem
 //-----------------------------------------------------------------------------
 IResponseSystem *CBaseEntity::GetResponseSystem()
@@ -6581,8 +6581,8 @@ IResponseSystem *CBaseEntity::GetResponseSystem()
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : inputdata - 
+// Purpose:
+// Input  : inputdata -
 //-----------------------------------------------------------------------------
 void CBaseEntity::InputDispatchResponse( inputdata_t& inputdata )
 {
@@ -6605,7 +6605,7 @@ void CBaseEntity::InputEnableShadow( inputdata_t &inputdata )
 
 //-----------------------------------------------------------------------------
 // Purpose: An input to add a new connection from this entity
-// Input  : &inputdata - 
+// Input  : &inputdata -
 //-----------------------------------------------------------------------------
 void CBaseEntity::InputAddOutput( inputdata_t &inputdata )
 {
@@ -6632,8 +6632,8 @@ void CBaseEntity::InputAddOutput( inputdata_t &inputdata )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : *conceptName - 
+// Purpose:
+// Input  : *conceptName -
 //-----------------------------------------------------------------------------
 void CBaseEntity::DispatchResponse( const char *conceptName )
 {
@@ -6702,7 +6702,7 @@ void CBaseEntity::DispatchResponse( const char *conceptName )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 void CBaseEntity::DumpResponseCriteria( void )
 {
@@ -6745,11 +6745,11 @@ void CC_Ent_Autoaim( const CCommand& args )
 static ConCommand ent_autoaim("ent_autoaim", CC_Ent_Autoaim, "Displays the entity's autoaim radius.\n\tArguments:   	{entity_name} / {class_name} / no argument picks what player is looking at", FCVAR_CHEAT );
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
-CAI_BaseNPC	*CBaseEntity::MyNPCPointer( void ) 
-{ 
-	if ( IsNPC() ) 
+CAI_BaseNPC	*CBaseEntity::MyNPCPointer( void )
+{
+	if ( IsNPC() )
 		return assert_cast<CAI_BaseNPC *>(this);
 
 	return NULL;
@@ -6759,7 +6759,7 @@ ConVar step_spline( "step_spline", "0" );
 
 //-----------------------------------------------------------------------------
 // Purpose: Run one tick's worth of faked simulation
-// Input  : *step - 
+// Input  : *step -
 //-----------------------------------------------------------------------------
 void CBaseEntity::ComputeStepSimulationNetwork( StepSimulationData *step )
 {
@@ -6796,7 +6796,7 @@ void CBaseEntity::ComputeStepSimulationNetwork( StepSimulationData *step )
 				frac = (float)( gpGlobals->tickcount - step->m_Previous.nTickCount ) / (float) tickdelta;
 				frac = clamp( frac, 0.0f, 1.0f );
 			}
-		
+
 			if (step->m_Previous2.nTickCount == 0 || step->m_Previous2.nTickCount >= step->m_Previous.nTickCount)
 			{
 				Vector delta = step->m_Next.vecOrigin - step->m_Previous.vecOrigin;
@@ -6806,7 +6806,7 @@ void CBaseEntity::ComputeStepSimulationNetwork( StepSimulationData *step )
 			{
 				StepSimulationStep *pOlder = &step->m_Previous;
 				StepSimulationStep *pNewer = &step->m_Next;
-		
+
 				if (step->m_Discontinuity.nTickCount > step->m_Previous.nTickCount)
 				{
 					if (gpGlobals->tickcount > step->m_Discontinuity.nTickCount)
@@ -6817,7 +6817,7 @@ void CBaseEntity::ComputeStepSimulationNetwork( StepSimulationData *step )
 					{
 						pNewer = &step->m_Discontinuity;
 					}
-		
+
 					tickdelta = pNewer->nTickCount - pOlder->nTickCount;
 					if ( tickdelta > 0 )
 					{
@@ -6825,7 +6825,7 @@ void CBaseEntity::ComputeStepSimulationNetwork( StepSimulationData *step )
 						frac = clamp( frac, 0.0f, 1.0f );
 					}
 				}
-		
+
 				Vector delta = pNewer->vecOrigin - pOlder->vecOrigin;
 				VectorMA( pOlder->vecOrigin, frac, delta, step->m_vecNetworkOrigin );
 			}
@@ -6854,7 +6854,7 @@ void CBaseEntity::ComputeStepSimulationNetwork( StepSimulationData *step )
 				frac = (float)( gpGlobals->tickcount - step->m_Previous.nTickCount ) / (float) tickdelta;
 				frac = clamp( frac, 0.0f, 1.0f );
 			}
-		
+
 			if (step->m_Previous2.nTickCount == 0 || step->m_Previous2.nTickCount >= step->m_Previous.nTickCount)
 			{
 				// Pure blend between start/end orientations
@@ -6866,7 +6866,7 @@ void CBaseEntity::ComputeStepSimulationNetwork( StepSimulationData *step )
 			{
 				StepSimulationStep *pOlder = &step->m_Previous;
 				StepSimulationStep *pNewer = &step->m_Next;
-		
+
 				if (step->m_Discontinuity.nTickCount > step->m_Previous.nTickCount)
 				{
 					if (gpGlobals->tickcount > step->m_Discontinuity.nTickCount)
@@ -6877,7 +6877,7 @@ void CBaseEntity::ComputeStepSimulationNetwork( StepSimulationData *step )
 					{
 						pNewer = &step->m_Discontinuity;
 					}
-		
+
 					tickdelta = pNewer->nTickCount - pOlder->nTickCount;
 					if ( tickdelta > 0 )
 					{
@@ -6885,7 +6885,7 @@ void CBaseEntity::ComputeStepSimulationNetwork( StepSimulationData *step )
 						frac = clamp( frac, 0.0f, 1.0f );
 					}
 				}
-		
+
 				// Pure blend between start/end orientations
 				Quaternion outangles;
 				QuaternionBlend( pOlder->qRotation, pNewer->qRotation, frac, outangles );
@@ -6942,7 +6942,7 @@ bool CBaseEntity::UseStepSimulationNetworkAngles( const QAngle **out_a )
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
+// Purpose:
 //-----------------------------------------------------------------------------
 
 bool CBaseEntity::AddStepDiscontinuity( float flTime, const Vector &vecOrigin, const QAngle &vecAngles )
@@ -6968,8 +6968,8 @@ bool CBaseEntity::AddStepDiscontinuity( float flTime, const Vector &vecOrigin, c
 }
 
 
-Vector CBaseEntity::GetStepOrigin( void ) const 
-{ 
+Vector CBaseEntity::GetStepOrigin( void ) const
+{
 	return GetLocalOrigin();
 }
 
@@ -6979,9 +6979,9 @@ QAngle CBaseEntity::GetStepAngles( void ) const
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: For each client who appears to be a valid recipient, checks the client has disabled CC and if so, removes them from 
+// Purpose: For each client who appears to be a valid recipient, checks the client has disabled CC and if so, removes them from
 //  the recipient list.
-// Input  : filter - 
+// Input  : filter -
 //-----------------------------------------------------------------------------
 void CBaseEntity::RemoveRecipientsIfNotCloseCaptioning( CRecipientFilter& filter )
 {
@@ -7023,24 +7023,24 @@ void CBaseEntity::RemoveRecipientsIfNotCloseCaptioning( CRecipientFilter& filter
 
 //-----------------------------------------------------------------------------
 // Purpose: Wrapper to emit a sentence and also a close caption token for the sentence as appropriate.
-// Input  : filter - 
-//			iEntIndex - 
-//			iChannel - 
-//			iSentenceIndex - 
-//			flVolume - 
-//			iSoundlevel - 
-//			iFlags - 
-//			iPitch - 
-//			bUpdatePositions - 
-//			soundtime - 
+// Input  : filter -
+//			iEntIndex -
+//			iChannel -
+//			iSentenceIndex -
+//			flVolume -
+//			iSoundlevel -
+//			iFlags -
+//			iPitch -
+//			bUpdatePositions -
+//			soundtime -
 //-----------------------------------------------------------------------------
-void CBaseEntity::EmitSentenceByIndex( IRecipientFilter& filter, int iEntIndex, int iChannel, int iSentenceIndex, 
+void CBaseEntity::EmitSentenceByIndex( IRecipientFilter& filter, int iEntIndex, int iChannel, int iSentenceIndex,
 	float flVolume, soundlevel_t iSoundlevel, int iFlags /*= 0*/, int iPitch /*=PITCH_NORM*/,
-	const Vector *pOrigin /*=NULL*/, const Vector *pDirection /*=NULL*/, 
+	const Vector *pOrigin /*=NULL*/, const Vector *pDirection /*=NULL*/,
 	bool bUpdatePositions /*=true*/, float soundtime /*=0.0f*/ )
 {
 	CUtlVector< Vector > dummy;
-	enginesound->EmitSentenceByIndex( filter, iEntIndex, iChannel, iSentenceIndex, 
+	enginesound->EmitSentenceByIndex( filter, iEntIndex, iChannel, iSentenceIndex,
 		flVolume, iSoundlevel, iFlags, iPitch, 0, pOrigin, pDirection, &dummy, bUpdatePositions, soundtime );
 }
 
@@ -7051,23 +7051,12 @@ void CBaseEntity::SetRefEHandle( const CBaseHandle &handle )
 	if ( edict() )
 	{
 		COMPILE_TIME_ASSERT( NUM_NETWORKED_EHANDLE_SERIAL_NUMBER_BITS <= 8*sizeof( edict()->m_NetworkSerialNumber ) );
-		edict()->m_NetworkSerialNumber = (m_RefEHandle.GetSerialNumber() & (1 << NUM_NETWORKED_EHANDLE_SERIAL_NUMBER_BITS) - 1);
+		edict()->m_NetworkSerialNumber = m_RefEHandle.GetSerialNumber() & ( (1 << NUM_NETWORKED_EHANDLE_SERIAL_NUMBER_BITS) - 1 );
 	}
 }
 
 
-bool CPointEntity::KeyValue( const char *szKeyName, const char *szValue ) 
-{
-	if ( FStrEq( szKeyName, "mins" ) || FStrEq( szKeyName, "maxs" ) )
-	{
-		Warning("Warning! Can't specify mins/maxs for point entities! (%s)\n", GetClassname() );
-		return true;
-	}
-
-	return BaseClass::KeyValue( szKeyName, szValue );
-}						 
-
-bool CServerOnlyPointEntity::KeyValue( const char *szKeyName, const char *szValue ) 
+bool CPointEntity::KeyValue( const char *szKeyName, const char *szValue )
 {
 	if ( FStrEq( szKeyName, "mins" ) || FStrEq( szKeyName, "maxs" ) )
 	{
@@ -7078,7 +7067,18 @@ bool CServerOnlyPointEntity::KeyValue( const char *szKeyName, const char *szValu
 	return BaseClass::KeyValue( szKeyName, szValue );
 }
 
-bool CLogicalEntity::KeyValue( const char *szKeyName, const char *szValue ) 
+bool CServerOnlyPointEntity::KeyValue( const char *szKeyName, const char *szValue )
+{
+	if ( FStrEq( szKeyName, "mins" ) || FStrEq( szKeyName, "maxs" ) )
+	{
+		Warning("Warning! Can't specify mins/maxs for point entities! (%s)\n", GetClassname() );
+		return true;
+	}
+
+	return BaseClass::KeyValue( szKeyName, szValue );
+}
+
+bool CLogicalEntity::KeyValue( const char *szKeyName, const char *szValue )
 {
 	if ( FStrEq( szKeyName, "mins" ) || FStrEq( szKeyName, "maxs" ) )
 	{
@@ -7219,7 +7219,7 @@ void CBaseEntity::SUB_FadeOut( void  )
 		SetRenderColorA( 255 );
 		return;
 	}
-    
+
 	SUB_PerformFadeOut();
 
 	if ( m_clrRender->a == 0 )
@@ -7243,8 +7243,8 @@ inline bool AnyPlayersInHierarchy_R( CBaseEntity *pEnt )
 		if ( AnyPlayersInHierarchy_R( pCur ) )
 			return true;
 	}
-	
-	return false;	
+
+	return false;
 }
 
 
@@ -7275,9 +7275,9 @@ void CBaseEntity::OnModelLoadComplete( const model_t* model )
 {
 	Assert( m_bDynamicModelPending && IsDynamicModelIndex( m_nModelIndex ) );
 	Assert( model == modelinfo->GetModel( m_nModelIndex ) );
-	
+
 	m_bDynamicModelPending = false;
-	
+
 	if ( m_bDynamicModelSetBounds )
 	{
 		m_bDynamicModelSetBounds = false;
@@ -7361,7 +7361,7 @@ void CC_Ent_Create( const CCommand& args )
 		Vector forward;
 		pPlayer->EyeVectors( &forward );
 		UTIL_TraceLine(pPlayer->EyePosition(),
-			pPlayer->EyePosition() + forward * MAX_TRACE_LENGTH,MASK_SOLID, 
+			pPlayer->EyePosition() + forward * MAX_TRACE_LENGTH,MASK_SOLID,
 			pPlayer, COLLISION_GROUP_NONE, &tr );
 		if ( tr.fraction != 1.0 )
 		{
@@ -7415,7 +7415,7 @@ bool CC_GetCommandEnt( const CCommand& args, CBaseEntity **ent, Vector *vecTarge
 		Vector forward;
 		pPlayer->EyeVectors( &forward );
 		UTIL_TraceLine(pPlayer->EyePosition(),
-			pPlayer->EyePosition() + forward * MAX_TRACE_LENGTH,MASK_NPCSOLID, 
+			pPlayer->EyePosition() + forward * MAX_TRACE_LENGTH,MASK_NPCSOLID,
 			pPlayer, COLLISION_GROUP_NONE, &tr );
 
 		if ( tr.fraction != 1.0 )

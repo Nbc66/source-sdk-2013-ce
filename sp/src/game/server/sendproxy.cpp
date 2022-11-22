@@ -27,7 +27,7 @@ void SendProxy_EHandleToInt( const SendProp *pProp, const void *pStruct, const v
 
 	if ( pHandle && pHandle->Get() )
 	{
-		int iSerialNum = pHandle->GetSerialNumber() & (1 << NUM_NETWORKED_EHANDLE_SERIAL_NUMBER_BITS) - 1;
+		int iSerialNum = pHandle->GetSerialNumber() & ( (1 << NUM_NETWORKED_EHANDLE_SERIAL_NUMBER_BITS) - 1 );
 		pOut->m_Int = pHandle->GetEntryIndex() | (iSerialNum << MAX_EDICT_BITS);
 	}
 	else
@@ -77,10 +77,10 @@ SendProp SendPropIntWithMinusOneFlag( const char *pVarName, int offset, int size
 
 //-----------------------------------------------------------------------------
 // Purpose: Proxy that only sends data to team members
-// Input  : *pStruct - 
-//			*pData - 
-//			*pOut - 
-//			objectID - 
+// Input  : *pStruct -
+//			*pData -
+//			*pOut -
+//			objectID -
 // Output : Returns true on success, false on failure.
 //-----------------------------------------------------------------------------
 void* SendProxy_OnlyToTeam( const SendProp *pProp, const void *pStruct, const void *pVarData, CSendProxyRecipients *pRecipients, int objectID )
@@ -94,7 +94,7 @@ void* SendProxy_OnlyToTeam( const SendProp *pProp, const void *pStruct, const vo
 			pRecipients->ClearAllRecipients();
 			for ( int i=0; i < pTeam->GetNumPlayers(); i++ )
 				pRecipients->SetRecipient( pTeam->GetPlayer( i )->GetClientIndex() );
-		
+
 			return (void*)pVarData;
 		}
 	}
@@ -121,11 +121,11 @@ static void SendProxy_Time( const SendProp *pProp, const void *pStruct, const vo
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : *pVarName - 
-//			sizeofVar - 
-//			flags - 
-//			pId - 
+// Purpose:
+// Input  : *pVarName -
+//			sizeofVar -
+//			flags -
+//			pId -
 // Output : SendProp
 //-----------------------------------------------------------------------------
 SendProp SendPropTime(
@@ -144,11 +144,11 @@ SendProp SendPropTime(
 
 //-----------------------------------------------------------------------------
 // Purpose: Converts a predictable Id to an integer
-// Input  : *pStruct - 
-//			*pVarData - 
-//			*pOut - 
-//			iElement - 
-//			objectID - 
+// Input  : *pStruct -
+//			*pVarData -
+//			*pOut -
+//			iElement -
+//			objectID -
 //-----------------------------------------------------------------------------
 static void SendProxy_PredictableIdToInt( const SendProp *pProp, const void *pStruct, const void *pVarData, DVariant *pOut, int iElement, int objectID )
 {
@@ -164,11 +164,11 @@ static void SendProxy_PredictableIdToInt( const SendProp *pProp, const void *pSt
 }
 
 //-----------------------------------------------------------------------------
-// Purpose: 
-// Input  : *pVarName - 
-//			sizeofVar - 
-//			flags - 
-//			pId - 
+// Purpose:
+// Input  : *pVarName -
+//			sizeofVar -
+//			flags -
+//			pId -
 // Output : SendProp
 //-----------------------------------------------------------------------------
 SendProp SendPropPredictableId(
