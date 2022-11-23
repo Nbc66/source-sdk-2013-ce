@@ -13,11 +13,26 @@ You can find Source 2013 CE's roadmap by going to our [Trello board](https://tre
 And you can also give us suggestions for fixes and features that you'd like to see in our Discord channel (`#source-SDK-2013-ce`) found in the 
 Source Modding Community server, which you can join [here](https://discord.gg/BD6WpY5).
 
-# Requirements 
-To be able to use Source 2013 CE you will need to download:
-* Visual Studio 2019
-* Multibyte MFC Library for Visual Studio 2019
-* Windows SDK 10.0.22000.0
+# Building Guide
+
+## Windows
+1. Install dependencies Visual Studio 2019 or higher, Multibyte MFC Library, Windows SDK 10.0.22000.0
+2. Navigate to `[SDK_ROOT]/[GAME]/src` and run `./createallprojects` or `./creategameprojects`
+3. Open Everything.sln or Game.sln and right click on Everything or Game, then select Build Solution
+
+## Linux (Debian)
+1. Install dependencies `sudo apt-get install build-essential gcc-multilib g++-multilib`
+2. Download Valve's [Steam Runtime repo](https://github.com/ValveSoftware/steam-runtime)
+3. Go into the steam-runtime directory and run:
+```sh
+./setup_chroot.sh --i386
+```
+4. Run the following commands:
+```sh
+cd [SDK_ROOT]/[GAME]/src
+[SCRIPT]
+sudo schroot --chroot steamrt_scout_i386 -- make -f [MAKEFILE].mak
+```
 
 # Contributing
 We appreciate any form of help so ideally if you want to help this project out the best way would be to make a pull request.
@@ -27,5 +42,6 @@ Thank you for trying out this project we hope we will help you out with your Sou
 
 Made with :heart: by [@Nbc66](https://github.com/Nbc66) & [@GamerDude27](https://github.com/GamerDude27)
 
-Credits for 2019 support: momentum mod, Brae, and Anthonypython
+Credits for Linux support: Momentum Mod
+Credits for 2019 support: Momentum Mod, Brae, and Anthonypython
 Credits for CI: TF2Vintage, Deathreus, Dio, Anthonypython
