@@ -29,7 +29,37 @@ GamepadUIBasePanel::GamepadUIBasePanel( vgui::VPANEL parent ) : BaseClass( NULL,
 
     m_pMainMenu = new GamepadUIMainMenu( this );
     OnMenuStateChanged();
+#ifdef SDK2013CE
+    HideGameMenuLogos();
+#endif
 }
+
+#ifdef SDK2013CE
+void GamepadUIBasePanel::HideGameMenuLogos()
+{
+    vgui::VPANEL _rootPanel = GamepadUI::GetInstance().GetRootVPanel();
+    int children_count = vgui::ipanel()->GetChildCount( _rootPanel );
+    for ( int i = 0; i < children_count; ++i )
+    {
+        vgui::VPANEL root_child = vgui::ipanel()->GetChild( _rootPanel, i );
+        if ( !Q_strcmp( "BaseGameUIPanel", vgui::ipanel()->GetName( root_child ) ) )
+        {
+            int base_panel_children = vgui::ipanel()->GetChildCount( root_child );
+            for ( int j = 0; j < base_panel_children; ++j )
+            {
+                vgui::VPANEL panel_child = vgui::ipanel()->GetChild( root_child, j );
+                const char *child_name = vgui::ipanel()->GetName( panel_child );
+                // hide titles and gamelogo
+                if ( Q_strstr( child_name, "GameMenuButton" ) || !Q_strcmp( child_name, "GameLogo" ) )
+                {
+                    vgui::Panel *panel = dynamic_cast<Panel *>( vgui::ipanel()->GetPanel( panel_child, "GameUI" ) );
+                    panel->SetVisible( false );
+                }
+            }
+        }
+    }
+}
+#endif
 
 void GamepadUIBasePanel::ApplySchemeSettings( vgui::IScheme* pScheme )
 {

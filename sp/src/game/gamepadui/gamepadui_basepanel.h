@@ -25,6 +25,11 @@ public:
     bool StartBackgroundMusic( float flVolume );
     void ReleaseBackgroundMusic();
 
+#ifdef SDK2013CE
+private:
+    void HideGameMenuLogos();
+#endif
+
 private:
     GamepadUIMainMenu *m_pMainMenu = NULL;
 

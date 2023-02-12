@@ -22,7 +22,7 @@ $Project "client"
 
 $Project "gamepadui"
 {
-	"game\gamepadui\gamepadui_episodic.vpc" [$EPISODIC || $SDK2013CE]
+	"game\gamepadui\gamepadui_sdk2013ce.vpc" [$SDK2013CE]
 }
 
 $Project "fgdlib"

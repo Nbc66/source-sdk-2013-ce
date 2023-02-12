@@ -1,6 +1,9 @@
 #include "gamepadui_interface.h"
 #include "gamepadui_basepanel.h"
 #include "gamepadui_mainmenu.h"
+#ifdef SDK2013CE
+#include "gamepadui_loading.h"
+#endif
 
 #include "vgui/ILocalize.h"
 
@@ -68,6 +71,7 @@ void GamepadUI::Initialize( CreateInterfaceFn factory )
     m_SteamAPIContext.Init();
 #endif // HL2_RETAIL
 
+
     m_pBasePanel = new GamepadUIBasePanel( GetRootVPanel() );
     if ( !m_pBasePanel )
     {
@@ -76,6 +80,11 @@ void GamepadUI::Initialize( CreateInterfaceFn factory )
     }
 
     GamepadUI_Log( "Overiding menu.\n" );
+
+#ifdef SDK2013CE
+    g_pGamepadUILoading = new GamepadUILoading( GetRootVPanel() );
+    m_pGameUI->SetLoadingBackgroundDialog( g_pGamepadUILoading->GetVPanel() );
+#endif
 
     m_pGameUI->SetMainMenuOverride( GetBaseVPanel() );
 

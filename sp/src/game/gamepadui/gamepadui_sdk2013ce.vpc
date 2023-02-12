@@ -1,0 +1,32 @@
+//-----------------------------------------------------------------------------
+//	GAMEPADUI_SDK2013.VPC
+//
+//	Project Script
+//-----------------------------------------------------------------------------
+
+$Macro SRCDIR		"..\.."
+$Macro GAMENAME 	"mod_sdk2013ce" // Stock SDK2013, Modders should replace this line with their mod folder name if needed.
+$Macro OUTBINNAME	"gamepadui"
+
+$Include "$SRCDIR\game\gamepadui\gamepadui_base.vpc"
+
+$Configuration
+{
+	$Compiler
+	{
+		$PreprocessorDefinitions			"$BASE;GAMEPADUI_GAME_HL2;GAMEPADUI_GAME_EPISODIC;SDK2013CE"
+	}
+}
+
+$Project "GamepadUI"
+{
+	$Folder "Header Files"
+    {
+		 $File "gamepadui_loading.h"
+	}
+
+	$Folder "Source Files"
+    {
+		 $File "gamepadui_loading.cpp"
+	}
+}

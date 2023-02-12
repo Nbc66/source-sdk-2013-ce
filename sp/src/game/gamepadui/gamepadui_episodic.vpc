@@ -5,7 +5,7 @@
 //-----------------------------------------------------------------------------
 
 $Macro SRCDIR		"..\.."
-$Macro GAMENAME 	"mod_sdk2013ce" // Stock SDK2013, Modders should replace this line with their mod folder name if needed.
+$Macro GAMENAME 	"mod_episodic" // Stock SDK2013, Modders should replace this line with their mod folder name if needed.
 $Macro OUTBINNAME	"gamepadui"
 
 $Include "$SRCDIR\game\gamepadui\gamepadui_base.vpc"
