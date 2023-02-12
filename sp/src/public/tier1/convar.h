@@ -282,6 +282,17 @@ public:
 
 	// Invoke the function
 	virtual void Dispatch( const CCommand &command );
+	
+#ifdef SDK2013CE
+	// Quick and dirty way to prevent "startupmenu" from running
+	void RemoveCallBack()
+	{
+		if ( m_bUsingNewCommandCallback )
+			m_pCommandCallback = NULL;
+		else
+			m_fnCommandCallbackV1 = NULL;
+	}
+#endif
 
 private:
 	// NOTE: To maintain backward compat, we have to be very careful:
