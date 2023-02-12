@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "gamepadui/achievements/hlx_kill_enemies_withphysics"
+	"$vertexalpha" "1"
+}

@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "gamepadui/achievements/hl2_kill_enemy_withtoilet"
+	"$vertexalpha" "1"
+}

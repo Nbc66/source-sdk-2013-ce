@@ -1,0 +1,9 @@
+"UnlitGeneric"
+{
+	"$basetexture" "gamepadui/spinner"
+	"$vertexcolor" 1
+	"$vertexalpha" 1
+	"$translucent" 1
+	"$ignorez" 1
+	"$no_fullbright" "1"
+}
