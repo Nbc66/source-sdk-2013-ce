@@ -18,6 +18,7 @@ public:
 	virtual void	PerformLayout();
 	virtual void	Paint();
 	MESSAGE_FUNC( OnActivate, "activate" );
+	MESSAGE_FUNC( OnDeactivate, "deactivate" );
 
 private:
 	void	SolveEnginePanel();
@@ -29,6 +30,8 @@ private:
 	int			m_iBarW;
 	int			m_iBarH;
 	bool		m_bResolved;
+	int			m_SpinnerFrame;
+	double		m_prevFrameTime;
 
 	vgui::Frame *m_pDialog;
 	vgui::ProgressBar *m_pProgress;
@@ -37,7 +40,6 @@ private:
 	vgui::ProgressBar *m_pProgressMirror;
 	vgui::ImagePanel *m_pSpinnerImage;
 	vgui::ImagePanel *m_pLogoImage;
-	int m_SpinnerFrame;
 };
 
 extern GamepadUILoading *g_pGamepadUILoading;
