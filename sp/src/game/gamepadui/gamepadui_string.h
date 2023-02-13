@@ -100,6 +100,9 @@ public:
             return;
 
         wchar_t szUnicode[ 4096 ];
+#ifdef SDK2013CE
+        memset( szUnicode, 0, sizeof( wchar_t ) * 4096 );
+#endif
         int nChars = V_UTF8ToUnicode( pszText, szUnicode, sizeof( szUnicode ) );
         if ( nChars > 1 )
             SetText( szUnicode, nChars - 1 );
