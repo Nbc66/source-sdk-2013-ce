@@ -439,7 +439,7 @@
 				"advanced"		"1"
 
 				"min"			"75"
-				"max"			"120"
+				"max"			"90"
 				"step"			"5"
 
 				"textprecision" "0"
