@@ -113,9 +113,12 @@ bool GamepadUIBasePanel::StartBackgroundMusic( float flVolume )
         return true;
 
     /* mostly from GameUI */
+    char path[512];
+    Q_snprintf(path, sizeof(path), "sound/ui/gamestartup*.mp3");
+    Q_FixSlashes(path);
     CUtlVector<char*> fileNames;
     FileFindHandle_t fh;
-    const char *fn = g_pFullFileSystem->FindFirstEx( "sound/ui/gamestartup*.mp3", "MOD", &fh );
+    char const* fn = g_pFullFileSystem->FindFirstEx(path, "MOD", &fh);
     if ( fn )
     {
         do
@@ -123,17 +126,22 @@ bool GamepadUIBasePanel::StartBackgroundMusic( float flVolume )
             char ext[ 10 ];
             Q_ExtractFileExtension( fn, ext, sizeof( ext ) );
 
-            if ( !Q_strcmp( ext, "mp3" ) )
+            if (!Q_stricmp(ext, "mp3"))
             {
                 char temp[ 512 ];
-                Q_snprintf( temp, sizeof( temp ), "ui/%s", fn );
+                {
+                    Q_snprintf(temp, sizeof(temp), "ui/%s", fn);
+                }
 
                 char *found = new char[ strlen( temp ) + 1 ];
-                Q_strncpy( found, temp, strlen( temp + 1 ) );
+                Q_strncpy(found, temp, strlen(temp) + 1);
 
                 Q_FixSlashes( found );
                 fileNames.AddToTail( found );
             }
+
+            fn = g_pFullFileSystem->FindNext(fh);
+
         } while ( fn );
 
         g_pFullFileSystem->FindClose( fh );
@@ -160,9 +168,24 @@ bool GamepadUIBasePanel::StartBackgroundMusic( float flVolume )
     if ( !pSoundFile )
         return false;
 
-    // mixes too loud against soft ui sounds
-    GamepadUI::GetInstance().GetEngineSound()->EmitAmbientSound( pSoundFile, gamepadui_background_music_duck.GetFloat() * flVolume );
-    m_nBackgroundMusicGUID = GamepadUI::GetInstance().GetEngineSound()->GetGuidForLastSoundEmitted();
+    // check and see if we have a background map loaded.
+    // if not, this code path won't properly play the music.
+    const bool bInGame = GamepadUI::GetInstance().GetEngineClient()->IsLevelMainMenuBackground();
+    if (bInGame)
+    {
+        // mixes too loud against soft ui sounds
+        GamepadUI::GetInstance().GetEngineSound()->EmitAmbientSound(pSoundFile, gamepadui_background_music_duck.GetFloat() * flVolume);
+        m_nBackgroundMusicGUID = GamepadUI::GetInstance().GetEngineSound()->GetGuidForLastSoundEmitted();
+    }
+    else
+    {
+        // old way, failsafe in case we don't have a background level.
+        char found[512];
+        Q_snprintf(found, sizeof(found), "play *#%s\n", pSoundFile);
+        GamepadUI::GetInstance().GetEngineClient()->ClientCmd_Unrestricted(found);
+    }
+
+    fileNames.PurgeAndDeleteElements();
 
     return m_nBackgroundMusicGUID != 0;
 }
