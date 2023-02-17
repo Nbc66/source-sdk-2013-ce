@@ -1,4 +1,14 @@
-![](.assets/sdk2013ce.png)
+<p align="center">
+  <img src=".assets/sdk2013ce.png" width="200" height="200">
+</p>
+
+<div align="center">
+
+ <a href="">[![Multiplayer Win](https://github.com/Nbc66/source-sdk-2013-ce/actions/workflows/MP_windows.yml/badge.svg)](https://github.com/Nbc66/source-sdk-2013-ce/actions/workflows/MP_windows.yml)</a>
+<a href="">[![Singleplayer Win](https://github.com/Nbc66/source-sdk-2013-ce/actions/workflows/SP_windows.yml/badge.svg)](https://github.com/Nbc66/source-sdk-2013-ce/actions/workflows/SP_windows.yml)</a>
+
+</div>
+
 # Source SDK 2013 Community Edition
 Source 2013 CE is a clean fork of Valve's [Source SDK 2013 repo](https://github.com/valveSoftware/source-sdk-2013) 
 with the goal of fixing up the SDK and to provide a clean bloat-free codebase that works out of the box to make developers' lives easier.
