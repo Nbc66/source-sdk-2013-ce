@@ -166,8 +166,14 @@ int CItem_ItemCrate::OnTakeDamage( const CTakeDamageInfo &info )
 void CItem_ItemCrate::VPhysicsCollision( int index, gamevcollisionevent_t *pEvent )
 {
 	float flDamageScale = 1.0f;
+#ifndef SDK2013CE
 	if ( FClassnameIs( pEvent->pEntities[!index], "prop_vehicle_airboat" ) ||
 		 FClassnameIs( pEvent->pEntities[!index], "prop_vehicle_jeep" ) )
+#else
+	if ( FClassnameIs( pEvent->pEntities[!index], "prop_vehicle_airboat" ) ||
+		 FClassnameIs( pEvent->pEntities[!index], "prop_vehicle_jeep" ) ||
+		 FClassnameIs( pEvent->pEntities[!index], "prop_vehicle_jalopy" ) )
+#endif // SDK2013CE
 	{
 		flDamageScale = 100.0f;
 	}

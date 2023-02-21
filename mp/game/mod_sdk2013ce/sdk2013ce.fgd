@@ -1,0 +1,130 @@
+//========= Copyright Valve Corporation, All rights reserved. ============//
+//
+// Purpose: SDK 2013 CE game definition file (.fgd) 
+//
+//=============================================================================
+
+@include "base.fgd"
+
+//-------------------------------------------------------------------------
+//
+// NPCs
+//
+//-------------------------------------------------------------------------
+@NPCClass base(BaseHelicopter) studio("models/combine_dropship.mdl" ) = npc_combinedropship : "Combine Dropship"
+[
+	spawnflags(Flags) =
+	[
+		32768 : "Wait for input before dropoff" : 0
+	]
+
+	LandTarget(target_destination) : "Land target name"
+	GunRange(float) : "Crate Gun Range" : 2048 : "If the dropship's carrying a crate with a gun on it, it'll only shoot targets within this range."
+
+	RollermineTemplate(target_destination) : "Name of Rollermine Template" : "" : "If this dropship drops any rollermines due to the 'DropMines' input being fired, it will use this template for the rollermines it creates. If left blank, ordinary rollermines will be dropped."
+
+	NPCTemplate(target_destination) : "Name of Template NPC 1"
+	NPCTemplate2(target_destination) : "Name of Template NPC 2"
+	NPCTemplate3(target_destination) : "Name of Template NPC 3"
+	NPCTemplate4(target_destination) : "Name of Template NPC 4"
+	NPCTemplate5(target_destination) : "Name of Template NPC 5"
+	NPCTemplate6(target_destination) : "Name of Template NPC 6"
+
+	Dustoff1(target_destination) : "Name of dustoff point for NPC 1"
+	Dustoff2(target_destination) : "Name of dustoff point for NPC 2"
+	Dustoff3(target_destination) : "Name of dustoff point for NPC 3"
+	Dustoff4(target_destination) : "Name of dustoff point for NPC 4"
+	Dustoff5(target_destination) : "Name of dustoff point for NPC 5"
+	Dustoff6(target_destination) : "Name of dustoff point for NPC 6"
+
+	APCVehicleName(target_destination) : "Name of the APC to drop"
+	Invulnerable(Choices) : "Invulnerable" : 0 =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	CrateType(Choices) : "Crate Type" : 2 =
+	[
+		-4 : "Jalopy (No crate)"
+		-3 : "Jeep (No crate)"
+		-2 : "APC (No crate)"
+		-1 : "Strider (No crate)"
+		0 : "Roller Hopper"
+		1 : "Soldier Crate"
+		2 : "None"
+	]
+
+	// Inputs
+	input LandLeaveCrate(integer) : "Land, drop soldiers, and leave the crate behind. Specify the number of troops to drop off in the parameter."
+	input LandTakeCrate(integer) : "Land, drop soldiers, but don't leave the crate behind. Specify the number of troops to drop off in the parameter."
+	input DropMines(integer) : "Drop Rollermines. Specify the number of mines to drop in the parameter."
+	input DropStrider(void) : "Drop the Strider you're carrying. Now."
+	input DropAPC(void) : "Drop the APC you're carrying. Now."
+	input Hover(target_destination) : "Hover over a named target entity until told to fly to a path."
+	input Pickup(string) : "Pickup an entity."
+	input SetLandTarget(string) : "Set my land target name."
+	input SetGunRange(float) : "Set my crate gun's range."
+
+	input EnableRotorSound(void) : "Turns on rotor sounds"
+	input DisableRotorSound(void) : "Turns off rotor sounds"
+
+	input StopWaitingForDropoff(void) : "Stop waiting for the dropoff. Dropoff as soon as possible."
+
+
+	// Outputs
+	output OnFinishedDropoff(void)  : "Fires when the dropship has finished a dropoff."
+	output OnFinishedPickup(void) : "Fires when the dropship has finished a pickup."
+
+	output OnCrateShotDownBeforeDropoff(float) : "Fires when the container was shot down before it dropped off soldiers. The parameter contains the number of soldiers that weren't successfully dropped off."
+	output OnCrateShotDownAfterDropoff(void) : "Fires when the container was shot down after it dropped off soldiers."
+
+]
+
+//-------------------------------------------------------------------------
+//
+// Vehicles.
+//
+//-------------------------------------------------------------------------
+@PointClass base(BaseDriveableVehicle) studioprop() = prop_vehicle_jalopy :
+	"Driveable studiomodel jalopy."
+[
+	input StartRemoveTauCannon(void) : "Start the tau removal sequence."
+	input FinishRemoveTauCannon(void) : "Finish the tau removal sequence."
+	
+	// FIXME: These will move into episodic
+	input LockEntrance( void ) : "Stops NPC's from entering the vehicle until unlocked."
+	input UnlockEntrance( void ) : "Allows NPC's to enter the vehicle."
+	input LockExit( void ) : "Stops NPC's from exiting the vehicle until unlocked."
+	input UnlockExit( void ) : "Allows NPC's to exit the vehicle."
+	input EnableRadar( void ) : "Turn on the Jalopy radar"
+	input DisableRadar( void ) : "Turn off the Jalopy radar"
+	input EnableRadarDetectEnemies( void ) : "Enable Jalopy radar to detect Striders and Hunters"
+	input AddBusterToCargo( void ) : "Put a striderbuster in the cargo trigger"
+	input SetCargoHopperVisibility ( bool ) : "Set the strider buster hopper thingy to be visible, or invisible."
+
+	input DisablePhysGun(void) : "Disable physgun interactions with the jeep."
+	input EnablePhysGun(void) : "Enable physgun interactions with the jeep (default)."
+
+	input CreateLinkController(void) : "Automatically builds and attaches a link controller to the car, which cuts the node connections under the car while the car is standing still."
+	input DestroyLinkController(void) : "Destroys the link controller created by CreateLinkController."
+
+	
+	CargoVisible(choices): "Hopper Visible" : 0 : "Is the striderbuster cargo hopper visible?" =
+	[
+		0 : "No"
+		1 : "Yes"
+	]
+
+	spawnflags(Flags) = 
+	[
+		1 : "HUD Locator Precache" : 0
+	]
+
+	
+	// FIXME: These are going to change!
+	output OnCompanionEnteredVehicle(void) : "Companion has entered the vehicle."
+	output OnCompanionExitedVehicle(void) : "Companion has exited the vehicle."
+	output OnHostileEnteredVehicle(void) : "Hostile has entered the vehicle."
+	output OnHostileExitedVehicle(void) : "Hostile has exited the vehicle."
+]

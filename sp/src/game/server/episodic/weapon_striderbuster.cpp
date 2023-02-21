@@ -270,7 +270,11 @@ void CWeaponStriderBuster::Spawn( void )
 //-----------------------------------------------------------------------------
 void CWeaponStriderBuster::Activate( void )
 {	
+#ifdef SDK2013CE
+	g_iszVehicle = AllocPooledString( "prop_vehicle_jalopy" );
+#else
 	g_iszVehicle = AllocPooledString( "prop_vehicle_jeep" );
+#endif // SDK2013CE
 	BaseClass::Activate();
 }
 
