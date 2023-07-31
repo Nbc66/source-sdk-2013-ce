@@ -25,10 +25,12 @@ And you can also give us suggestions for fixes and features that you'd like to s
 Source Modding Community server, which you can join [here](https://discord.gg/BD6WpY5).
 
 # Requirements 
-To be able to use Source 2013 CE you will need to download:
-* Visual Studio 2019
-* Multibyte MFC Library for Visual Studio 2019
-* Windows SDK 10.0.22000.0
+To be able to use Source 2013 CE you will need to download **Visual Studio 2019** and install:
+* MSVC v142 - VS 2019 C++ x64/x86 build tools
+* C++ MFC Library for latest v142 build tools (x86 and x64)
+* Windows 11 SDK (10.0.22000.0)
+
+As of July 2023, CE has been tested on Visual Studio 2022 with the latest versions of the requirements listed above. So if desired you can use that instead.
 
 # Contributing
 We appreciate any form of help so ideally if you want to help this project out the best way would be to make a pull request.
