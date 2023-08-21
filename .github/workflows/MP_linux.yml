@@ -1,0 +1,37 @@
+name: MP_Linux
+
+on: 
+  push:
+    paths:
+      - '.github/**'
+      - 'mp/src/**'
+  pull_request:
+   paths:
+      - 'mp/src/**'
+
+jobs:
+  build:
+    runs-on:
+      ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Create project
+        working-directory: mp/src
+        run: devtools/bin/vpc /sdk2013ce +game /mksln Game
+
+      - name: Build project
+        working-directory: mp/src
+        run: make -f Game.mak
+
+      - name: Pack
+        shell: bash
+        run: tar cJfv Linux.tar.xz --exclude="*.dbg" mp/game/mod_sdk2013ce/bin
+
+      - name: Upload product
+        uses: actions/upload-artifact@v2
+        with:
+          name: mp_sdk2013ce
+          path: Linux.tar.xz
