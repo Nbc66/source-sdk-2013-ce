@@ -2623,12 +2623,15 @@ bool	GLMDetectOGLP( void )
 // from http://blog.timac.org/?p=190
 
 #ifndef _WIN32
-	#include <stdbool.h>  
+	#include <stdbool.h>
 #endif
-#include <sys/types.h>  
-#ifndef _WIN32
-	#include <unistd.h>  
-	#include <sys/sysctl.h>  
+#include <sys/types.h>
+#ifdef _LINUX
+	#include <unistd.h>
+	#include <linux/sysctl.h>
+#elif OSX
+	#include <unistd.h>
+	#include <sys/sysctl.h>
 #endif
 
 // From Technical Q&A QA1361  
