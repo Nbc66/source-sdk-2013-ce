@@ -18,6 +18,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Configure dependencies
+        uses: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential gcc-multilib g++-multilib
+
       - name: Create project
         working-directory: mp/src
         run: devtools/bin/vpc /sdk2013ce +game /mksln Game
