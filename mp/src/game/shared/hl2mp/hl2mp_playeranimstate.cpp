@@ -107,7 +107,8 @@ Activity CHL2MPPlayerAnimState::TranslateActivity( Activity actDesired )
 
 	if ( GetHL2MPPlayer()->GetActiveWeapon() )
 	{
-		translateActivity = GetHL2MPPlayer()->GetActiveWeapon()->ActivityOverride( translateActivity, false );
+		bool activityOverrideValue = false;
+		translateActivity = GetHL2MPPlayer()->GetActiveWeapon()->ActivityOverride( translateActivity, &activityOverrideValue );
 	}
 
 	return translateActivity;

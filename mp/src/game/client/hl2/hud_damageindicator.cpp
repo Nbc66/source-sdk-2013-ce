@@ -179,7 +179,7 @@ void CHudDamageIndicator::DrawDamageIndicator(int side)
 	int x1 = m_flDmgX;
 	int x2 = m_flDmgX + m_flDmgWide;
 	int y[4] = { (int)m_flDmgY, (int)(m_flDmgY + insetY), (int)(m_flDmgY + m_flDmgTall1 - insetY), (int)(m_flDmgY + m_flDmgTall1) };
-	int alpha[4] = { 0.0f, 1.0f, 1.0f, 0.0f };
+	int alpha[4] = { 0, 1, 1, 0 };
 
 	// see if we're high damage
 	bool bHighDamage = false;
@@ -192,10 +192,10 @@ void CHudDamageIndicator::DrawDamageIndicator(int side)
 		y[1] = 0.0f;
 		y[2] = GetTall();
 		y[3] = GetTall();
-		alpha[0] = 1.0f;
-		alpha[1] = 0.0f;
-		alpha[2] = 0.0f;
-		alpha[3] = 1.0f;
+		alpha[0] = 1;
+		alpha[1] = 0;
+		alpha[2] = 0;
+		alpha[3] = 1;
 		bHighDamage = true;
 	}
 
