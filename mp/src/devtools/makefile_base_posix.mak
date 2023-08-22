@@ -14,7 +14,8 @@
 #  +	command is executed even if Make is invoked in "do not exec" mode
 
 OS := $(shell uname)
-HOSTNAME := $(shell hostname)
+# Creates errors on Arch Linux and is unused
+# HOSTNAME := $(shell hostname)
 
 -include $(SRCROOT)/devtools/steam_def.mak
 -include $(SRCROOT)/devtools/sourcesdk_def.mak
