@@ -29,9 +29,9 @@ Source Modding Community server, which you can join [here](https://discord.gg/BD
 ## Compiling on Windows
 1. Install **Visual Studio 2019**
 2. Install dependencies:
-  * MSVC v142 - VS 2019 C++ x64/x86 build tools
-  * C++ MFC Library for latest v142 build tools (x86 and x64)
-  * Windows 11 SDK (10.0.22000.0)
+	- MSVC v142 - VS 2019 C++ x64/x86 build tools
+	- C++ MFC Library for latest v142 build tools (x86 and x64)
+	- Windows 11 SDK (10.0.22000.0)
 3. Navigate to the source directory (`sp/src` or `mp/src`)
 4. Generate the project files, use `createallprojects.bat` or `creategameprojects.bat`
 5. Open `Everything.sln` or `Game.sln`
@@ -41,8 +41,8 @@ Source Modding Community server, which you can join [here](https://discord.gg/BD
 
 ## Compiling on Linux
 1. Install dependencies:
-    Debian/Ubuntu: `apt-get install build-essential gcc-multilib g++-multilib`
-    Arch Linux: `pacman -S base-devel multilib-devel`
+	- Debian/Ubuntu: `apt-get install build-essential gcc-multilib g++-multilib`
+	- Arch Linux: `pacman -S base-devel multilib-devel`
 2. Navigate to the source directory (`sp/src` or `mp/src`)
 3. Generate the project files, use `createallprojects` or `creategameprojects`
 4. Build the project `make -f Everything.mak # or make -f Game.mak`
