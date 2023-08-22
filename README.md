@@ -27,7 +27,8 @@ Source Modding Community server, which you can join [here](https://discord.gg/BD
 # Compiling
 
 ## Compiling on Windows
-1. Install **Visual Studio 2019**
+1. Install Visual Studio:
+	Install **Visual Studio 2019** or **Visual Studio 2022**
 2. Install dependencies:
 	- MSVC v142 - VS 2019 C++ x64/x86 build tools
 	- C++ MFC Library for latest v142 build tools (x86 and x64)
