@@ -8,7 +8,7 @@ $Configuration
 	$General
 	{
 		// Request a specific compiler toolset.
-		$PlatformToolset "v142"
+		$PlatformToolset "v143"
 	}
 
 	$General
