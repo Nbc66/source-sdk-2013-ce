@@ -38,7 +38,8 @@ We appreciate any form of help so ideally if you want to help this project out t
 # Ending Notes
 Thank you for trying out this project we hope we will help you out with your Source engine troubles!
 
-Made with :heart: by [@Nbc66](https://github.com/Nbc66) & [@GamerDude27](https://github.com/GamerDude27)
+Made with :heart: by [@Nbc66](https://github.com/Nbc66) , [@GamerDude27](https://github.com/GamerDude27) and [@Adrikikicp](https://github.com/Adrikikicp)
 
 Credits for 2019 support: momentum mod, Brae, and Anthonypython
 Credits for CI: TF2Vintage, Deathreus, Dio, Anthonypython
+
