@@ -23,6 +23,7 @@ ipch
 *.vpc_crc
 *.sln
 *.sentinel
+mp/src/fmod
 
 # Visual Studio build results
 *[Dd]ebug*/
