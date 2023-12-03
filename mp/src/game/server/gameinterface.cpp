@@ -6,6 +6,10 @@
 //			to external modules
 //===========================================================================//
 
+#ifdef GE_LUA
+#include "lua_manager.h"
+#endif
+
 #include "cbase.h"
 #include "gamestringpool.h"
 #include "mapentities_shared.h"
@@ -570,6 +574,11 @@ bool CServerGameDLL::DLLInit( CreateInterfaceFn appSystemFactory,
 		CreateInterfaceFn physicsFactory, CreateInterfaceFn fileSystemFactory, 
 		CGlobalVars *pGlobals)
 {
+#ifdef GE_LUA
+	// Start LUA
+	GELua()->InitDll();
+#endif
+
 	ConnectTier1Libraries( &appSystemFactory, 1 );
 	ConnectTier2Libraries( &appSystemFactory, 1 );
 	ConnectTier3Libraries( &appSystemFactory, 1 );
@@ -753,6 +762,10 @@ void CServerGameDLL::PostInit()
 
 void CServerGameDLL::DLLShutdown( void )
 {
+#ifdef GE_LUA
+	// Shutdown LUA, close all open gameplays
+	GELua()->ShutdownDll();
+#endif
 
 	// Due to dependencies, these are not autogamesystems
 	ModelSoundsCacheShutdown();

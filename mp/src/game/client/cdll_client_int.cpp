@@ -1063,6 +1063,9 @@ int CHLClient::Init( CreateInterfaceFn appSystemFactory, CreateInterfaceFn physi
 
 	g_pClientMode->Enable();
 
+	// FMOD - Start 'er up!
+
+
 	if ( !view )
 	{
 		view = ( IViewRender * )&g_DefaultViewRender;
@@ -1207,6 +1210,9 @@ void CHLClient::Shutdown( void )
 
 	g_pClientMode->Disable();
 	g_pClientMode->Shutdown();
+
+	// FMOD - Shut us down
+	
 
 	input->Shutdown_All();
 	C_BaseTempEntity::ClearDynamicTempEnts();
@@ -1514,6 +1520,9 @@ void CHLClient::View_Render( vrect_t *rect )
 {
 	VPROF( "View_Render" );
 
+	// S:O - Think about fading ambient sounds if necessary
+	
+
 	// UNDONE: This gets hit at startup sometimes, investigate - will cause NaNs in calcs inside Render()
 	if ( rect->width == 0 || rect->height == 0 )
 		return;
@@ -1696,10 +1705,15 @@ void CHLClient::ResetStringTablePointers()
 void CHLClient::LevelShutdown( void )
 {
 	// HACK: Bogus, but the logic is too complicated in the engine
+
+
 	if (!g_bLevelInitialized)
 		return;
 
 	g_bLevelInitialized = false;
+
+	// S:O - Stop all FMOD sounds when exiting to the main menu
+	
 
 	// Disable abs recomputations when everything is shutting down
 	CBaseEntity::EnableAbsRecomputations( false );
