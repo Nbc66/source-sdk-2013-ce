@@ -1,2 +1,0 @@
-C:\Program Files (x86)\Steam\steamapps\sourcemods\source-sdk-2013-ce\mp\src\game\client\Release_mod_sdk2013ce\client.dll
-D:\SS13CE\mp\src\game\client\Release_mod_sdk2013ce\client.dll
