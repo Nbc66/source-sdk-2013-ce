@@ -15,6 +15,7 @@
 #include "materialsub.h"
 #include "fgdlib/fgdlib.h"
 #include "manifest.h"
+#include "matrixinvert.h"
 
 #ifdef VSVMFIO
 #include "VmfImport.h"
@@ -1617,12 +1618,94 @@ ChunkFileResult_t CMapFile::LoadEntityCallback(CChunkFile *pFile, int nParam)
 		{
 			if( ( g_nDXLevel == 0 ) || ( g_nDXLevel >= 70 ) )
 			{
+				char* pParallaxObbStr = ValueForKey(mapent, "parallaxobb");
 				const char *pSideListStr = ValueForKey( mapent, "sides" );
 				int size;
 				size = IntForKey( mapent, "cubemapsize" );
-				Cubemap_InsertSample( mapent->origin, size );
+				Cubemap_InsertSample(mapent->origin, size, pParallaxObbStr);
 				Cubemap_SaveBrushSides( pSideListStr );
 			}
+
+			//
+	// parallax_obb brushes are removed after the transformation matrix is found and saved into 
+	// the entity's data (ent will be removed after data transferred to patched materials)
+	//
+			if (!strcmp("parallax_obb", pClassName))
+			{
+				matrix3x4_t obbMatrix, invObbMatrix;
+				SetIdentityMatrix(obbMatrix);
+				SetIdentityMatrix(invObbMatrix);
+
+				// Get corner and its 3 edges (scaled, local x, y, and z axes)
+				mapbrush_t* brush = &mapbrushes[mapent->firstbrush];
+				Vector corner, x, y, z;
+
+				// Find first valid winding (with these whiles, if not enough valid windings then identity matrix is passed through to VMTs)
+				int i = 0;
+				while (i < brush->numsides)
+				{
+					winding_t* wind = brush->original_sides[i].winding;
+					if (!wind)
+					{
+						i++;
+						continue;
+					}
+
+					corner = wind->p[0];
+					y = wind->p[1] - corner;
+					z = wind->p[3] - corner;
+					x = CrossProduct(y, z).Normalized();
+
+					i++;
+					break;
+				}
+
+				// Skip second valid winding (opposite face from first, unusable for finding Z's length)
+				while (i < brush->numsides)
+				{
+					winding_t* wind = brush->original_sides[i].winding;
+					if (!wind)
+					{
+						i++;
+						continue;
+					}
+					i++;
+					break;
+				}
+
+				// Find third valid winding
+				while (i < brush->numsides)
+				{
+					winding_t* wind = brush->original_sides[i].winding;
+					if (!wind)
+					{
+						i++;
+						continue;
+					}
+
+					// Find length of X
+					// Start with diagonal, then scale X by the projection of diag onto X
+					Vector diag = wind->p[0] - wind->p[2];
+					x *= abs(DotProduct(diag, x));
+
+					// Build transformation matrix (what is needed to turn a [0,0,0] - [1,1,1] cube into this brush)
+					MatrixSetColumn(x, 0, obbMatrix);
+					MatrixSetColumn(y, 1, obbMatrix);
+					MatrixSetColumn(z, 2, obbMatrix);
+					MatrixSetColumn(corner, 3, obbMatrix);
+
+					// Find inverse (we need the world to local matrix, "transformationmatrix" is kind of a misnomer)
+					MatrixInversion(obbMatrix, invObbMatrix);
+					break;
+				}
+
+				char szMatrix[1024];
+				Q_snprintf(szMatrix, 1024, "[%f %f %f %f];[%f %f %f %f];[%f %f %f %f]", invObbMatrix[0][0], invObbMatrix[0][1], invObbMatrix[0][2], invObbMatrix[0][3], invObbMatrix[1][0], invObbMatrix[1][1], invObbMatrix[1][2], invObbMatrix[1][3], invObbMatrix[2][0], invObbMatrix[2][1], invObbMatrix[2][2], invObbMatrix[2][3]);
+				SetKeyValue(mapent, "transformationmatrix", szMatrix);
+
+				return (ChunkFile_Ok);
+			}
+
 			// clear out this entity
 			mapent->epairs = NULL;
 			return(ChunkFile_Ok);
@@ -2606,6 +2689,28 @@ bool LoadMapFile( const char *pszFileName )
 		else
 		{
 			Error("Error opening %s: %s.\n", pszFileName, File.GetErrorText(eResult));
+		}
+	}
+
+	// Fill out parallax obb matrix array
+	for (int i = 0; i < g_nCubemapSamples; i++)
+	{
+		if (g_pParallaxObbStrs[i][0] != '\0')
+		{
+			entity_t* obbEnt = EntityByName(g_pParallaxObbStrs[i]);
+			g_pParallaxObbStrs[i] = ValueForKey(obbEnt, "transformationmatrix");
+		}
+	}
+
+	// Remove parallax_obb entities (in a nice slow linear search)
+	for (int i = 0; i < g_MainMap->num_entities; i++)
+	{
+		entity_t* mapent = &g_MainMap->entities[i];
+		const char* pClassName = ValueForKey(mapent, "classname");
+		if (!strcmp("parallax_obb", pClassName))
+		{
+			mapent->numbrushes = 0;
+			mapent->epairs = NULL;
 		}
 	}
 

@@ -61,6 +61,11 @@ ConVar debug_latch_reset_onduck( "debug_latch_reset_onduck", "1", FCVAR_CHEAT );
 #endif
 #endif
 
+// Camera Bob
+ConVar cl_viewbob_enabled("cl_viewbob_enabled", "1", 0, "Oscillation Toggle");
+ConVar cl_viewbob_timer("cl_viewbob_timer", "10", 0, "Speed of Oscillation");
+ConVar cl_viewbob_scale("cl_viewbob_scale", "0.05", 0, "Magnitude of Oscillation");
+
 // [MD] I'll remove this eventually. For now, I want the ability to A/B the optimizations.
 bool g_bMovementOptimizations = true;
 
@@ -1914,6 +1919,13 @@ void CGameMovement::WalkMove( void )
 	// Copy movement amounts
 	fmove = mv->m_flForwardMove;
 	smove = mv->m_flSideMove;
+
+	if (cl_viewbob_enabled.GetBool() && !engine->IsPaused())
+	{
+		float xoffset = sin(gpGlobals->curtime * cl_viewbob_timer.GetFloat()) * player->GetAbsVelocity().Length() * cl_viewbob_scale.GetFloat() / 300;
+		float yoffset = sin(2 * gpGlobals->curtime * cl_viewbob_timer.GetFloat()) * player->GetAbsVelocity().Length() * cl_viewbob_scale.GetFloat() / 800;
+		player->ViewPunch(QAngle(xoffset, yoffset, 0));
+	}
 
 	// Zero out z components of movement vectors
 	if ( g_bMovementOptimizations )
