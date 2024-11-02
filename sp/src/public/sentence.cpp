@@ -526,8 +526,8 @@ void CSentence::ParseWords( CUtlBuffer& buf )
 			assert( pt );
 			pt->SetPhonemeCode( code );
 			pt->SetTag( phonemename );
-			pt->SetStartTime(startLocl);
-			pt->SetEndTime(endLocl);
+			pt->SetStartTime(start);
+			pt->SetEndTime(end);
 
 			AddPhonemeTag( wt, pt );
 		}
