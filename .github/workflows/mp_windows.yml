@@ -1,0 +1,36 @@
+name: Multiplayer Windows
+
+on: 
+  push:
+    paths:
+      - '.github/**'
+      - 'mp/src/**'
+  pull_request:
+   paths:
+      - 'mp/src/**'
+
+jobs:
+  build:
+    name: Build Multiplayer Windows Binaries
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Dependencies
+        uses: ilammy/msvc-dev-cmd@v1
+        
+      - name: Create Project
+        working-directory: mp/src
+        run: devtools/bin/vpc.exe /sdk2013ce /2013 +game /mksln sdk2013ce.sln
+
+      - name: Build Project
+        working-directory: mp/src
+        run: devenv sdk2013ce.sln /Build Release
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mp_sdk2013ce_windows  
+          path: mp/game/mod_sdk2013ce/bin/*
