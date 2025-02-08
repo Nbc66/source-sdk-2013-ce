@@ -55,6 +55,12 @@
 #include "portal_player.h"
 #endif // PORTAL
 
+#ifdef LUA_SDK
+#include "luamanager.h"
+#include "lbasecombatweapon_shared.h"
+#include "lbaseplayer_shared.h"
+#endif
+
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
@@ -2850,6 +2856,13 @@ bool CHL2_Player::Weapon_CanUse( CBaseCombatWeapon *pWeapon )
 //-----------------------------------------------------------------------------
 void CHL2_Player::Weapon_Equip( CBaseCombatWeapon *pWeapon )
 {
+#if LUA_SDK
+	BEGIN_LUA_CALL_HOOK("Weapon_Equip");
+	lua_pushplayer(L, this);
+	lua_pushweapon(L, pWeapon);
+	END_LUA_CALL_HOOK(2, 0);
+#endif
+
 #if	HL2_SINGLE_PRIMARY_WEAPON_MODE
 
 	if ( pWeapon->GetSlot() == WEAPON_PRIMARY_SLOT )

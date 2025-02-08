@@ -15,6 +15,11 @@
 #include "eventlist.h"
 // NVNT haptic include for notification of world precache
 #include "haptics/haptic_utils.h"
+
+#ifdef LUA_SDK
+#include "luamanager.h"
+#endif
+
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
@@ -124,7 +129,13 @@ void C_World::OnDataChanged( DataUpdateType_t updateType )
 
 void C_World::RegisterSharedActivities( void )
 {
+#ifdef LUA_SDK
+	// BEGIN_LUA_SET_ENUM_LIBRARY( "Activity" );
+#endif
 	ActivityList_RegisterSharedActivities();
+#ifdef LUA_SDK
+	// END_LUA_SET_ENUM_LIBRARY();
+#endif
 	EventList_RegisterSharedEvents();
 }
 

@@ -619,7 +619,11 @@ protected:
 	CUtlVector<CHandle<C_EconWearable > >	m_hMyWearables;
 #endif
 
+#if !defined( LUA_SDK )
 private:
+#else
+public:
+#endif
 
 	struct StepSoundCache_t
 	{

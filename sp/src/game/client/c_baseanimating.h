@@ -570,8 +570,17 @@ private:
 	CInterpolatedVarArray< float, MAXSTUDIOBONECTRLS >		m_iv_flEncodedController;
 	float							m_flOldEncodedController[MAXSTUDIOBONECTRLS];
 
+
 	// Clientside animation
+
+#ifdef LUA_SDK
+public:
 	bool							m_bClientSideAnimation;
+#else
+	private:
+		bool							m_bClientSideAnimation;
+#endif
+
 	bool							m_bLastClientSideFrameReset;
 
 	int								m_nNewSequenceParity;

@@ -176,6 +176,11 @@ bool VGui_Startup( CreateInterfaceFn appSystemFactory )
 		return false; // c_vguiscreen.cpp needs this!
 	}
 
+#if defined( LUA_SDK )
+	// Create the root panel for our scripted GameUI state
+	VGUI_CreateGameUIRootPanel();
+#endif
+
 	VGui_OneTimeInit();
 
 	// Create any root panels for .dll
@@ -245,6 +250,10 @@ void VGui_Shutdown()
 	{
 		g_pClientMode->VGui_Shutdown();
 	}
+
+#if defined( LUA_SDK )
+	VGUI_DestroyGameUIRootPanel();
+#endif
 
 	// Make sure anything "marked for deletion"
 	//  actually gets deleted before this dll goes away

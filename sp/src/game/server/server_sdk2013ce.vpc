@@ -50,6 +50,24 @@ $Project "Server"
 
 		$Folder	"SDK2013CE DLL"
 		{
+			$File	"$SRCDIR\game\shared\hl2mp\weapon_hl2mpbase_scriptedweapon.cpp"
+			$File	"$SRCDIR\game\shared\hl2mp\weapon_hl2mpbase_scriptedweapon.h"
+
+			$File	"$SRCDIR\game\shared\hl2mp\lhl2mp_player_shared.cpp"
+			$File	"$SRCDIR\game\shared\hl2mp\lhl2mp_player_shared.h"
+
+			$File	"$SRCDIR\game\shared\hl2mp\hl2mp_player_shared.cpp"
+			$File	"$SRCDIR\game\shared\hl2mp\hl2mp_player_shared.h"
+
+			$File	"$SRCDIR\game\shared\hl2mp\hl2mp_playeranimstate.cpp"
+			$File	"$SRCDIR\game\shared\hl2mp\hl2mp_playeranimstate.h"
+
+			$File	"$SRCDIR\game\shared\multiplayer\multiplayer_animstate.cpp"
+			$File	"$SRCDIR\game\shared\multiplayer\multiplayer_animstate.h"
+
+			$File	"hl2mp\hl2mp_player.cpp"
+			$File	"hl2mp\hl2mp_player.h"
+			$File	"hl2\lhl2_player.cpp"
 		}
 
 		$Folder	"HL2 DLL"

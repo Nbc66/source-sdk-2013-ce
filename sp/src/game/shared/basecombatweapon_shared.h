@@ -169,6 +169,10 @@ public:
 	// A derived weapon class should return true here so that weapon sounds, etc, can
 	//  apply the proper filter
 	virtual bool			IsPredicted( void ) const { return false; }
+#if defined( LUA_SDK )
+	virtual bool			IsScripted(void) const { return false; }
+	virtual bool			IsWeapon(void) const { return true; }
+#endif
 
 	virtual void			Spawn( void );
 	virtual void			Precache( void );

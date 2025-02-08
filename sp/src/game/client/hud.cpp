@@ -26,6 +26,9 @@
 #include <vgui_controls/AnimationController.h>
 #include <vgui/ISurface.h>
 #include "hud_lcd.h"
+#ifdef LUA_SDK
+#include "luamanager.h"
+#endif
 
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
@@ -287,6 +290,17 @@ void CHudElement::SetHiddenBits( int iBits )
 //-----------------------------------------------------------------------------
 bool CHudElement::ShouldDraw( void )
 {
+#if defined ( LUA_SDK )
+	C_BasePlayer* pPlayer = C_BasePlayer::GetLocalPlayer();
+	if (pPlayer)
+	{
+		BEGIN_LUA_CALL_HOOK("HudElementShouldDraw");
+		lua_pushstring(L, GetName());
+		END_LUA_CALL_HOOK(1, 1);
+
+		RETURN_LUA_BOOLEAN();
+	}
+#endif
 	bool bShouldDraw = ( !gHUD.IsHidden( m_iHiddenBits ) );
 
 	if ( bShouldDraw )

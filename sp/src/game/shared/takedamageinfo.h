@@ -32,7 +32,11 @@ public:
 					CTakeDamageInfo( CBaseEntity *pInflictor, CBaseEntity *pAttacker, const Vector &damageForce, const Vector &damagePosition, float flDamage, int bitsDamageType, int iKillType = 0, Vector *reportedPosition = NULL );
 					CTakeDamageInfo( CBaseEntity *pInflictor, CBaseEntity *pAttacker, CBaseEntity *pWeapon, const Vector &damageForce, const Vector &damagePosition, float flDamage, int bitsDamageType, int iKillType = 0, Vector *reportedPosition = NULL );
 	
-
+#if 0
+#ifdef LUA_SDK
+					CTakeDamageInfo& operator=(const CTakeDamageInfo& from);
+#endif
+#endif
 	// Inflictor is the weapon or rocket (or player) that is dealing the damage.
 	CBaseEntity*	GetInflictor() const;
 	void			SetInflictor( CBaseEntity *pInflictor );
@@ -354,6 +358,17 @@ inline void CTakeDamageInfo::CopyDamageToBaseDamage()
 	m_flBaseDamage = m_flDamage;
 }
 
+// Andrew; we need a test case to prove this is necessary
+#if 0
+#ifdef LUA_SDK
+CTakeDamageInfo& CTakeDamageInfo::operator=(const CTakeDamageInfo& from)
+{
+	memcpy(this, &from, sizeof(*this));
+
+	return *this;
+}
+#endif
+#endif
 
 // -------------------------------------------------------------------------------------------------- //
 // Inlines.

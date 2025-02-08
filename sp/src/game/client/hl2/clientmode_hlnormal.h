@@ -16,7 +16,13 @@
 #include <vgui_controls/EditablePanel.h>
 #include <vgui/Cursor.h>
 
+#ifdef LUA_SDK
+class CScriptedHudViewport;
+#endif
 class CHudViewport;
+#ifdef LUA_SDK
+class CScriptedClientLuaPanel;
+#endif
 
 namespace vgui
 {

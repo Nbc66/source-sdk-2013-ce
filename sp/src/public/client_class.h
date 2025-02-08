@@ -93,6 +93,24 @@ public:
 // the list can be given to the engine).
 // Use this macro to expose your client class to the engine.
 // networkName must match the network name of a class registered on the server.
+#if defined ( LUA_SDK )
+#define IMPLEMENT_CLIENTCLASS(clientClassName, dataTable, serverClassName) \
+	INTERNAL_IMPLEMENT_CLIENTCLASS_PROLOGUE(clientClassName, dataTable, serverClassName) \
+	static IClientNetworkable* _##clientClassName##_CreateObject( int entnum, int serialNum ) \
+	{ \
+		clientClassName *pRet = new clientClassName; \
+		if ( !pRet ) \
+			return 0; \
+		pRet->Init( entnum, serialNum ); \
+		if ( !StringHasPrefixCaseSensitive( #clientClassName, "class " ) ) \
+			pRet->SetClassname( #clientClassName ); \
+		return pRet; \
+	} \
+	ClientClass __g_##clientClassName##ClientClass(#serverClassName, \
+													_##clientClassName##_CreateObject, \
+													NULL,\
+													&dataTable::g_RecvTable);
+#else
 #define IMPLEMENT_CLIENTCLASS(clientClassName, dataTable, serverClassName) \
 	INTERNAL_IMPLEMENT_CLIENTCLASS_PROLOGUE(clientClassName, dataTable, serverClassName) \
 	static IClientNetworkable* _##clientClassName##_CreateObject( int entnum, int serialNum ) \
@@ -107,6 +125,7 @@ public:
 													_##clientClassName##_CreateObject, \
 													NULL,\
 													&dataTable::g_RecvTable);
+#endif
 
 // Implement a client class and provide a factory so you can allocate and delete it yourself
 // (or make it a singleton).

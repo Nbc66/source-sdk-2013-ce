@@ -8,11 +8,11 @@
 #include "cbase.h"
 
 #ifdef CLIENT_DLL
-#include "c_hl2mp_player.h"
+#include "hl2mp/c_hl2mp_player.h"
 #include "prediction.h"
 #define CRecipientFilter C_RecipientFilter
 #else
-#include "hl2mp_player.h"
+#include "hl2mp/hl2mp_player.h"
 #endif
 
 #include "engine/IEngineSound.h"

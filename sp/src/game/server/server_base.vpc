@@ -51,11 +51,12 @@ $Configuration
 	
 	$Compiler
 	{
-		$AdditionalIncludeDirectories	"$BASE;.\;$SRCDIR\game\shared;$SRCDIR\utils\common;$SRCDIR\game\shared\econ;$SRCDIR\game\server\NextBot"
-		$PreprocessorDefinitions		"$BASE;GAME_DLL;VECTOR;VERSION_SAFE_STEAM_API_INTERFACES;PROTECTED_THINGS_ENABLE;sprintf=use_Q_snprintf_instead_of_sprintf;strncpy=use_Q_strncpy_instead;_snprintf=use_Q_snprintf_instead"
+		$AdditionalIncludeDirectories	"$BASE;.\;$SRCDIR\lua-5.1.5\src;$SRCDIR\lua-5.1.5\etc;$SRCDIR\game\shared;$SRCDIR\utils\common;$SRCDIR\game\shared\econ;$SRCDIR\game\server\NextBot"
+		$PreprocessorDefinitions		"$BASE;GAME_DLL;VECTOR;VERSION_SAFE_STEAM_API_INTERFACES;PROTECTED_THINGS_ENABLE;sprintf=use_Q_snprintf_instead_of_sprintf;strncpy=use_Q_strncpy_instead;_snprintf=use_Q_snprintf_instead;LUA_SDK;ARGG;HL2SB"
 		$PreprocessorDefinitions		"$BASE;SWDS" [$POSIX]
-		$PreprocessorDefinitions		"$BASE;fopen=dont_use_fopen" [$WINDOWS||$X360]
-		$Create/UsePrecompiledHeader	"Use Precompiled Header (/Yu)"
+		$PreprocessorDefinitions		"$BASE" [$WINDOWS||$X360]
+		//$Create/UsePrecompiledHeader	"Use Precompiled Header (/Yu)"
+		$Create/UsePrecompiledHeader	"Not Using Precompiled Headers"
 		$Create/UsePCHThroughFile		"cbase.h"
 	}
 
@@ -664,6 +665,73 @@ $Project
 		//Haptics
 		$File	"$SRCDIR\public\haptics\haptic_msgs.cpp"
 		$File	"$SRCDIR\public\haptics\haptic_utils.cpp"	[$WIN32]
+		
+		$Folder	"Lua"
+		{
+            $File "$SRCDIR\game\shared\basescripted.cpp"
+            $File "$SRCDIR\game\shared\basescripted.h"
+            $File "$SRCDIR\game\server\basescriptedtrigger.cpp"
+            $File "$SRCDIR\game\server\basescriptedtrigger.h"
+		    $File "$SRCDIR\game\shared\lbasecombatweapon_shared.cpp"
+		    $File "$SRCDIR\game\shared\lbasecombatweapon_shared.h"
+            $File "$SRCDIR\game\shared\lbaseentity_shared.cpp"
+            $File "$SRCDIR\game\shared\lbaseentity_shared.h"
+            $File "$SRCDIR\game\shared\lbaseplayer_shared.cpp"
+            $File "$SRCDIR\game\shared\lbaseplayer_shared.h"
+            $File "$SRCDIR\public\lbspflags.cpp"
+            $File "lbaseentity.cpp"
+            $File "lbaseentity.h"
+            $File "lbaseanimating.cpp"
+            $File "lbaseanimating.cpp"
+            $File "$SRCDIR\public\lColor.cpp"
+            $File "$SRCDIR\public\tier1\lconvar.cpp"
+            $File "$SRCDIR\public\tier0\ldbg.cpp"
+		    $File "$SRCDIR\game\shared\leffect_dispatch_data.cpp"
+		    $File "$SRCDIR\public\leiface.cpp"
+		    $File "lentitylist.cpp"
+		    $File "$SRCDIR\public\lfilesystem.cpp"
+		    $File "$SRCDIR\public\lgametrace.cpp"
+		    $File "$SRCDIR\public\lglobalvars_base.cpp"
+		    $File "$SRCDIR\public\tier1\liconvar.cpp"
+		    $File "$SRCDIR\public\licvar.cpp"
+		    $File "$SRCDIR\public\materialsystem\limaterial.cpp"
+            $File "$SRCDIR\game\shared\limovehelper.cpp"
+            $File "$SRCDIR\game\shared\lin_buttons.cpp"
+            $File "$SRCDIR\public\linetchannelinfo.cpp"
+            $File "$SRCDIR\game\shared\lipredictionsystem.cpp"
+            $File "$SRCDIR\public\SoundEmitterSystem\lisoundemittersystembase.cpp"
+            $File "$SRCDIR\public\steam\listeamfriends.cpp"
+            $File "$SRCDIR\public\steam\listeamfriends.h"
+            $File "$SRCDIR\public\engine\livdebugoverlay.cpp"
+            $File "$SRCDIR\public\tier1\LKeyValues.cpp"
+            $File "$SRCDIR\public\mathlib\lmathlib.cpp"
+            $File "$SRCDIR\public\lnetworkstringtabledefs.cpp"
+            $File "$SRCDIR\public\lnetworkstringtabledefs.h"
+            $File "$SRCDIR\public\vphysics\lperformance.cpp"
+            $File "$SRCDIR\public\vphysics\lperformance.h"
+            $File "lplayer.cpp"
+            $File "lrecipientfilter.cpp"
+            $File "lrecipientfilter.h"
+            $File "$SRCDIR\public\vstdlib\lrandom.cpp"
+            $File "$SRCDIR\game\shared\lshareddefs.cpp"
+            $File "$SRCDIR\game\shared\lshareddefs.h"
+            $File "$SRCDIR\game\shared\lsrcinit.cpp"
+            $File "$SRCDIR\public\steam\lsteam_api.cpp"
+            $File "$SRCDIR\game\shared\ltakedamageinfo.cpp"
+            $File "$SRCDIR\game\shared\luacachefile.cpp"
+            $File "$SRCDIR\game\shared\luacachefile.h"
+            $File "$SRCDIR\game\shared\luamanager.cpp"
+            $File "$SRCDIR\game\shared\luamanager.h"
+            $File "lutil.cpp"
+            $File "lutil.h"
+            $File "$SRCDIR\game\shared\lutil_shared.cpp"
+            $File "$SRCDIR\public\mathlib\lvector.cpp"
+            $File "$SRCDIR\public\mathlib\lvmatrix.cpp"
+            $File "$SRCDIR\public\mathlib\lvmatrix.h"
+            $File "$SRCDIR\public\lvphysics_interface.cpp"
+            $File "$SRCDIR\public\XUnzip.cpp"
+            $File "$SRCDIR\public\zip_utils.cpp"
+        }
 
 		// Not using precompiled header cbase.h
 
@@ -996,6 +1064,24 @@ $Project
 		$File	"$SRCDIR\game\shared\econ\ihasowner.h"
 		//Haptics
 		$File	"$SRCDIR\public\haptics\haptic_utils.h"	[$WIN32]
+		
+		// Lua
+        $File "$SRCDIR\public\lcmodel.h"
+        $File "$SRCDIR\public\lColor.h"
+        $File "$SRCDIR\game\shared\leffect_dispatch_data.h"
+        $File "$SRCDIR\public\lfilesystem.h"
+        $File "$SRCDIR\public\lgametrace.h"
+        $File "$SRCDIR\public\licvar.h"
+        $File "$SRCDIR\public\materialsystem\limaterial.h"
+        $File "$SRCDIR\game\shared\limovehelper.h"
+        $File "$SRCDIR\public\linetchannelinfo.h"
+        $File "$SRCDIR\public\SoundEmitterSystem\lisoundemittersystembase.h"
+        $File "$SRCDIR\public\tier1\LKeyValues.h"
+        $File "$SRCDIR\game\shared\lshareddefs.h"
+        $File "$SRCDIR\game\shared\ltakedamageinfo.h"
+        $File "$SRCDIR\game\shared\luasrclib.h"
+        $File "$SRCDIR\public\mathlib\lvector.h"
+        $File "$SRCDIR\public\lvphysics_interface.h"
 	}
 
 	$Folder	"Tools Framework"
@@ -1009,6 +1095,7 @@ $Project
 	{
 		$Lib	choreoobjects
 		$Lib	dmxloader
+		$Lib	lua51
 		$Lib	mathlib
 		$Lib	particles
 		$Lib	tier2

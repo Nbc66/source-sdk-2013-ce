@@ -22,6 +22,16 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
+#ifdef CLIENT_DLL
+#ifdef LUA_SDK
+//=========================================================
+//=========================================================
+void CTeamplayRules::Think(void)
+{
+}
+#endif
+#endif
+
 #ifdef GAME_DLL
 static char team_names[MAX_TEAMS][MAX_TEAMNAME_LENGTH];
 static int team_scores[MAX_TEAMS];

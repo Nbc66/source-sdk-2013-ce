@@ -6,24 +6,24 @@
 #endif
 
 #ifdef CLIENT_DLL
-	#include "c_hl2mp_player.h"
+	#include "c_baseplayer.h"
 #else
-	#include "hl2mp_player.h"
+	#include "hl2_player.h"
 #endif
 
-#include "weapon_hl2mpbase.h"
+#include "basecombatweapon_shared.h"
 
 #if defined( CLIENT_DLL )
 #define CBaseHL2MPCombatWeapon C_BaseHL2MPCombatWeapon
 #endif
 
-class CBaseHL2MPCombatWeapon : public CWeaponHL2MPBase
+class CBaseHL2MPCombatWeapon : public CBaseCombatWeapon
 {
 #if !defined( CLIENT_DLL )
 	DECLARE_DATADESC();
 #endif
 
-	DECLARE_CLASS( CBaseHL2MPCombatWeapon, CWeaponHL2MPBase );
+	DECLARE_CLASS( CBaseHL2MPCombatWeapon, CBaseCombatWeapon);
 public:
 	DECLARE_NETWORKCLASS();
 	DECLARE_PREDICTABLE();

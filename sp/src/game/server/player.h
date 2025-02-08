@@ -1193,6 +1193,12 @@ private:
 
 	bool m_autoKickDisabled;
 
+#if !defined( LUA_SDK )
+private:
+#else
+public:
+#endif
+
 	struct StepSoundCache_t
 	{
 		StepSoundCache_t() : m_usSoundNameIndex( 0 ) {}

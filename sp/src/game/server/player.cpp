@@ -82,6 +82,15 @@
 #include "weapon_physcannon.h"
 #endif
 
+#ifdef LUA_SDK
+#include "luamanager.h"
+#include "lbaseentity_shared.h"
+#include "lbaseplayer_shared.h"
+#include "lgametrace.h"
+#include "ltakedamageinfo.h"
+#include "mathlib/lvector.h"
+#endif
+
 ConVar autoaim_max_dist( "autoaim_max_dist", "2160" ); // 2160 = 180 feet
 ConVar autoaim_max_deflect( "autoaim_max_deflect", "0.99" );
 
@@ -896,9 +905,26 @@ void CBasePlayer::DrawDebugGeometryOverlays(void)
 //=========================================================
 void CBasePlayer::TraceAttack( const CTakeDamageInfo &inputInfo, const Vector &vecDir, trace_t *ptr, CDmgAccumulator *pAccumulator )
 {
+#if defined ( LUA_SDK )
+	CTakeDamageInfo linputInfo = inputInfo;
+	Vector lvecDir = vecDir;
+
+	BEGIN_LUA_CALL_HOOK("PlayerTraceAttack");
+	lua_pushplayer(L, this);
+	lua_pushdamageinfo(L, linputInfo);
+	lua_pushvector(L, lvecDir);
+	lua_pushtrace(L, *ptr);
+	END_LUA_CALL_HOOK(4, 1);
+
+	RETURN_LUA_NONE();
+#endif
 	if ( m_takedamage )
 	{
+#if defined ( LUA_SDK )
+		CTakeDamageInfo info = linputInfo;
+#else
 		CTakeDamageInfo info = inputInfo;
+#endif
 
 		if ( info.GetAttacker() )
 		{
@@ -2786,6 +2812,16 @@ bool CBasePlayer::IsUseableEntity( CBaseEntity *pEntity, unsigned int requiredCa
 //-----------------------------------------------------------------------------
 bool CBasePlayer::CanPickupObject( CBaseEntity *pObject, float massLimit, float sizeLimit )
 {
+#ifdef LUA_SDK
+	BEGIN_LUA_CALL_HOOK("PlayerCanPickupObject");
+	lua_pushentity(L, pObject);
+	lua_pushnumber(L, massLimit);
+	lua_pushnumber(L, sizeLimit);
+	END_LUA_CALL_HOOK(3, 1);
+
+	RETURN_LUA_BOOLEAN();
+#endif
+
 	// UNDONE: Make this virtual and move to HL2 player
 #ifdef HL2_DLL
 	//Must be valid
@@ -4871,6 +4907,12 @@ ReturnSpot:
 //-----------------------------------------------------------------------------
 void CBasePlayer::InitialSpawn( void )
 {
+#if defined ( LUA_SDK )
+	BEGIN_LUA_CALL_HOOK("PlayerInitialSpawn");
+	lua_pushplayer(L, this);
+	END_LUA_CALL_HOOK(1, 0);
+#endif
+
 	m_iConnected = PlayerConnected;
 	gamestats->Event_PlayerConnected( this );
 }
@@ -5368,6 +5410,17 @@ void CBasePlayer::VelocityPunch( const Vector &vecForce )
 //-----------------------------------------------------------------------------
 bool CBasePlayer::CanEnterVehicle( IServerVehicle *pVehicle, int nRole )
 {
+#ifdef LUA_SDK
+	BEGIN_LUA_CALL_HOOK("CanEnterVehicle");
+	lua_pushplayer(L, this);
+	// FIXME: implement lua_pushvehicle()!
+	lua_pushentity(L, pVehicle->GetVehicleEnt());
+	lua_pushinteger(L, nRole);
+	END_LUA_CALL_HOOK(3, 1);
+
+	RETURN_LUA_BOOLEAN();
+#endif
+
 	// Must not have a passenger there already
 	if ( pVehicle->GetPassenger( nRole ) )
 		return false;

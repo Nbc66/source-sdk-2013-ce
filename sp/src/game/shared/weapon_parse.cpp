@@ -347,6 +347,9 @@ FileWeaponInfo_t::FileWeaponInfo_t()
 	bShowUsageHint = false;
 	m_bAllowFlipping = true;
 	m_bBuiltRightHanded = true;
+#ifdef LUA_SDK
+	m_iPlayerDamage = 0;
+#endif
 }
 
 #ifdef CLIENT_DLL
@@ -404,6 +407,9 @@ void FileWeaponInfo_t::Parse( KeyValues *pKeyValuesData, const char *szWeaponNam
 		}
 	}
 
+#ifdef LUA_SDK
+	m_iPlayerDamage  = pKeyValuesData->GetInt("damage", 0);
+#endif
 
 	bShowUsageHint = ( pKeyValuesData->GetInt( "showusagehint", 0 ) != 0 ) ? true : false;
 	bAutoSwitchTo = ( pKeyValuesData->GetInt( "autoswitchto", 1 ) != 0 ) ? true : false;

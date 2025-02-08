@@ -56,7 +56,9 @@ public:
 	virtual void SetLastCapPointChanged( int iIndex ) { return; }
 
 #ifdef CLIENT_DLL
-
+#ifdef LUA_SDK
+	virtual void Think(void);
+#endif
 #else
 
 	CTeamplayRules();

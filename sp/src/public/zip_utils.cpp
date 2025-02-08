@@ -23,6 +23,7 @@
 #include "byteswap.h"
 #include "utlstring.h"
 
+
 // Data descriptions for byte swapping - only needed
 // for structures that are written to file for use by the game.
 BEGIN_BYTESWAP_DATADESC( ZIP_EndOfCentralDirRecord )
@@ -1715,4 +1716,3 @@ unsigned int CZip::GetAlignment()
 {
 	return m_ZipFile.GetAlignment();
 }
-

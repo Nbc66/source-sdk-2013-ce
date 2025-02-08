@@ -15,6 +15,10 @@
 #include <KeyValues.h>
 #include "utldict.h"
 
+#ifdef LUA_SDK
+#include "luamanager.h"
+#endif
+
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 

@@ -45,6 +45,12 @@
 #include "weapon_physcannon.h"
 #endif
 
+#ifdef LUA_SDK
+#include "luamanager.h"
+#include "lbaseplayer_shared.h"
+#endif
+
+
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
@@ -143,6 +149,32 @@ void Host_Say( edict_t *pEdict, const CCommand &args, bool teamonly )
 	{
 		pPlayer = ((CBasePlayer *)CBaseEntity::Instance( pEdict ));
 		Assert( pPlayer );
+
+#if defined ( LUA_SDK )
+		BEGIN_LUA_CALL_HOOK("Host_Say");
+		lua_pushplayer(L, pPlayer);
+		lua_pushstring(L, p);
+		lua_pushboolean(L, teamonly);
+		END_LUA_CALL_HOOK(3, 1);
+
+		// Andrew; this is just a continuation of RETURN_LUA_NONE().
+		if (lua_isboolean(L, -1))
+		{
+			bool res = (bool)luaL_checkboolean(L, -1);
+			lua_pop(L, 1);
+			if (!res)
+				return;
+		}
+		else if (lua_isstring(L, -1))
+		{
+			p = (char*)luaL_checkstring(L, -1);
+			lua_pop(L, 1);
+		}
+		else
+		{
+			lua_pop(L, 1);
+		}
+#endif
 
 		// make sure the text has valid content
 		p = CheckChatText( pPlayer, p );

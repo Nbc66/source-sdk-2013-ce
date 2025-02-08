@@ -70,6 +70,12 @@ public:
 	void NetworkStateChanged() {}
 	void NetworkStateChanged( void *pVar ) {}
 
+	// Dummy for scripted weapons.
+#ifdef LUA_SDK
+	void SetClassname(const char* classname) {}
+#endif
+	
+
 	virtual bool					Init(int entnum, int iSerialNum);
 
 	virtual void					Precache( void );

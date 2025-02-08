@@ -822,7 +822,15 @@ public:
 #endif
 
 	// used so we know when things are no longer touching
-	int			touchStamp;			
+	int			touchStamp;		
+
+#if defined( LUA_SDK )
+	// Andrew; This is used to determine an entity's reference in Lua's LUA_REGISTRYINDEX.
+	// I'd rather do this than create a struct and pass that to each bounded function, plus it'll save some perf for massive executions, like Think funcs.
+	int				m_nTableReference;
+	// Henry; There's an IsPlayer and IsWorld and such, why not an IsWeapon?
+	virtual bool	IsWeapon(void) const { return false; }
+#endif
 
 protected:
 

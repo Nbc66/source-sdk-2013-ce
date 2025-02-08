@@ -322,7 +322,13 @@ bool CMultiplayRules::Init()
 
 
 #ifdef CLIENT_DLL
-
+#ifdef LUA_SDK
+//=========================================================
+//=========================================================
+void CMultiplayRules::Think(void)
+{
+}
+#endif
 
 #else 
 
@@ -357,7 +363,11 @@ ConVarRef suitcharger( "sk_suitcharger" );
 #endif
 	}
 
+#endif
 
+
+
+#ifndef CLIENT_DLL
 	//=========================================================
 	//=========================================================
 	void CMultiplayRules::Think ( void )

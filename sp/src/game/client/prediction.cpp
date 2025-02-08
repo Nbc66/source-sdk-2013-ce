@@ -769,6 +769,39 @@ void CPrediction::RunPreThink( C_BasePlayer *player )
 	// FIXME:  Do we need to set up a client side version of the gamerules???
 	// g_pGameRules->PlayerThink( player );
 
+#ifdef LUA_SDK
+// Andrew; Yes. At least for mods using the Source Engine Lua SDK, we do.
+//
+//=========================================================================
+// SOURCE ENGINE LUA SDK GAMERULES THINK
+//
+// Below, we call Think() on the global gamerules object. This needs to be
+// done by our SDK, and our SDK only, simply because without this call,
+// only GAME_LUA has a Think hook. This isn't helpful for many game logic
+// situations, considering this SDK extends functionality for developers.
+//
+// The issue is that while this is fine to call, where we do it may not be.
+// There's a specific chain of calls made during every frame, and depending
+// on what scripters do in their hooks for the CLIENT_LUA Think hook, they
+// could be unintentionally causing senarios to arise which do not behave
+// well with other game events, or logic set out internally. In one case,
+// someone's hook may not work at all, and in another, it may break
+// prediction, or prevent critical events from being fired properly.
+//
+// In the end, caution will simply need to be taken when using this hook,
+// and careful observation will need to be made when controlling things
+// like a player's view for cinematic purposes, or the creation and
+// placement of entities for a gamemode.
+//
+// This isn't the only client-side thinking hook we're providing, so, in
+// worst-case scenarios, if functionality of something breaks, you may just
+// need to implement your feature or write your logic in other calls to
+// create harmony with the frame function call sequence.
+//
+//========================================================================= 
+	g_pGameRules->Think();
+#endif
+
 	player->PreThink();
 #endif
 }

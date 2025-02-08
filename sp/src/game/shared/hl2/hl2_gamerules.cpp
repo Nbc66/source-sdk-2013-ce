@@ -212,6 +212,7 @@ bool CHalfLife2::Damage_IsTimeBased( int iDmgType )
 #else
 	return BaseClass::Damage_IsTimeBased( iDmgType );
 #endif
+
 }
 
 #ifdef CLIENT_DLL
@@ -1324,21 +1325,31 @@ ConVar  alyx_darkness_force( "alyx_darkness_force", "0", FCVAR_CHEAT | FCVAR_REP
 	void CHalfLife2::PlayerThink( CBasePlayer *pPlayer )
 	{
 	}
+#endif
 
-	void CHalfLife2::Think( void )
+#if defined(CLIENT_DLL) && defined(LUA_SDK)
+	void CHalfLife2::Think(void)
+	{
+	}
+#endif
+
+
+#ifndef CLIENT_DLL
+	void CHalfLife2::Think(void)
 	{
 		BaseClass::Think();
 
-		if( physcannon_mega_enabled.GetBool() == true )
+		if (physcannon_mega_enabled.GetBool() == true)
 		{
 			m_bMegaPhysgun = true;
 		}
 		else
 		{
 			// FIXME: Is there a better place for this?
-			m_bMegaPhysgun = ( GlobalEntity_GetState("super_phys_gun") == GLOBAL_ON );
+			m_bMegaPhysgun = (GlobalEntity_GetState("super_phys_gun") == GLOBAL_ON);
 		}
 	}
+
 
 	//-----------------------------------------------------------------------------
 	// Purpose: Returns how much damage the given ammo type should do to the victim

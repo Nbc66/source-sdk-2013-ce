@@ -13,6 +13,11 @@
 #include "particle_parse.h"
 #include "rendertexture.h"
 
+#ifdef LUA_SDK
+#include "luamanager.h"
+#include "lbaseentity_shared.h"
+#endif
+
 #ifdef PORTAL
 	#include "PortalRender.h"
 #endif
@@ -567,6 +572,12 @@ void CClientTools::OnEntityDeleted( CBaseEntity *pEntity )
 
 void CClientTools::OnEntityCreated( CBaseEntity *pEntity )
 {
+#if defined ( LUA_SDK )
+	BEGIN_LUA_CALL_HOOK("OnEntityCreated");
+	lua_pushentity(L, pEntity);
+	END_LUA_CALL_HOOK(1, 0);
+#endif
+
 	if ( !m_bInRecordingMode )
 		return;
 
