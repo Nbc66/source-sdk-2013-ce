@@ -3,11 +3,15 @@
 </p>
 
 </div>
-# lua Branch is experimental and only SP currently has it implemented.
+
 
 # Source SDK 2013 Community Edition
+
+**lua Branch is experimental and currently only on SP**
 Source 2013 CE is a clean fork of Valve's [Source SDK 2013 repo](https://github.com/valveSoftware/source-sdk-2013) 
 with the goal of fixing up the SDK and to provide a clean bloat-free codebase that works out of the box to make developers' lives easier.
+
+you can find a pre-compiled mod template with the lua base files at [https://github.com/AnthonyPython/CE_SP_lua_mod](https://github.com/AnthonyPython/CE_SP_lua_mod)
 
 # Info
 There are currently two branches, the first one being `master` which will only contain fixes without any extra additions.</br>
@@ -38,3 +42,5 @@ Made with :heart: by [@Nbc66](https://github.com/Nbc66) & [@GamerDude27](https:/
 
 Credits for 2019 support: momentum mod, Brae, and Anthonypython
 Credits for CI: TF2Vintage, Deathreus, Dio, Anthonypython
+Credits for original lua implementation hl2sb/ Team Sandbox
+Credits for porting and fixing lua implementation by Anthonypython
