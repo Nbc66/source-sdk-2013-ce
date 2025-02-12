@@ -109,7 +109,7 @@ static int EditablePanel_GetPanelClassName (lua_State *L) {
 
 static int EditablePanel_HasHotkey (lua_State *L) {
   size_t l;
-  lua_pushpanel(L, luaL_checkeditablepanel(L, 1)->HasHotkey((wchar_t)luaL_checklstring(L, 2, &l)));
+  lua_pushpanel(L, luaL_checkeditablepanel(L, 1)->HasHotkey(luaL_checklstring(L, 2, &l)[0]));
   return 1;
 }
 
