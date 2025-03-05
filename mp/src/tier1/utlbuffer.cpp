@@ -615,8 +615,6 @@ void CUtlBuffer::GetStringInternal( char *pString, size_t maxLenInChars )
 		return;
 	}
 
-	Assert( maxLenInChars != 0 );
-
 	if ( maxLenInChars == 0 )
 	{
 		return;
