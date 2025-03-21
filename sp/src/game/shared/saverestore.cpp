@@ -2707,7 +2707,15 @@ void CEntitySaveRestoreBlockHandler::Restore( IRestore *pRestore, bool createPla
 			if ( pEntInfo->classname != NULL_STRING )
 			{
 				pent = CreateEntityByName( STRING(pEntInfo->classname) );
-				pent->InitializeAsClientEntity( NULL, RENDER_GROUP_OPAQUE_ENTITY );
+#ifdef SDK2013CE
+				//Valve didn't think it would be possible, unfortunatly it can be null. -AnthonyH
+				if(pent)
+					pent->InitializeAsClientEntity( NULL, RENDER_GROUP_OPAQUE_ENTITY );
+#else
+				pent->InitializeAsClientEntity(NULL, RENDER_GROUP_OPAQUE_ENTITY);
+
+#endif
+				
 				
 				pRestore->SetReadPos( pEntInfo->location );
 
