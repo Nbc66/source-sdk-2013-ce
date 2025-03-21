@@ -43,6 +43,8 @@ public:
 	void	Touch( CBaseEntity *pOther ); 
 	void	EndTouch( CBaseEntity *pOther );
 
+	virtual void OnRestore(void);
+
 #ifdef CLIENT_DLL
 	// model specific
 	virtual int DrawModel( int flags );

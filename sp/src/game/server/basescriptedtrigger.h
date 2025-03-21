@@ -38,6 +38,8 @@ public:
 	// by default, triggers don't deal with TraceAttack
 	void TraceAttack(CBaseEntity *pAttacker, float flDamage, const Vector &vecDir, trace_t *ptr, int bitsDamageType) {}
 
+	virtual void OnRestore(void);
+
 protected:
 
 	DECLARE_DATADESC();

@@ -128,7 +128,33 @@ void CBaseScripted::LoadScriptedEntity( void )
 	}
 }
 
-void CBaseScripted::InitScriptedEntity( void )
+void CBaseScripted::InitScriptedEntity()
+{
+	SetThink(&CBaseScripted::Think);
+	SetTouch(&CBaseScripted::Touch);
+	SetNextThink(gpGlobals->curtime);
+
+	if (m_nTableReference == LUA_NOREF)
+	{
+		LoadScriptedEntity();
+		m_nTableReference = luaL_ref(L, LUA_REGISTRYINDEX);
+	}
+	else
+	{
+		lua_getref(L, m_nTableReference);
+		if (!lua_istable(L, -1))
+		{
+			lua_pop(L, 1);
+			LoadScriptedEntity();
+			m_nTableReference = luaL_ref(L, LUA_REGISTRYINDEX);
+		}
+	}
+
+	BEGIN_LUA_CALL_ENTITY_METHOD("Initialize");
+	END_LUA_CALL_ENTITY_METHOD(0, 0);
+}
+
+/*void CBaseScripted::InitScriptedEntity(void)
 {
 #if defined ( LUA_SDK )
 #if 0
@@ -192,7 +218,7 @@ void CBaseScripted::InitScriptedEntity( void )
 	BEGIN_LUA_CALL_ENTITY_METHOD( "Initialize" );
 	END_LUA_CALL_ENTITY_METHOD( 0, 0 );
 #endif
-}
+}*/
 
 #ifdef CLIENT_DLL
 int CBaseScripted::DrawModel( int flags )
@@ -300,5 +326,20 @@ void CBaseScripted::VPhysicsUpdate( IPhysicsObject *pPhysics )
 		lua_pushphysicsobject( L, pPhysics );
 	END_LUA_CALL_ENTITY_METHOD( 1, 0 );
 #endif
+}
+
+void CBaseScripted::OnRestore()
+{
+	BaseClass::OnRestore();
+
+	// Reassign Think and Touch functions
+	SetThink(&CBaseScripted::Think);
+	SetTouch(&CBaseScripted::Touch);
+
+	// Reset next think time
+	SetNextThink(gpGlobals->curtime);
+
+	// Reload Lua entity
+	InitScriptedEntity();
 }
 
