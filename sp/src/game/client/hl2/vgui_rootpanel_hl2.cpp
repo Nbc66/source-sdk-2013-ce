@@ -18,6 +18,7 @@
 
 #ifdef LUA_SDK
 C_ScriptedBaseGameUIPanel* g_pScriptedBaseGameUIPanel = NULL;
+C_ScriptedBaseINGamePanel* g_pScriptedBaseINGamePanel = NULL;
 
 
 //-----------------------------------------------------------------------------
@@ -146,5 +147,97 @@ void C_ScriptedBaseGameUIPanel::LevelInit(void)
 // Purpose: 
 //-----------------------------------------------------------------------------
 void C_ScriptedBaseGameUIPanel::LevelShutdown(void)
+{
+}
+
+#ifdef LUA_SDK
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+void VGUI_CreateINGameRootPanel(void)
+{
+	g_pScriptedBaseINGamePanel = new C_ScriptedBaseINGamePanel(enginevgui->GetPanel(PANEL_INGAMESCREENS));
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+void VGUI_DestroyINGameRootPanel(void)
+{
+	delete g_pScriptedBaseINGamePanel;
+	g_pScriptedBaseINGamePanel = NULL;
+}
+
+vgui::Panel* VGui_GetINGamePanel(void)
+{
+	return g_pScriptedBaseINGamePanel;
+}
+#endif
+
+//-----------------------------------------------------------------------------
+// C_ScriptedBaseINGamePanel implementation.
+//-----------------------------------------------------------------------------
+C_ScriptedBaseINGamePanel::C_ScriptedBaseINGamePanel(vgui::VPANEL parent)
+	: BaseClass(NULL, "ScriptedBaseINGamePanel")
+{
+	SetParent(parent);
+	SetPaintEnabled(false);
+	SetPaintBorderEnabled(false);
+	SetPaintBackgroundEnabled(false);
+
+	// This panel does post child painting
+	SetPostChildPaintEnabled(true);
+
+	// Make it screen sized
+	SetBounds(0, 0, ScreenWidth(), ScreenHeight());
+
+	// Ask for OnTick messages
+	vgui::ivgui()->AddTickSignal(GetVPanel());
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+C_ScriptedBaseINGamePanel::~C_ScriptedBaseINGamePanel(void)
+{
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+void C_ScriptedBaseINGamePanel::PostChildPaint()
+{
+	BaseClass::PostChildPaint();
+
+	// Draw all panel effects
+	RenderPanelEffects();
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: For each panel effect, check if it wants to draw and draw it on
+//  this panel/surface if so
+//-----------------------------------------------------------------------------
+void C_ScriptedBaseINGamePanel::RenderPanelEffects(void)
+{
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+void C_ScriptedBaseINGamePanel::OnTick(void)
+{
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: Reset effects on level load/shutdown
+//-----------------------------------------------------------------------------
+void C_ScriptedBaseINGamePanel::LevelInit(void)
+{
+}
+
+//-----------------------------------------------------------------------------
+// Purpose: 
+//-----------------------------------------------------------------------------
+void C_ScriptedBaseINGamePanel::LevelShutdown(void)
 {
 }

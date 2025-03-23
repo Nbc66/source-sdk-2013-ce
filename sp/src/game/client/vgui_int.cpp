@@ -179,6 +179,7 @@ bool VGui_Startup( CreateInterfaceFn appSystemFactory )
 #if defined( LUA_SDK )
 	// Create the root panel for our scripted GameUI state
 	VGUI_CreateGameUIRootPanel();
+	VGUI_CreateINGameRootPanel();
 #endif
 
 	VGui_OneTimeInit();
@@ -253,6 +254,7 @@ void VGui_Shutdown()
 
 #if defined( LUA_SDK )
 	VGUI_DestroyGameUIRootPanel();
+	VGUI_DestroyINGameRootPanel();
 #endif
 
 	// Make sure anything "marked for deletion"

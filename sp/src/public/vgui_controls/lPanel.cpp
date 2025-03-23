@@ -1292,6 +1292,11 @@ static int luasrc_VGui_GetGameUIPanel (lua_State *L) {
   return 1;
 }
 
+static int luasrc_VGui_GetINGamePanel(lua_State* L) {
+    lua_pushpanel(L, VGui_GetINGamePanel());
+    return 1;
+}
+
 static int luasrc_VGui_GetClientLuaRootPanel (lua_State *L) {
   lua_pushpanel(L, VGui_GetClientLuaRootPanel());
   return 1;
@@ -1300,6 +1305,7 @@ static int luasrc_VGui_GetClientLuaRootPanel (lua_State *L) {
 
 static const luaL_Reg Panel_funcs[] = {
   {"VGui_GetGameUIPanel", luasrc_VGui_GetGameUIPanel},
+  {"VGui_GetINGamePanel", luasrc_VGui_GetINGamePanel},
   {"VGui_GetClientLuaRootPanel", luasrc_VGui_GetClientLuaRootPanel},
   {NULL, NULL}
 };

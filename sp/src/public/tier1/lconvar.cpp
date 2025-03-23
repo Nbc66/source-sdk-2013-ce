@@ -250,6 +250,10 @@ static int luasrc_ConCommand(lua_State* L) {
 		pConCommand = new ConCommand(strdup(pName), CC_GameUIConCommand, strdup(luaL_optstring(L, 2, 0)), luaL_optint(L, 3, 0), NULL);
 #else
 		const char* pNameS = luaL_optstring(L, 2, 0);
+		if (pNameS == nullptr)
+		{
+			pNameS = "";
+		}
 		pConCommand = new ConCommand(strdup(pName), CC_GameUIConCommand, strdup(pNameS), 0, NULL);
 #endif
 	}
@@ -257,6 +261,10 @@ static int luasrc_ConCommand(lua_State* L) {
 	{
 
 	const char* pNameS = luaL_optstring(L, 2, 0);
+	if (pNameS == nullptr)
+	{
+		pNameS = "";
+	}
 	pConCommand = new ConCommand(strdup(pName), CC_ConCommand, strdup(pNameS), FCVAR_CLIENTDLL | FCVAR_CLIENTCMD_CAN_EXECUTE | FCVAR_SERVER_CAN_EXECUTE, NULL);
 	}
 #else
