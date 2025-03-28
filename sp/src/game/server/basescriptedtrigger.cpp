@@ -114,33 +114,8 @@ void CBaseScriptedTrigger::LoadScriptedTrigger( void )
 	}
 }
 
-void CBaseScriptedTrigger::InitScriptedTrigger()
-{
-	SetThink(&CBaseScriptedTrigger::Think);
-	SetTouch(&CBaseScriptedTrigger::Touch);
-	SetNextThink(gpGlobals->curtime);
 
-	if (m_nTableReference == LUA_NOREF)
-	{
-		LoadScriptedTrigger();
-		m_nTableReference = luaL_ref(L, LUA_REGISTRYINDEX);
-	}
-	else
-	{
-		lua_getref(L, m_nTableReference);
-		if (!lua_istable(L, -1))
-		{
-			lua_pop(L, 1);
-			LoadScriptedTrigger();
-			m_nTableReference = luaL_ref(L, LUA_REGISTRYINDEX);
-		}
-	}
-
-	BEGIN_LUA_CALL_TRIGGER_METHOD("Initialize");
-	END_LUA_CALL_TRIGGER_METHOD(0, 0);
-}
-
-/*void CBaseScriptedTrigger::InitScriptedTrigger(void)
+void CBaseScriptedTrigger::InitScriptedTrigger(void)
 {
 #if defined ( LUA_SDK )
 #if 0
@@ -211,7 +186,7 @@ void CBaseScriptedTrigger::InitScriptedTrigger()
 	BEGIN_LUA_CALL_TRIGGER_METHOD( "Initialize" );
 	END_LUA_CALL_TRIGGER_METHOD( 0, 0 );
 #endif
-}*/
+}
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------

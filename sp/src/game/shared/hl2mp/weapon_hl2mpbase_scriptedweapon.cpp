@@ -544,6 +544,8 @@ void CHL2MPScriptedWeapon::InitScriptedWeapon( void )
 	}
 	lua_pop( L, 1 );
 
+	m_hWeaponFileInfo = InsertFileWeaponInfoFromLUA(m_pLuaWeaponInfo);
+
 	BEGIN_LUA_CALL_WEAPON_METHOD( "Initialize" );
 	END_LUA_CALL_WEAPON_METHOD( 0, 0 );
 #endif

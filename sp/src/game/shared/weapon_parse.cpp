@@ -260,6 +260,14 @@ KeyValues* ReadEncryptedKVFile( IFileSystem *filesystem, const char *szFilenameW
 	return pKV;
 }
 
+WEAPON_FILE_INFO_HANDLE InsertFileWeaponInfoFromLUA(FileWeaponInfo_t* weapondata)
+{
+
+	unsigned short lookup = m_WeaponInfoDatabase.Insert(weapondata->szClassName, weapondata);
+	Assert(lookup != m_WeaponInfoDatabase.InvalidIndex());
+	return lookup;
+}
+
 
 //-----------------------------------------------------------------------------
 // Purpose: Read data on weapon from script file

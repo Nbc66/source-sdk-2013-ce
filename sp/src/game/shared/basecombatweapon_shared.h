@@ -606,7 +606,7 @@ public:
 
 	IPhysicsConstraint		*GetConstraint() { return m_pConstraint; }
 
-private:
+protected:
 	WEAPON_FILE_INFO_HANDLE	m_hWeaponFileInfo;
 	IPhysicsConstraint		*m_pConstraint;
 

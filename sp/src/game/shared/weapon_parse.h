@@ -147,6 +147,7 @@ FileWeaponInfo_t *GetFileWeaponInfoFromHandle( WEAPON_FILE_INFO_HANDLE handle );
 WEAPON_FILE_INFO_HANDLE GetInvalidWeaponInfoHandle( void );
 void PrecacheFileWeaponInfoDatabase( IFileSystem *filesystem, const unsigned char *pICEKey );
 
+WEAPON_FILE_INFO_HANDLE InsertFileWeaponInfoFromLUA(FileWeaponInfo_t* weapondata);
 
 // 
 // Read a possibly-encrypted KeyValues file in. 
