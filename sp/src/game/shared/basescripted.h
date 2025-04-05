@@ -51,8 +51,6 @@ public:
 	void	RestoreTable(lua_State* L, IRestore& restore);
 	void	SaveTable(lua_State* L, ISave& save);
 
-	//virtual void Save(CSave& save);
-	//virtual void Restore(CRestore& restore);
 	virtual int				Save(ISave& save);
 	virtual int				Restore(IRestore& restore);
 	int						GetSupportedPairCount(lua_State* L, int tableIndex);

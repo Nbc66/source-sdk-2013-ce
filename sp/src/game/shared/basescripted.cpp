@@ -20,8 +20,7 @@
 // memdbgon must be the last include file in a .cpp file!!!
 #include "tier0/memdbgon.h"
 
-//#include <cstdint>
-#include "tier1/checksum_crc.h" // For CRC32_t
+//#include "tier1/checksum_crc.h" // For CRC32_t
 
 #define SCRIPTED_ENTITY_SAVE_VERSION 1
 
@@ -144,6 +143,7 @@ CBaseScripted::~CBaseScripted( void )
 #ifdef GAME_DLL
 void CBaseScripted::OnSave(IEntitySaveUtils* pUtils)
 {
+    //TODO: find some way to save think and touch correctly? This is just dumb but it prevents complaining and crashing.
 	SetThink(NULL);
 	SetTouch(NULL);
 	BaseClass::OnSave(pUtils);
@@ -219,7 +219,7 @@ void CBaseScripted::RestoreEntity(IRestore& restore, CBaseEntity* entity) {
     if (!restore.ReadFields("scripteddata", &saveHeader, NULL, saveHeader.m_DataMap.dataDesc, saveHeader.m_DataMap.dataNumFields))
         return;
 
-    DevWarning("RestoreEntity: Version= %d, Flags= 0x%x, luaTablePairCount= %d\n", saveHeader.version, saveHeader.flags, saveHeader.luaTablePairCount);
+    //DevWarning("RestoreEntity: Version= %d, Flags= 0x%x, luaTablePairCount= %d\n", saveHeader.version, saveHeader.flags, saveHeader.luaTablePairCount);
 
     if (saveHeader.flags & SESF_HAS_LUA_TABLE) {
 
@@ -234,7 +234,7 @@ void CBaseScripted::RestoreEntity(IRestore& restore, CBaseEntity* entity) {
         if (lua_isfunction(L, -1)) {
             lua_pushvalue(L, -3);        // stack: [entity, table, entity.Restore, entity]
             lua_pushvalue(L, -3);        // stack: [entity, table, entity.Restore, entity, table]
-            printf("RestoreEntity: Calling Lua Restore\n");
+            //printf("RestoreEntity: Calling Lua Restore\n");
             if (lua_pcall(L, 2, 0, 0) != 0) {
                 DevWarning("RestoreEntity: Lua error: %s\n", lua_tostring(L, -1));
                 lua_pop(L, 1);
@@ -264,7 +264,7 @@ int CBaseScripted::Restore(IRestore& restore) {
 int CBaseScripted::GetSupportedPairCount(lua_State* L, int tableIndex) {
     // Validate Lua state and stack
     if (!L || lua_gettop(L) < 1 || tableIndex == 0) {
-        printf("Invalid Lua state or tableIndex: %d, Stack size: %d\n", tableIndex, lua_gettop(L));
+        DevWarning("Invalid Lua state or tableIndex: %d, Stack size: %d\n", tableIndex, lua_gettop(L));
         return 0;
     }
 
@@ -273,7 +273,7 @@ int CBaseScripted::GetSupportedPairCount(lua_State* L, int tableIndex) {
 
     // Ensure the value at absIndex is a table
     if (!lua_istable(L, absIndex)) {
-        printf("Value at index %d is not a table, type: %s\n", absIndex, lua_typename(L, lua_type(L, absIndex)));
+        //DevLog("Value at index %d is not a table, type: %s\n", absIndex, lua_typename(L, lua_type(L, absIndex)));
         return 0;
     }
 
@@ -295,7 +295,7 @@ int CBaseScripted::GetSupportedPairCount(lua_State* L, int tableIndex) {
 void CBaseScripted::SaveTable(lua_State* L, ISave& save) {
     // Ensure the table is at the top of the stack
     if (!lua_istable(L, -1)) {
-        printf("SaveTable: Expected table at -1, got %s\n", lua_typename(L, lua_type(L, -1)));
+        DevWarning("SaveTable: Expected table at -1, got %s\n", lua_typename(L, lua_type(L, -1)));
         return;
     }
 
@@ -363,13 +363,13 @@ void CBaseScripted::SaveTable(lua_State* L, ISave& save) {
 void CBaseScripted::RestoreTable(lua_State* L, IRestore& restore) {
     // Ensure the table is at the top of the stack
     if (!lua_istable(L, -1)) {
-        printf("RestoreTable: Expected table at -1, got %s\n", lua_typename(L, lua_type(L, -1)));
+        DevWarning("RestoreTable: Expected table at -1, got %s\n", lua_typename(L, lua_type(L, -1)));
         return;
     }
 
     int count;
     restore.ReadInt(&count);
-    printf("RestoreTable: Count=%d\n", count);
+    //DevLog("RestoreTable: Count=%d\n", count);
 
     for (int i = 0; i < count; i++) {
         // Save the stack top to restore later in case of errors
@@ -394,7 +394,7 @@ void CBaseScripted::RestoreTable(lua_State* L, IRestore& restore) {
             lua_pushnumber(L, (double)key_num);
         }
         else {
-            printf("RestoreTable: Unsupported key type %d at pair %d, skipping\n", key_type, i);
+            DevWarning("RestoreTable: Unsupported key type %d at pair %d, skipping\n", key_type, i);
             continue; // Skip this pair without pushing anything
         }
 
@@ -432,7 +432,7 @@ void CBaseScripted::RestoreTable(lua_State* L, IRestore& restore) {
             break;
         }
         default:
-            printf("RestoreTable: Unsupported value type %d at pair %d, skipping\n", value_type, i);
+            DevWarning("RestoreTable: Unsupported value type %d at pair %d, skipping\n", value_type, i);
             lua_pop(L, 1); // Pop the key
             continue;
         }
@@ -442,7 +442,7 @@ void CBaseScripted::RestoreTable(lua_State* L, IRestore& restore) {
 
         // Ensure the stack is clean (should be back to [table])
         if (lua_gettop(L) != top) {
-            printf("RestoreTable: Stack imbalance after pair %d, expected %d, got %d\n", i, top, lua_gettop(L));
+            DevWarning("RestoreTable: Stack imbalance after pair %d, expected %d, got %d\n", i, top, lua_gettop(L));
             lua_settop(L, top);
         }
     }
@@ -666,15 +666,13 @@ void CBaseScripted::OnRestore()
 {
 	BaseClass::OnRestore();
 
-	// Reassign Think and Touch functions
+	// Reassign Think and Touch functions since we don't save these at all and is variable betweem each scripted entity.
 	SetThink(&CBaseScripted::Think);
 	SetTouch(&CBaseScripted::Touch);
 
 	// Reset next think time
 	SetNextThink(gpGlobals->curtime);
 
-	// Reload Lua entity
-	//InitScriptedEntity();
 
 	BEGIN_LUA_CALL_ENTITY_METHOD("OnRestore");
 	END_LUA_CALL_ENTITY_METHOD(0, 0);
