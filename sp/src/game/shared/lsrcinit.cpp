@@ -24,10 +24,10 @@ static const luaL_Reg luasrclibs[] = {
   {LUA_BASEPLAYERLIBNAME, luaopen_CBasePlayer_shared},
   {LUA_EFFECTDATALIBNAME, luaopen_CEffectData},
   {LUA_GAMETRACELIBNAME, luaopen_CGameTrace},
-#ifndef CLIENT_DLL
+/*#ifndef CLIENT_DLL
   {LUA_HL2MPPLAYERLIBNAME, luaopen_CHL2MP_Player},
 #endif
-  {LUA_HL2MPPLAYERLIBNAME, luaopen_CHL2MP_Player_shared},
+  {LUA_HL2MPPLAYERLIBNAME, luaopen_CHL2MP_Player_shared},*/
   {LUA_COLORLIBNAME, luaopen_Color},
   {LUA_CONCOMMANDLIBNAME, luaopen_ConCommand},
   {LUA_CONTENTSLIBNAME, luaopen_CONTENTS},

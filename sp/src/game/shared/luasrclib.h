@@ -33,9 +33,9 @@ LUALIB_API int (luaopen_CEffectData) (lua_State *L);
 #define LUA_GAMETRACELIBNAME			"CGameTrace"
 LUALIB_API int (luaopen_CGameTrace) (lua_State *L);
 
-#define LUA_HL2MPPLAYERLIBNAME			"CHL2MP_Player"
+/*#define LUA_HL2MPPLAYERLIBNAME			"CHL2MP_Player"
 LUALIB_API int (luaopen_CHL2MP_Player) (lua_State *L);
-LUALIB_API int (luaopen_CHL2MP_Player_shared) (lua_State *L);
+LUALIB_API int (luaopen_CHL2MP_Player_shared) (lua_State *L);*/
 
 #define LUA_COLORLIBNAME				"Color"
 LUALIB_API int (luaopen_Color) (lua_State *L);
